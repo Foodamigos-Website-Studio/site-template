@@ -18,6 +18,19 @@ export function consentFromCookie(cookieHeader: string | null | undefined): Cons
   return "pending"
 }
 
+/**
+ * The choice as the browser has it, when the server saw none: the cookie, else the copy in local storage. The server
+ * can miss it where a proxy drops cookies (Website Studio's draft preview) or an iframe blocks them, and local storage
+ * still works in an iframe.
+ */
+export function consentInBrowser(cookieHeader: string | null | undefined, stored: string | null | undefined): ConsentStatus {
+  const fromCookie = consentFromCookie(cookieHeader)
+  if (fromCookie !== "pending") return fromCookie
+  if (stored === "true") return "accepted"
+  if (stored === "false") return "declined"
+  return "pending"
+}
+
 export function consentCookie(accepted: boolean, secure: boolean): string {
   return `${CONSENT_COOKIE}=${accepted}; Path=/; Max-Age=${CONSENT_MAX_AGE_SECONDS}; SameSite=Lax${secure ? "; Secure" : ""}`
 }
