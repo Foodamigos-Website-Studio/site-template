@@ -1,21 +1,41 @@
-// The home page: v0 designs it from the brief (a placeholder until then).
 import type { Metadata } from "next"
 
+import { BlueBand } from "@/components/home/blue-band"
+import { DietaryStrip } from "@/components/home/dietary-strip"
+import { GuestCards } from "@/components/home/guest-cards"
+import { Hero } from "@/components/home/hero"
+import { LocationsBlock } from "@/components/home/locations-block"
+import { Reviews } from "@/components/home/reviews"
+import { Showcase } from "@/components/home/showcase"
+import { Statement } from "@/components/home/statement"
+import { onlineShopOn } from "@/lib/modules"
+import { cityOf, seoDescription, seoTitle } from "@/lib/page-text"
 import { pageMetadata } from "@/lib/seo"
-import { getProject } from "@/lib/studio-api"
+import { getCompanies, getProject } from "@/lib/studio-api"
 
 export async function generateMetadata(): Promise<Metadata> {
-  const project = await getProject()
-  const name = project?.name ?? "Restaurant"
-  return pageMetadata({ title: name, description: project?.tagline ?? name, path: "/" })
+  const [project, companies] = await Promise.all([getProject(), getCompanies()])
+  return pageMetadata({
+    title: seoTitle(project, companies, "Smash Burger"),
+    description: seoDescription(project, companies, "frische Smash Burger, hausgemachte Saucen, knuspriges Chicken und Shakes. Online bestellen"),
+    path: "/",
+  })
 }
 
 export default async function Home() {
-  const project = await getProject()
+  const [project, companies] = await Promise.all([getProject(), getCompanies()])
+  const city = cityOf(project, companies)
+  const shopOn = onlineShopOn(project)
   return (
-    <section>
-      <h1>{project?.name}</h1>
-      {project?.tagline ? <p>{project.tagline}</p> : null}
-    </section>
+    <>
+      <Hero name={project?.name ?? ""} city={city} shopOn={shopOn} />
+      <GuestCards city={city} />
+      <Showcase city={city} shopOn={shopOn} />
+      <Statement />
+      <DietaryStrip project={project} />
+      <BlueBand />
+      <Reviews companies={companies ?? []} />
+      <LocationsBlock companies={companies ?? []} shopOn={shopOn} />
+    </>
   )
 }

@@ -1,4 +1,199 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* No design here on purpose: v0 sets the site's colours, fonts and spacing from the inspiration. */
+@theme {
+  --color-link: #075C40;
+  --color-accent: #73C0D3;
+  --color-primary: #FFDD00;
+  --color-secondary: #075C40;
+  --color-background: #FFFFFF;
+  --color-text-primary: #075C40;
+  --color-hero-background: #73C0D3;
+
+  --radius: 4px;
+
+  --ease-pop: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-bebas), Impact, "Arial Narrow", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a,
+  button {
+    transition-property: color, background-color, border-color, opacity;
+    transition-duration: 150ms;
+    transition-timing-function: ease;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-secondary);
+    outline-offset: 3px;
+  }
+}
+
+@utility container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1320px;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility display-heading {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 3px var(--color-secondary);
+}
+
+@utility text-outline-light {
+  color: transparent;
+  -webkit-text-stroke: 3px var(--color-primary);
+}
+
+@utility text-stroke-green {
+  -webkit-text-stroke: 5px var(--color-secondary);
+  paint-order: stroke fill;
+}
+
+/* Marquee: the track holds two identical halves and moves by exactly one half. */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 20s linear infinite;
+}
+
+.marquee-track[data-direction="right"] {
+  animation-name: marquee-right;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sticker-ring {
+  animation: spin-slow 20s linear infinite;
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-in {
+  animation: hero-in 800ms var(--ease-pop) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+
+/* The fan of photos: each card sits at --tx/--ty/--rot and swings in from below. */
+@keyframes fan-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--tx), calc(var(--ty) + 90px)) rotate(calc(var(--rot) - 14deg));
+  }
+  to {
+    opacity: 1;
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+  }
+}
+
+.fan-drift {
+  transform: translateY(calc(var(--drift, 0) * -0.1px)) rotate(calc(var(--drift, 0) * 0.004deg));
+  will-change: transform;
+}
+
+.fan-card {
+  --tx: calc(var(--o) * var(--step) - 50%);
+  --ty: calc(var(--o) * var(--o) * 1.1vw);
+  --rot: calc(var(--o) * 7deg);
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+  animation: fan-in 800ms var(--ease-pop) both;
+  animation-delay: calc((var(--n) + 2) * 80ms);
+}
+
+.fan-card-inner {
+  transition: transform 300ms var(--ease-pop), box-shadow 300ms var(--ease-pop);
+}
+
+.fan-card:hover .fan-card-inner {
+  transform: translateY(-24px) rotate(calc(var(--rot) * -1)) scale(1.04);
+  box-shadow: 0 30px 50px -12px rgb(7 92 64 / 0.45);
+  z-index: 20;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.typewriter-caret {
+  animation: caret-blink 900ms steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .sticker-ring,
+  .hero-in,
+  .fan-card,
+  .typewriter-caret {
+    animation: none !important;
+  }
+
+  .fan-card-inner {
+    transition: none;
+  }
+
+  .fan-drift {
+    transform: none;
+  }
+}

@@ -8,7 +8,10 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "d1d3y7hwnj9i8h.cloudfront.net" },
+    ],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }]

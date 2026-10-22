@@ -1,4 +1,6 @@
 // Restaurant JSON-LD for every page, from the site API (rendered once in the root layout).
+import { MEDIA } from "@/lib/media"
+import { mainCompany } from "@/lib/open-status"
 import { getSiteUrl } from "@/lib/seo"
 import { getCompanies, getProject } from "@/lib/studio-api"
 
@@ -7,14 +9,14 @@ const clock = (hour: number, minute: number) => `${String(hour).padStart(2, "0")
 
 export async function RestaurantJsonLd({ cuisine }: { cuisine?: string }) {
   const [project, companies, origin] = await Promise.all([getProject(), getCompanies(), getSiteUrl()])
-  const company = companies?.[0]
+  const company = mainCompany(project, companies)
   if (!project || !company) return null
   const data = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     name: project.name,
     url: origin,
-    image: project.og_image_url ? [project.og_image_url] : undefined,
+    image: [project.og_image_url ?? MEDIA.hero.src],
     servesCuisine: cuisine,
     telephone: company.phone_number ?? undefined,
     email: company.email ?? undefined,
