@@ -6,9 +6,9 @@ import { getProject } from "@/lib/studio-api"
 export async function SiteFooter() {
   const project = await getProject()
   return (
-    <footer className="border-t">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between">
-        <span className="text-sm">© {new Date().getFullYear()} {project?.name}</span>
+    <footer>
+      <div>
+        <span>© {new Date().getFullYear()} {project?.name}</span>
         <LegalLinks />
       </div>
     </footer>

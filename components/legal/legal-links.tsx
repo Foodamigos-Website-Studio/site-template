@@ -8,16 +8,16 @@ export async function LegalLinks({ className }: { className?: string }) {
   if (!legal) return null
   return (
     <nav aria-label="Legal" className={className} data-slot="legal-links">
-      <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+      <ul>
         {legal.pages.map((page) => (
           <li key={page.page}>
-            <a href={page.slug} className="hover:underline">
+            <a href={page.slug}>
               {page.label}
             </a>
           </li>
         ))}
         <li>
-          <CookieSettingsButton label={legal.consent_banner.settings} className="hover:underline" />
+          <CookieSettingsButton label={legal.consent_banner.settings} />
         </li>
       </ul>
     </nav>

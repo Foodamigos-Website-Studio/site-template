@@ -13,9 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const project = await getProject()
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24">
-      <h1 className="text-4xl font-semibold">{project?.name}</h1>
-      {project?.tagline ? <p className="mt-4 text-lg">{project.tagline}</p> : null}
+    <section>
+      <h1>{project?.name}</h1>
+      {project?.tagline ? <p>{project.tagline}</p> : null}
     </section>
   )
 }

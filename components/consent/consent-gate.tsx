@@ -4,7 +4,6 @@
 // <ConsentGate category="embedded_media" label="YouTube">…</ConsentGate>.
 import type { ReactNode } from "react"
 
-import { Button } from "@/components/ui/button"
 import type { ConsentCategory } from "@/lib/consent"
 
 import { useConsent } from "./consent-provider"
@@ -25,11 +24,11 @@ export function ConsentGate({
   const { granted, openSettings } = useConsent()
   if (granted(category)) return <>{children}</>
   return (
-    <div data-slot="consent-placeholder" className="flex min-h-40 flex-col items-center justify-center gap-3 rounded-lg border p-6 text-center text-sm">
+    <div data-slot="consent-placeholder">
       <span>{label}</span>
-      <Button variant="outline" onClick={openSettings}>
+      <button type="button" onClick={openSettings}>
         {settingsLabel}
-      </Button>
+      </button>
     </div>
   )
 }

@@ -25,6 +25,7 @@ export function legalRoute(page: LegalPageKey, path: string) {
     const title = [label, project?.name].filter(Boolean).join(" – ")
     return {
       ...(await pageMetadata({ title, description: legalDescription(legal) || title, path: legalSlug(page, SITE_LANGUAGE) })),
+      // Legal pages are not for search engines: noindex, and never in the sitemap (lib/site-pages.ts).
       robots: { index: false, follow: true },
     }
   }

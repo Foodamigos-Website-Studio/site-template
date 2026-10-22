@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const consent = consentFromCookie(`${CONSENT_COOKIE}=${cookieStore.get(CONSENT_COOKIE)?.value ?? ""}`)
   return (
     <html lang={SITE_LANGUAGE}>
-      <body className="bg-background text-foreground antialiased">
+      <body>
         <ConsentProvider initial={consent}>
           <SiteHeader />
           <main id="content">{children}</main>

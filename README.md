@@ -3,13 +3,15 @@
 The base every FoodAmigos Website Studio website starts from. Max (the Website Studio agent) creates each website's
 v0 chat from this repository (`POST /chats/from-repo`), writes the restaurant's values into `lib/site-defaults.ts`,
 and v0 then designs the restaurant's own pages. Everything every site must have is already here, so v0 never builds
-it again:
+it again. **None of it is styled**: plain semantic HTML with `data-slot` hooks, an empty theme and no UI components,
+so the template has no influence on how v0 designs the site.
 
 | What | Where |
 |---|---|
 | Legal pages from the site API, per language: Impressum, privacy policy, cookie policy | `app/impressum`, `app/datenschutzerklaerung` · `app/privacy-policy`, `app/cookie-richtlinie` · `app/cookie-policy`, `components/legal` |
 | Cookie banner and consent (analytics, embedded media and restaurant scripts only after Accept) | `components/consent`, `lib/consent.ts` |
 | Umami analytics after consent | `components/consent/analytics.tsx` |
+| The coupons page for search engines (`/angebote` · `/coupons`): h1, FAQ, FAQ JSON-LD; in the sitemap, not in the navigation | `app/angebote`, `app/coupons`, `components/seo`, `lib/seo-pages.ts` |
 | The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |
 | The site API client | `lib/studio-api.ts`, `lib/config.ts` |
 | SEO base: metadata, sitemap, robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
@@ -19,7 +21,10 @@ it again:
 - **Keep** the files above working: restyle them freely, never remove a legal page, the banner, its two equally
   prominent buttons, the footer's `<LegalLinks />`, the consent gate around embeds, or `proxy.ts`.
 - **Design** the header, footer, home page and the site's own pages like the inspiration.
-- **Add** every page you create to `lib/site-pages.ts` (the sitemap). Wrap videos, iframes and third-party widgets in
+- **Add** every page you create to `lib/site-pages.ts` (the sitemap). The legal pages stay `noindex` and out of the
+  sitemap; the coupons page stays out of the navigation.
+- **SEO optimization**: rewrite the coupons page's texts in `lib/seo-pages.ts` only to rank better (the restaurant's
+  name, cuisine, city, dietary options), keeping its structure. Wrap videos, iframes and third-party widgets in
   `<ConsentGate category="embedded_media">`.
 - Restaurant data always comes from `lib/studio-api.ts`; never hard-code it.
 

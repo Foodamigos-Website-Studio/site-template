@@ -14,13 +14,13 @@ function Block({ block }: { block: LegalBlock }) {
       )
     case "subheading":
       return (
-        <h3 className="text-lg font-semibold">
+        <h3>
           <InlineText text={block.text} />
         </h3>
       )
     case "list":
       return (
-        <ul className="list-disc space-y-1 pl-6">
+        <ul>
           {block.items.map((item, index) => (
             <li key={index}>
               <InlineText text={item} />
@@ -30,12 +30,12 @@ function Block({ block }: { block: LegalBlock }) {
       )
     case "definition_list":
       return (
-        <div className="space-y-2">
-          {block.heading ? <h3 className="text-lg font-semibold">{block.heading}</h3> : null}
-          <dl className="grid gap-x-6 gap-y-1 sm:grid-cols-[max-content_1fr]">
+        <div>
+          {block.heading ? <h3>{block.heading}</h3> : null}
+          <dl>
             {block.items.map((item) => (
-              <div key={item.term} className="contents">
-                <dt className="font-medium">{item.term}</dt>
+              <div key={item.term}>
+                <dt>{item.term}</dt>
                 <dd>{item.value}</dd>
               </div>
             ))}
@@ -44,12 +44,12 @@ function Block({ block }: { block: LegalBlock }) {
       )
     case "table":
       return (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left text-sm">
+        <div>
+          <table>
             <thead>
               <tr>
                 {block.columns.map((column) => (
-                  <th key={column} className="border-b px-3 py-2 font-semibold">
+                  <th key={column}>
                     {column}
                   </th>
                 ))}
@@ -59,7 +59,7 @@ function Block({ block }: { block: LegalBlock }) {
               {block.rows.map((row, index) => (
                 <tr key={index}>
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="border-b px-3 py-2 align-top">
+                    <td key={cellIndex}>
                       <InlineText text={cell} />
                     </td>
                   ))}
@@ -80,11 +80,11 @@ function Block({ block }: { block: LegalBlock }) {
 
 export function LegalBlocks({ page }: { page: LegalPage }) {
   return (
-    <article className="mx-auto max-w-3xl space-y-8 px-4 py-16 leading-relaxed">
-      <h1 className="text-3xl font-semibold">{page.title}</h1>
+    <article>
+      <h1>{page.title}</h1>
       {page.sections.map((section, index) => (
-        <section key={index} className="space-y-4">
-          {section.heading ? <h2 className="text-xl font-semibold">{section.heading}</h2> : null}
+        <section key={index}>
+          {section.heading ? <h2>{section.heading}</h2> : null}
           {section.blocks.map((block, blockIndex) => (
             <Block key={blockIndex} block={block} />
           ))}

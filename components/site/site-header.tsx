@@ -7,9 +7,9 @@ import { getProject } from "@/lib/studio-api"
 export async function SiteHeader() {
   const project = await getProject()
   return (
-    <header className="border-b">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/" className="font-semibold">
+    <header>
+      <div>
+        <Link href="/">
           {project?.name}
         </Link>
       </div>
