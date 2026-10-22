@@ -58,9 +58,9 @@ export function Showcase({ city, shopOn }: { city: string; shopOn: boolean }) {
         </div>
       </div>
 
-      <div className="mt-24 md:mt-32">
-        <div className="-mx-[5%] -rotate-2">
-          <Marquee text="Zeit für deinen Burger!" className="py-2 text-[clamp(4.5rem,11vw,10rem)] text-primary text-stroke-green" />
+      <div className="mt-28 pb-8 md:mt-40 md:pb-12">
+        <div className="-mx-[10%] -rotate-[4deg] bg-hero-background py-6">
+          <Marquee text="Zeit für deinen Burger!" className="text-[clamp(4.5rem,11vw,10rem)] text-primary" />
         </div>
       </div>
     </section>

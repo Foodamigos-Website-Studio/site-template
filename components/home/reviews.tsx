@@ -31,11 +31,13 @@ export function Reviews({ companies }: { companies: Company[] }) {
   if (reviews.length === 0 && places.length === 0) return <div className="bg-hero-background pb-16" />
 
   return (
-    <section className="bg-hero-background pb-24 md:pb-32">
+    <section className="bg-hero-background pb-24 pt-16 md:pb-32 md:pt-24">
       <div className="container-x flex flex-col gap-12">
         <div className="flex flex-col gap-6">
           <Reveal>
-            <h2 className="display-heading text-[clamp(3.25rem,9vw,8rem)] text-background">Das sagen unsere Gäste</h2>
+            <h2 className="display-heading overflow-visible pt-[0.15em] text-[clamp(3.25rem,9vw,8rem)] leading-[1.1]! text-background">
+              Das sagen unsere Gäste
+            </h2>
           </Reveal>
           {places.length > 0 ? (
             <ul className="flex flex-wrap gap-3">

@@ -6,6 +6,7 @@ import { fullAddress } from "@/components/home/locations-block"
 import { Reveal } from "@/components/reveal"
 import { CtaLink } from "@/components/site/cta"
 import { onlineShopOn } from "@/lib/modules"
+import { mainCompany } from "@/lib/open-status"
 import { seoDescription, seoTitle } from "@/lib/page-text"
 import { ROUTES, telHref } from "@/lib/routes"
 import { mapsUrl } from "@/lib/hours"
@@ -26,6 +27,8 @@ const link = "underline underline-offset-4 transition-colors duration-[150ms] ea
 export default async function KontaktPage() {
   const [project, companies] = await Promise.all([getProject(), getCompanies()])
   const shopOn = onlineShopOn(project)
+  const main = mainCompany(project, companies)
+  const projectEmail = main?.email ?? main?.business_profile?.email ?? null
 
   return (
     <>
@@ -43,6 +46,7 @@ export default async function KontaktPage() {
           <ul className="grid gap-5 md:grid-cols-2">
             {(companies ?? []).map((company, index) => {
               const address = fullAddress(company)
+              const email = company.email ?? company.business_profile?.email ?? projectEmail
               return (
                 <li key={company.uuid} className="flex">
                   <Reveal index={index} className="flex w-full">
@@ -58,11 +62,11 @@ export default async function KontaktPage() {
                             </a>
                           </li>
                         ) : null}
-                        {company.email ? (
+                        {email ? (
                           <li className="flex items-center gap-3">
                             <Mail className="size-5 shrink-0" aria-hidden="true" />
-                            <a href={`mailto:${company.email}`} className={link}>
-                              {company.email}
+                            <a href={`mailto:${email}`} className={`${link} break-all`}>
+                              {email}
                             </a>
                           </li>
                         ) : null}

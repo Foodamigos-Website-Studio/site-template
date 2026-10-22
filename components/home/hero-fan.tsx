@@ -32,7 +32,7 @@ export function HeroFan({ photos }: { photos: Photo[] }) {
   return (
     <div
       ref={ref}
-      className="fan-drift relative mt-10 h-[clamp(320px,40vw,620px)] w-full [--step:max(12.5vw,50px)] md:mt-14"
+      className="fan-drift relative mt-10 h-[clamp(300px,38vw,580px)] w-full [--radius:96vw] md:mt-14"
     >
       {photos.map((photo, index) => {
         const offset = index - middle
@@ -41,7 +41,7 @@ export function HeroFan({ photos }: { photos: Photo[] }) {
         return (
           <div
             key={index}
-            className="fan-card absolute left-1/2 top-8 w-[clamp(150px,19vw,300px)]"
+            className="fan-card absolute left-1/2 top-8 w-[clamp(120px,17vw,280px)]"
             style={
               {
                 "--o": offset,
@@ -56,7 +56,7 @@ export function HeroFan({ photos }: { photos: Photo[] }) {
                 src={photo.src}
                 alt={first ? photo.alt : ""}
                 fill
-                sizes="(min-width: 1600px) 300px, 19vw"
+                sizes="(min-width: 1647px) 280px, 17vw"
                 className="object-cover"
                 priority={offset === 0}
               />

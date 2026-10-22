@@ -9,6 +9,7 @@
   --color-background: #FFFFFF;
   --color-text-primary: #075C40;
   --color-hero-background: #73C0D3;
+  --color-blue-deep: #2A8CA6;
 
   --radius: 4px;
 
@@ -115,7 +116,7 @@
 }
 
 .sticker-ring {
-  animation: spin-slow 20s linear infinite;
+  animation: spin-slow 12s linear infinite;
 }
 
 @keyframes hero-in {
@@ -151,10 +152,11 @@
   will-change: transform;
 }
 
+/* Cards sit on one circle of radius --radius, spaced 6deg apart: eleven cards span -30deg to +30deg. */
 .fan-card {
-  --tx: calc(var(--o) * var(--step) - 50%);
-  --ty: calc(var(--o) * var(--o) * 1.3vw + var(--lift, 0px));
-  --rot: calc(var(--o) * 7deg);
+  --rot: calc(var(--o) * 6deg);
+  --tx: calc(sin(var(--rot)) * var(--radius) - 50%);
+  --ty: calc((1 - cos(var(--rot))) * var(--radius) + var(--lift, 0px));
   transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
   animation: fan-in 800ms var(--ease-pop) both;
   animation-delay: calc((var(--n) + 2) * 80ms);

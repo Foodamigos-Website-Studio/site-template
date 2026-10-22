@@ -10,16 +10,18 @@ import { HeroWords } from "./hero-words"
 const WORDS = ["Smash Burger", "Hot Cheese Fries", "Oreo Shake", "Chicken Crunch"]
 
 const FAN = [
-  MEDIA.chilli,
-  MEDIA.fries,
-  MEDIA.bbq,
-  MEDIA.hero,
-  MEDIA.elGordo,
   MEDIA.shake,
+  MEDIA.bbq,
+  MEDIA.fries,
+  MEDIA.chilli,
+  MEDIA.elGordo,
+  MEDIA.hero,
+  MEDIA.bbq,
   MEDIA.chilli,
   MEDIA.fries,
-  MEDIA.bbq,
-].map((photo, index, all) => (index === 3 ? all[4] : index === 4 ? all[3] : photo))
+  MEDIA.shake,
+  MEDIA.elGordo,
+]
 
 const step = (i: number) => ({ "--i": i }) as CSSProperties
 

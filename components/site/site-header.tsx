@@ -28,6 +28,7 @@ export async function SiteHeader() {
     { href: ROUTES.about, label: "Über uns" },
     ...(shopOn ? [{ href: ROUTES.shop, label: "Speisekarte" }] : []),
     { href: ROUTES.locations, label: "Standorte" },
+    { href: ROUTES.contact, label: "Kontakt" },
   ]
 
   const wordmark = project?.logo_url ? (
@@ -39,7 +40,7 @@ export async function SiteHeader() {
   return (
     <header className="relative z-30 bg-hero-background" data-slot="site-header">
       <div className="container-x flex h-20 items-center justify-between xl:grid xl:h-28 xl:grid-cols-[1fr_auto_1fr]">
-        <nav aria-label="Hauptnavigation" className="hidden items-center gap-7 xl:flex">
+        <nav aria-label="Hauptnavigation" className="hidden items-center gap-6 whitespace-nowrap xl:flex">
           {links.map((link) => (
             <Link key={link.href} href={link.href} prefetch={link.href !== ROUTES.shop} className={linkClass}>
               {link.label}
@@ -74,7 +75,7 @@ export async function SiteHeader() {
             </CtaLink>
           ) : null}
           <MobileNav
-            links={[...links, { href: ROUTES.contact, label: "Kontakt" }]}
+            links={links}
             phone={phone}
             status={status}
             orderHref={shopOn ? ROUTES.shop : null}
