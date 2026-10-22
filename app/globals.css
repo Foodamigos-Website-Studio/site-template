@@ -147,16 +147,46 @@
   }
 }
 
+/* Cards sit on one circle of radius --arc, --step apart. Desktop: eleven cards, -30deg to +30deg.
+   Mobile: seven cards at 100px on a wider circle. The height follows the outermost card plus --tail. */
 .fan-drift {
+  --w: 100px;
+  --arc: 140vw;
+  --step: 7deg;
+  --reach: 3;
+  --top: 0px;
+  --tail: 24px;
+  --max: calc(var(--reach) * var(--step));
+  height: calc(
+    var(--top) + (1 - cos(var(--max))) * var(--arc) + var(--w) * 0.625 * (1 + cos(var(--max))) +
+      var(--w) * 0.5 * sin(var(--max)) + var(--tail)
+  );
   transform: translateY(calc(var(--drift, 0) * -0.1px)) rotate(calc(var(--drift, 0) * 0.004deg));
   will-change: transform;
 }
 
-/* Cards sit on one circle of radius --radius, spaced 6deg apart: eleven cards span -30deg to +30deg. */
+@media (min-width: 768px) {
+  .fan-drift {
+    --w: clamp(120px, 17vw, 280px);
+    --arc: 96vw;
+    --step: 6deg;
+    --reach: 5;
+    --top: 32px;
+    --tail: 40px;
+  }
+
+  .fan-card[data-centre] {
+    --lift: -2.2vw;
+  }
+}
+
 .fan-card {
-  --rot: calc(var(--o) * 6deg);
-  --tx: calc(sin(var(--rot)) * var(--radius) - 50%);
-  --ty: calc((1 - cos(var(--rot))) * var(--radius) + var(--lift, 0px));
+  top: var(--top);
+  width: var(--w);
+  --lift: 0px;
+  --rot: calc(var(--o) * var(--step));
+  --tx: calc(sin(var(--rot)) * var(--arc) - 50%);
+  --ty: calc((1 - cos(var(--rot))) * var(--arc) + var(--lift, 0px));
   transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
   animation: fan-in 800ms var(--ease-pop) both;
   animation-delay: calc((var(--n) + 2) * 80ms);

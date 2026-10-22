@@ -30,10 +30,7 @@ export function HeroFan({ photos }: { photos: Photo[] }) {
   const seen = new Set<string>()
 
   return (
-    <div
-      ref={ref}
-      className="fan-drift relative mt-10 h-[clamp(300px,38vw,580px)] w-full [--radius:96vw] md:mt-14"
-    >
+    <div ref={ref} className="fan-drift relative mt-6 w-full md:mt-14">
       {photos.map((photo, index) => {
         const offset = index - middle
         const first = !seen.has(photo.src)
@@ -41,22 +38,22 @@ export function HeroFan({ photos }: { photos: Photo[] }) {
         return (
           <div
             key={index}
-            className="fan-card absolute left-1/2 top-8 w-[clamp(120px,17vw,280px)]"
+            data-centre={offset === 0 ? "" : undefined}
+            className={`fan-card absolute left-1/2 ${Math.abs(offset) > 3 ? "max-md:hidden" : ""}`}
             style={
               {
                 "--o": offset,
                 "--n": index,
-                "--lift": offset === 0 ? "-2.2vw" : "0px",
                 zIndex: 10 - Math.abs(offset),
               } as CSSProperties
             }
           >
-            <div className="fan-card-inner relative aspect-[4/5] overflow-hidden rounded border-4 border-background bg-background shadow-[0_18px_36px_-14px_rgb(7_92_64_/_0.5)]">
+            <div className="fan-card-inner relative aspect-[4/5] overflow-hidden rounded-[4px] border-[3px] border-background bg-background shadow-[0_10px_28px_-8px_rgb(7_92_64_/_0.45)]">
               <Image
                 src={photo.src}
                 alt={first ? photo.alt : ""}
                 fill
-                sizes="(min-width: 1647px) 280px, 17vw"
+                sizes="(min-width: 1647px) 280px, (min-width: 768px) 17vw, 100px"
                 className="object-cover"
                 priority={offset === 0}
               />
