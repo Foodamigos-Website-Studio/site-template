@@ -21,7 +21,7 @@ export type ButtonVariant = keyof typeof VARIANTS
 export function buttonClasses(variant: ButtonVariant = "red", size: keyof typeof SIZES = "lg", className?: string) {
   return cn(
     "inline-flex items-center justify-center gap-2 rounded-[7px] border-2 text-center font-heading uppercase leading-none tracking-wide",
-    "transition-transform duration-[150ms] ease-[ease] hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+    "transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px] motion-reduce:transition-none motion-reduce:hover:translate-y-0",
     VARIANTS[variant],
     SIZES[size],
     className,

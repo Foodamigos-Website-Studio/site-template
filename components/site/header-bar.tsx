@@ -43,7 +43,7 @@ export function HeaderBar({
 
   return (
     <header className={cn("z-30 w-full text-background", overHero ? "absolute inset-x-0 top-0" : "relative bg-charcoal")}>
-      <div className="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-4 sm:px-8 sm:py-6">
+      <div className="mx-auto grid min-h-[96px] max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-4 sm:min-h-[140px] sm:px-8 sm:py-6">
         <div className="flex justify-start">
           <button
             type="button"
@@ -51,7 +51,7 @@ export function HeaderBar({
             aria-expanded={open}
             aria-controls="site-menu"
             aria-label="Open menu"
-            className="inline-flex size-12 items-center justify-center rounded-[7px] border-2 border-charcoal bg-background text-charcoal shadow-[0_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-0.5"
+            className="inline-flex size-12 items-center justify-center rounded-[7px] border-2 border-charcoal bg-background text-charcoal shadow-[0_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px]"
           >
             <Menu className="size-6" strokeWidth={3} aria-hidden="true" />
           </button>
@@ -59,9 +59,9 @@ export function HeaderBar({
 
         <Link
           href="/"
-          className="flex items-center justify-center text-center font-heading text-lg uppercase leading-none transition-transform duration-[150ms] ease-[ease] hover:-translate-y-0.5 sm:text-2xl lg:text-3xl"
+          className="flex items-center justify-center text-center font-heading text-xl uppercase leading-none transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px] sm:text-4xl lg:text-5xl"
         >
-          {logoUrl ? <Image src={logoUrl} alt={name} width={160} height={56} className="h-10 w-auto sm:h-14" /> : name}
+          {logoUrl ? <Image src={logoUrl} alt={name} width={240} height={96} className="h-12 w-auto sm:h-20 lg:h-24" /> : name}
         </Link>
 
         <div className="flex justify-end">
@@ -88,7 +88,7 @@ export function HeaderBar({
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="inline-flex size-12 items-center justify-center rounded-[7px] border-2 border-charcoal bg-background text-charcoal shadow-[0_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-0.5"
+              className="inline-flex size-12 items-center justify-center rounded-[7px] border-2 border-charcoal bg-background text-charcoal shadow-[0_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px]"
             >
               <X className="size-6" strokeWidth={3} aria-hidden="true" />
             </button>

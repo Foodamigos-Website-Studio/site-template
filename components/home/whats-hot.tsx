@@ -6,8 +6,9 @@ import { FORMAT_LOCALE, ORDER_PATH, type FeaturedProduct } from "@/lib/restauran
 import { ProductSlider } from "./product-slider"
 
 export function WhatsHot({ products, orderOn }: { products: FeaturedProduct[]; orderOn: boolean }) {
-  if (!products.length) return null
-  const items = products.map((product) => ({
+  const withImage = products.filter((product) => product.imageUrl)
+  if (!withImage.length) return null
+  const items = withImage.map((product) => ({
     id: product.id,
     name: product.name,
     imageUrl: product.imageUrl,

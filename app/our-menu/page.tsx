@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { Reveal } from "@/components/reveal"
 import { ButtonLink } from "@/components/ui/button-link"
 import { WaveEdge } from "@/components/ui/decor"
 import { PageHero } from "@/components/ui/page-hero"
+import { SafeImage } from "@/components/ui/safe-image"
 import { SITE_LANGUAGE } from "@/lib/config"
 import { formatPrice } from "@/lib/format"
 import { localizedPath } from "@/lib/localized-routes"
@@ -89,7 +89,7 @@ export default async function MenuPage() {
                                 <article className="flex h-full gap-4 rounded-[7px] border-2 border-charcoal bg-background p-4 shadow-[4px_4px_0_0_var(--color-charcoal)]">
                                   {product.image_url ? (
                                     <div className="relative size-24 shrink-0 overflow-hidden rounded-[7px] border-2 border-charcoal sm:size-28">
-                                      <Image src={product.image_url} alt={product.name} fill sizes="112px" className="object-cover" />
+                                      <SafeImage src={product.image_url} alt={product.name} eager fallbackIndex={index} />
                                     </div>
                                   ) : null}
                                   <div className="flex min-w-0 flex-1 flex-col gap-1">

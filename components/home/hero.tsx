@@ -21,11 +21,13 @@ export function Hero({ name, city, orderOn }: { name: string; city: string | nul
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-charcoal/70" />
 
       <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 pt-24 text-center">
-        <p className="flex items-center gap-3 font-heading text-sm uppercase tracking-widest sm:text-lg">
-          <Sparkle className="size-5 text-primary" />
-          {name}
-          {city ? <span> · {city}</span> : null}
-          <Sparkle className="size-5 text-primary" />
+        <p className="flex items-center justify-center gap-3 font-heading text-sm uppercase tracking-widest sm:text-lg">
+          <Sparkle className="size-5 shrink-0 text-primary" />
+          <span className="whitespace-normal text-center text-[14px] sm:text-lg">
+            {name}
+            {city ? ` · ${city}` : null}
+          </span>
+          <Sparkle className="size-5 shrink-0 text-primary" />
         </p>
         <h1 className="max-w-5xl text-balance font-heading text-5xl uppercase leading-[0.9] sm:text-7xl lg:text-[120px]">
           Fresh smash burgers, made to order
@@ -35,12 +37,16 @@ export function Hero({ name, city, orderOn }: { name: string; city: string | nul
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-3 px-6 pb-28 sm:gap-5 sm:pb-20">
-        {orderOn ? <ButtonLink href={ORDER_PATH}>Order online</ButtonLink> : null}
-        <ButtonLink href={localizedPath("our-menu", SITE_LANGUAGE)} variant="charcoal">
+      <div className="flex flex-col items-stretch gap-3 px-6 pb-28 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-5 sm:pb-20">
+        {orderOn ? (
+          <ButtonLink href={ORDER_PATH} className="w-full sm:w-auto">
+            Order online
+          </ButtonLink>
+        ) : null}
+        <ButtonLink href={localizedPath("our-menu", SITE_LANGUAGE)} variant="charcoal" className="w-full sm:w-auto">
           See the menu
         </ButtonLink>
-        <ButtonLink href={localizedPath("location-and-hours", SITE_LANGUAGE)} variant="light">
+        <ButtonLink href={localizedPath("location-and-hours", SITE_LANGUAGE)} variant="light" className="w-full sm:w-auto">
           Find us
         </ButtonLink>
       </div>

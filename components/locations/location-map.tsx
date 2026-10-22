@@ -4,6 +4,7 @@
 // API; it works only on the custom domain and the v0/Vercel previews). Google sets cookies, so it shows only after
 // consent (embedded_media); before that, a placeholder that reopens the banner. Unstyled: size it in the site's CSS.
 import { useConsent } from "@/components/consent/consent-provider"
+import { MASCOT } from "@/lib/media"
 
 export function mapEmbedUrl(apiKey: string, address: string, language: string): string {
   const params = new URLSearchParams({ key: apiKey, q: address, language })
@@ -29,6 +30,8 @@ export function LocationMap({
   if (!granted("embedded_media")) {
     return (
       <div data-slot="map-placeholder">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img data-slot="map-placeholder-mascot" src={MASCOT.chili.src} alt="" aria-hidden="true" loading="eager" referrerPolicy="no-referrer" />
         <button type="button" onClick={openSettings}>
           {consentLabel}
         </button>

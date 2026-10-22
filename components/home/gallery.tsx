@@ -1,8 +1,7 @@
-import Image from "next/image"
-
 import { Reveal } from "@/components/reveal"
 import { ButtonLink } from "@/components/ui/button-link"
 import { WaveEdge } from "@/components/ui/decor"
+import { SafeImage } from "@/components/ui/safe-image"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { MASCOT, PHOTO, type Media } from "@/lib/media"
 import { ORDER_PATH } from "@/lib/restaurant"
@@ -44,12 +43,13 @@ export function Gallery({ orderOn }: { orderOn: boolean }) {
                     "relative aspect-square overflow-hidden rounded-[7px] border-2 border-charcoal bg-background transition-transform duration-[150ms] ease-[ease] hover:-translate-y-1",
                   )}
                 >
-                  <Image
+                  <SafeImage
                     src={tile.media.src}
                     alt={tile.media.alt}
-                    fill
-                    sizes="(min-width: 1160px) 270px, (min-width: 768px) 25vw, 50vw"
-                    className={cn(tile.mascot ? "object-contain p-3" : "object-cover")}
+                    eager
+                    contain={tile.mascot}
+                    fallbackIndex={index}
+                    className={cn(tile.mascot && "mix-blend-multiply")}
                   />
                 </figure>
               </Reveal>

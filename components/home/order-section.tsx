@@ -29,7 +29,7 @@ export function OrderSection({ companies, orderOn }: { companies: Company[]; ord
                 className="object-cover"
               />
             </div>
-            <Reveal direction="right" className="absolute -bottom-8 -right-3 w-32 sm:w-44 md:-right-8">
+            <Reveal direction="right" className="absolute -bottom-8 right-2 w-32 sm:-right-3 sm:w-44 md:-right-8">
               <Mascot media={MASCOT.shake} sticker className="rotate-6" sizes="176px" />
             </Reveal>
           </Reveal>

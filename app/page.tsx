@@ -38,7 +38,7 @@ export default async function Home() {
       <Intro about={project?.about ?? null} orderOn={orderOn} />
       <ShopCards href={orderOn ? ORDER_PATH : "/our-menu"} />
       {locations.length ? <OrderSection companies={locations} orderOn={orderOn} /> : null}
-      <PhotoStrip />
+      <PhotoStrip orderOn={orderOn} />
       <WhatsHot products={featuredProducts(menu)} orderOn={orderOn} />
       <Dietary options={project?.dietary_attributes ?? []} />
       {locations.length ? <LocationsSection companies={locations} orderOn={orderOn} /> : null}

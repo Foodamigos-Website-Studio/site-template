@@ -1,5 +1,6 @@
 import { Reveal } from "@/components/reveal"
-import { Mascot, WaveEdge } from "@/components/ui/decor"
+import { WaveEdge } from "@/components/ui/decor"
+import { SafeImage } from "@/components/ui/safe-image"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { MASCOT } from "@/lib/media"
 import { dietLabel, dietSentence } from "@/lib/restaurant"
@@ -18,7 +19,10 @@ export function Dietary({ options }: { options: string[] }) {
     <section className="relative overflow-x-clip bg-background pb-24 pt-24 sm:pb-32 sm:pt-32">
       <WaveEdge className="text-charcoal" />
       <div className="mx-auto max-w-[1160px] px-6 text-center">
-        <Reveal>
+        <Reveal className="flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
+          <div className="relative size-28 shrink-0 rotate-3 sm:size-36 lg:size-44">
+            <SafeImage src={MASCOT.chili.src} alt={MASCOT.chili.alt} eager contain className="mix-blend-multiply" />
+          </div>
           <SectionHeading sparkleClassName="text-primary">{dietSentence(options)}</SectionHeading>
         </Reveal>
         <Reveal index={1}>
@@ -43,9 +47,6 @@ export function Dietary({ options }: { options: string[] }) {
           ))}
         </ul>
       </div>
-      <Reveal direction="right" className="mx-auto mt-10 w-44 md:absolute md:bottom-10 md:right-6 md:mt-0 md:w-48 lg:right-16 lg:w-64">
-        <Mascot media={MASCOT.chili} className="rotate-3" sizes="(min-width: 1024px) 256px, 176px" />
-      </Reveal>
     </section>
   )
 }

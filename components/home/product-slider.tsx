@@ -1,15 +1,15 @@
 "use client"
 
 import { ArrowLeft, ArrowRight } from "lucide-react"
-import Image from "next/image"
 import { useRef } from "react"
 
 import { ButtonLink } from "@/components/ui/button-link"
+import { SafeImage } from "@/components/ui/safe-image"
 
 type Item = { id: string; name: string; imageUrl: string; price: string | null }
 
 const arrowClasses =
-  "inline-flex h-14 w-16 items-center justify-center rounded-full border-2 border-charcoal bg-background text-charcoal transition-transform duration-[150ms] ease-[ease] hover:-translate-y-0.5"
+  "inline-flex h-14 w-16 items-center justify-center rounded-full border-2 border-charcoal bg-background text-charcoal transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px]"
 
 export function ProductSlider({ items, href }: { items: Item[]; href: string }) {
   const list = useRef<HTMLUListElement>(null)
@@ -29,19 +29,19 @@ export function ProductSlider({ items, href }: { items: Item[]; href: string }) 
         aria-label="Popular products, scroll sideways"
         className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 pt-2 sm:px-[max(1.5rem,calc((100vw-1160px)/2))]"
       >
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li key={item.id} className="w-64 shrink-0 snap-start sm:w-72">
             <a
               href={href}
               className="group block overflow-hidden rounded-[7px] border-2 border-charcoal bg-background text-charcoal transition-transform duration-[150ms] ease-[ease] hover:-translate-y-1"
             >
               <div className="relative aspect-square overflow-hidden">
-                <Image
+                <SafeImage
                   src={item.imageUrl}
                   alt={item.name}
-                  fill
-                  sizes="288px"
-                  className="object-cover transition-transform duration-[362ms] ease-out group-hover:scale-105"
+                  eager={index < 5}
+                  fallbackIndex={index}
+                  className="transition-transform duration-[362ms] ease-out group-hover:scale-105"
                 />
               </div>
               <div className="flex flex-col gap-1 p-4">
