@@ -89,7 +89,7 @@ export default async function StandortePage() {
                       </Reveal>
                     ) : null}
                   </div>
-                  <Reveal index={index} className="min-h-80 overflow-hidden rounded border-4 border-secondary bg-hero-background lg:min-h-full [&_iframe]:size-full [&_iframe]:min-h-96 [&_[data-slot=map-placeholder]]:flex [&_[data-slot=map-placeholder]]:size-full [&_[data-slot=map-placeholder]]:min-h-96 [&_[data-slot=map-placeholder]]:items-center [&_[data-slot=map-placeholder]]:justify-center [&_button]:rounded [&_button]:border-2 [&_button]:border-secondary [&_button]:bg-primary [&_button]:px-6 [&_button]:py-3 [&_button]:font-heading [&_button]:text-2xl [&_button]:uppercase [&_button]:text-secondary">
+                  <Reveal index={index} className="h-[420px] overflow-hidden rounded border-4 border-secondary bg-hero-background lg:self-start [&_iframe]:size-full [&_button]:rounded [&_button]:border-2 [&_button]:border-secondary [&_button]:bg-primary [&_button]:px-6 [&_button]:py-3 [&_button]:font-heading [&_button]:text-2xl [&_button]:uppercase [&_button]:text-secondary">
                     <LocationMap
                       apiKey={project?.google_maps_api_key}
                       address={address}
@@ -105,9 +105,9 @@ export default async function StandortePage() {
         </ul>
       </section>
 
-      <div className="overflow-hidden bg-background pb-24">
-        <div className="-mx-[5%] -rotate-2">
-          <Marquee text="Zeit für deinen Burger!" className="py-2 text-[clamp(4rem,10vw,9rem)] text-primary text-stroke-green" />
+      <div className="overflow-hidden bg-background py-12 md:py-16">
+        <div className="-mx-[5%] flex h-[150px] -rotate-2 items-center bg-secondary">
+          <Marquee text="Zeit für deinen Burger!" className="w-full text-[clamp(3.5rem,8vw,6.5rem)] text-primary" />
         </div>
       </div>
     </>

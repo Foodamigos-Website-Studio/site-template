@@ -3,6 +3,8 @@
 // A map of one location: Google's Maps Embed API with the project's browser key (google_maps_api_key from the site
 // API; it works only on the custom domain and the v0/Vercel previews). Google sets cookies, so it shows only after
 // consent (embedded_media); before that, a placeholder that reopens the banner. Unstyled: size it in the site's CSS.
+import { MapPin } from "lucide-react"
+
 import { useConsent } from "@/components/consent/consent-provider"
 
 export function mapEmbedUrl(apiKey: string, address: string, language: string): string {
@@ -28,7 +30,10 @@ export function LocationMap({
   if (!apiKey || !address) return null
   if (!granted("embedded_media")) {
     return (
-      <div data-slot="map-placeholder">
+      <div data-slot="map-placeholder" className="flex size-full flex-col items-center justify-center gap-3 px-6 text-center text-secondary">
+        <MapPin className="size-12" strokeWidth={1.75} aria-hidden="true" />
+        <p className="text-lg font-semibold leading-snug">Die Karte wird nach deiner Zustimmung geladen</p>
+        <p className="mb-3 text-base leading-snug">{address}</p>
         <button type="button" onClick={openSettings}>
           {consentLabel}
         </button>

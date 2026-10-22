@@ -15,7 +15,7 @@ const bandText = "text-[length:var(--band-text)] text-blue-deep"
 
 export function GuestCards({ city }: { city: string }) {
   return (
-    <section className="relative overflow-hidden bg-hero-background py-16 md:py-24">
+    <section className="relative -mt-[138px] overflow-hidden md:bg-hero-background bg-[linear-gradient(to_bottom,transparent_138px,var(--color-hero-background)_138px)] py-16 md:mt-0 md:bg-none md:py-24">
       <h2 className="sr-only">Frische Burger, Fries und Shakes{city ? ` in ${city}` : ""}</h2>
 
       <div className="relative [--band-text:clamp(4.5rem,14vw,13rem)]">

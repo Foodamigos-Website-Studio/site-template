@@ -85,8 +85,8 @@ export default async function UeberUnsPage() {
       </section>
 
       <section className="overflow-hidden bg-background pb-20 md:pb-28">
-        <div className="container-x grid items-center gap-12 md:grid-cols-2">
-          <Reveal className="relative mx-auto w-full max-w-lg">
+        <div className="container-x grid items-start gap-12 md:grid-cols-2">
+          <Reveal className="relative mx-auto mt-2 w-full max-w-lg">
             <div className="-rotate-2 overflow-hidden rounded border-4 border-secondary shadow-[12px_12px_0_0_var(--color-primary)]">
               <Image
                 src={MEDIA.ingredients.src}
