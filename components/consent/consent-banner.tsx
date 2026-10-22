@@ -1,11 +1,14 @@
 "use client"
 
-// The cookie banner (texts from the site API's GET /legal). Restyle it to the site's design; keep both buttons equally
-// prominent and the link to the cookie policy.
+// The cookie banner (texts from the site API's GET /legal): a slim full-width bar at the very bottom of the viewport.
+// Both buttons stay equally prominent and the link to the cookie policy stays in the text.
 import { InlineText } from "@/components/legal/inline-text"
 import type { ConsentBannerTexts } from "@/lib/studio-api"
 
 import { useConsent } from "./consent-provider"
+
+const button =
+  "flex-1 rounded border-2 border-secondary bg-secondary px-4 py-1.5 font-heading text-lg uppercase leading-none tracking-wide text-primary transition-colors duration-[150ms] ease-in-out hover:bg-background hover:text-secondary sm:flex-none sm:px-5"
 
 export function ConsentBanner({ texts }: { texts: ConsentBannerTexts | null }) {
   const { open, accept, decline } = useConsent()
@@ -16,25 +19,17 @@ export function ConsentBanner({ texts }: { texts: ConsentBannerTexts | null }) {
       aria-live="polite"
       aria-label={texts.settings}
       data-slot="consent-banner"
-      className="fixed inset-x-0 bottom-0 z-50 p-3 md:p-5"
+      className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-secondary bg-primary px-4 py-2 text-secondary"
     >
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 rounded border-2 border-secondary bg-primary p-5 text-secondary shadow-[6px_6px_0_0_var(--color-secondary)] md:flex-row md:items-center md:gap-8">
-        <p className="text-sm leading-relaxed md:flex-1 [&_a]:underline [&_a]:underline-offset-4">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
+        <p className="text-xs leading-snug sm:flex-1 [&_a]:underline [&_a]:underline-offset-4">
           <InlineText text={texts.text} />
         </p>
-        <div className="flex shrink-0 gap-3">
-          <button
-            type="button"
-            onClick={accept}
-            className="flex-1 rounded border-2 border-secondary bg-secondary px-6 py-3 font-heading text-xl uppercase leading-none tracking-wide text-primary transition-colors duration-[150ms] ease-in-out hover:bg-background hover:text-secondary md:flex-none"
-          >
+        <div className="flex shrink-0 gap-2">
+          <button type="button" onClick={accept} className={button}>
             {texts.accept}
           </button>
-          <button
-            type="button"
-            onClick={decline}
-            className="flex-1 rounded border-2 border-secondary bg-secondary px-6 py-3 font-heading text-xl uppercase leading-none tracking-wide text-primary transition-colors duration-[150ms] ease-in-out hover:bg-background hover:text-secondary md:flex-none"
-          >
+          <button type="button" onClick={decline} className={button}>
             {texts.decline}
           </button>
         </div>

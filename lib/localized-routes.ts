@@ -10,7 +10,6 @@ export type LocalizedPage =
   | "our-menu"
   | "reservations"
   | "gift-cards"
-  | "location-and-hours"
 
 /** The folder (English path) and the paths in other languages. */
 const ROUTES: Record<LocalizedPage, { folder: string; localized: Record<string, string> }> = {
@@ -22,7 +21,6 @@ const ROUTES: Record<LocalizedPage, { folder: string; localized: Record<string, 
   "our-menu": { folder: "/our-menu", localized: { de: "/speisekarte" } },
   reservations: { folder: "/reservations", localized: { de: "/reservierungen" } },
   "gift-cards": { folder: "/gift-cards", localized: { de: "/gutscheine" } },
-  "location-and-hours": { folder: "/location-and-hours", localized: { de: "/standort-und-oeffnungszeiten" } },
 }
 
 /** The page's path on the site, e.g. /datenschutzerklaerung on a German site. */

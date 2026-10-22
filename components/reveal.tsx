@@ -3,10 +3,13 @@
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react"
 
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)"
+const FAILSAFE_MS = 4000
 
 /**
- * Scroll reveal: the server HTML is visible; after mount an element below 15% of the viewport is hidden
- * (opacity 0, translateY 24px) and eases in once its top reaches 15% of the viewport height.
+ * Scroll reveal that never hides content unless that is safe. The server HTML is always visible; after mount only an
+ * element that is entirely below the viewport is hidden (opacity 0, translateY 24px), and it eases in as soon as it
+ * enters the viewport. Nothing is hidden for automated browsers (navigator.webdriver), without IntersectionObserver
+ * or with reduced motion, and everything still hidden is revealed after 4 seconds if the visitor has not scrolled.
  */
 export function Reveal({
   children,
@@ -25,40 +28,55 @@ export function Reveal({
     const element = ref.current
     if (!element) return
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-    if (element.getBoundingClientRect().top <= window.innerHeight * 0.15) return
+    if (navigator.webdriver || typeof IntersectionObserver === "undefined") return
+    if (element.getBoundingClientRect().top < window.innerHeight) return
 
     element.style.opacity = "0"
     element.style.transform = "translateY(24px)"
 
+    let scrolled = false
     let revealed = false
+    let failsafe: ReturnType<typeof setTimeout> | undefined
+
+    const cleanup = () => {
+      observer.disconnect()
+      window.removeEventListener("scroll", onScroll)
+      if (failsafe) clearTimeout(failsafe)
+    }
     const reveal = () => {
       if (revealed) return
       revealed = true
-      observer.disconnect()
-      window.removeEventListener("scroll", check)
+      cleanup()
       element.style.transition = `opacity 700ms ${EASE}, transform 700ms ${EASE}`
       element.style.transitionDelay = `${Math.min(index, 5) * 80}ms`
       element.style.opacity = "1"
       element.style.transform = "none"
     }
-    const check = () => {
-      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
-      if (element.getBoundingClientRect().top <= window.innerHeight * 0.15 || atBottom) reveal()
+    const onScroll = () => {
+      scrolled = true
+      // The last 5% of the viewport is outside the observer's root, so the page end is checked here.
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) reveal()
     }
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) reveal()
       },
-      { rootMargin: "0px 0px -85% 0px" },
+      { rootMargin: "0px 0px -5% 0px" },
     )
     observer.observe(element)
-    // Fast scrolls can jump over the 15% band, and the page end may never reach it: check on scroll as well.
-    window.addEventListener("scroll", check, { passive: true })
+    window.addEventListener("scroll", onScroll, { passive: true })
+    failsafe = setTimeout(() => {
+      if (!scrolled) reveal()
+    }, FAILSAFE_MS)
 
     return () => {
-      observer.disconnect()
-      window.removeEventListener("scroll", check)
+      cleanup()
+      // A stale hidden state must never survive an unmount/remount cycle.
+      if (!revealed) {
+        element.style.opacity = ""
+        element.style.transform = ""
+      }
     }
   }, [index])
 

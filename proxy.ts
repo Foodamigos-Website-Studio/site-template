@@ -58,7 +58,5 @@ export const config = {
     "/reservierungen",
     "/gift-cards",
     "/gutscheine",
-    "/location-and-hours",
-    "/standort-und-oeffnungszeiten",
   ],
 }

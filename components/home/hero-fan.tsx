@@ -32,7 +32,7 @@ export function HeroFan({ photos }: { photos: Photo[] }) {
   return (
     <div
       ref={ref}
-      className="fan-drift relative mx-auto mt-10 h-[clamp(250px,30vw,440px)] w-full [--step:max(11vw,40px)] md:mt-14"
+      className="fan-drift relative mt-10 h-[clamp(320px,40vw,620px)] w-full [--step:max(12.5vw,50px)] md:mt-14"
     >
       {photos.map((photo, index) => {
         const offset = index - middle
@@ -41,15 +41,22 @@ export function HeroFan({ photos }: { photos: Photo[] }) {
         return (
           <div
             key={index}
-            className="fan-card absolute left-1/2 top-4 w-[clamp(120px,15vw,240px)]"
-            style={{ "--o": offset, "--n": index, zIndex: 10 - Math.abs(offset) } as CSSProperties}
+            className="fan-card absolute left-1/2 top-8 w-[clamp(150px,19vw,300px)]"
+            style={
+              {
+                "--o": offset,
+                "--n": index,
+                "--lift": offset === 0 ? "-2.2vw" : "0px",
+                zIndex: 10 - Math.abs(offset),
+              } as CSSProperties
+            }
           >
             <div className="fan-card-inner relative aspect-[4/5] overflow-hidden rounded border-4 border-background bg-background shadow-[0_18px_36px_-14px_rgb(7_92_64_/_0.5)]">
               <Image
                 src={photo.src}
                 alt={first ? photo.alt : ""}
                 fill
-                sizes="(min-width: 1600px) 240px, 15vw"
+                sizes="(min-width: 1600px) 300px, 19vw"
                 className="object-cover"
                 priority={offset === 0}
               />

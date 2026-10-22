@@ -13,7 +13,7 @@ so the template has no influence on how v0 designs the site.
 | Umami analytics after consent | `components/consent/analytics.tsx` |
 | The coupons page for search engines (`/angebote` · `/coupons`): h1, FAQ, FAQ JSON-LD; in the sitemap, not in the navigation | `app/angebote`, `app/coupons`, `components/seo`, `lib/seo-pages.ts` |
 | Menu page with prices and Menu JSON-LD (`/speisekarte` · `/our-menu`; `/menu` is the shop's) | `app/our-menu`, `lib/format.ts` |
-| Locations and opening hours with today's status, route link and map after consent (`/standort-und-oeffnungszeiten` · `/location-and-hours`) | `app/location-and-hours`, `lib/hours.ts`, `components/locations/location-map.tsx` |
+| Locations and opening hours with today's status, route link and map after consent (`/standorte`, the only locations page) | `app/standorte`, `lib/hours.ts`, `components/locations/location-map.tsx` |
 | Table reservations: the reservation service's widget (`/reservierungen` · `/reservations`), when the module is on | `app/reservations`, `components/reservations` |
 | Gift cards: purchase into the shop's checkout and balance check, as Server Actions (`/gutscheine` · `/gift-cards`), when the module is on | `app/gift-cards`, `hooks/use-gift-card-*`, `lib/gift-cards.ts` |
 | The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |

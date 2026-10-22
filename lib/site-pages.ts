@@ -2,6 +2,7 @@
 // page, written by Max when a page is added and removed when it is deleted). /menu is the online shop's, never a page
 // of the site; legal pages are noindex and never in the sitemap.
 import { localizedPath } from "./localized-routes"
+import { ROUTES } from "./routes"
 import type { PageMetaEntry } from "./studio-api"
 import { seoPaths } from "./seo-pages"
 
@@ -18,7 +19,7 @@ export function indexedPaths(language: string, modules: ModulePages = { menu: fa
   return [
     ...SITE_PAGES,
     ...(modules.menu ? [localizedPath("our-menu", language)] : []),
-    ...(modules.locations ? [localizedPath("location-and-hours", language)] : []),
+    ...(modules.locations ? [ROUTES.locations] : []),
     ...(modules.reservations ? [localizedPath("reservations", language)] : []),
     ...(modules.giftCards ? [localizedPath("gift-cards", language)] : []),
     ...seoPaths(language),
@@ -32,7 +33,7 @@ export function indexedPaths(language: string, modules: ModulePages = { menu: fa
 export function sitemapPaths(language: string, modules: ModulePages, entries: readonly PageMetaEntry[] | null): string[] {
   const off = [
     ...(modules.menu ? [] : [localizedPath("our-menu", language)]),
-    ...(modules.locations ? [] : [localizedPath("location-and-hours", language)]),
+    ...(modules.locations ? [] : [ROUTES.locations]),
     ...(modules.reservations ? [] : [localizedPath("reservations", language)]),
     ...(modules.giftCards ? [] : [localizedPath("gift-cards", language)]),
   ]

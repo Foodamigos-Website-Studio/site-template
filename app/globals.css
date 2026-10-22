@@ -153,7 +153,7 @@
 
 .fan-card {
   --tx: calc(var(--o) * var(--step) - 50%);
-  --ty: calc(var(--o) * var(--o) * 1.1vw);
+  --ty: calc(var(--o) * var(--o) * 1.3vw + var(--lift, 0px));
   --rot: calc(var(--o) * 7deg);
   transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
   animation: fan-in 800ms var(--ease-pop) both;
@@ -168,6 +168,12 @@
   transform: translateY(-24px) rotate(calc(var(--rot) * -1)) scale(1.04);
   box-shadow: 0 30px 50px -12px rgb(7 92 64 / 0.45);
   z-index: 20;
+}
+
+/* Set by MotionGuard for automated browsers and after 4 seconds: entrance animations never keep content hidden. */
+html[data-static] .hero-in,
+html[data-static] .fan-card {
+  animation: none;
 }
 
 @keyframes caret-blink {

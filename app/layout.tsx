@@ -5,6 +5,7 @@ import type { ReactNode } from "react"
 
 import { Analytics } from "@/components/consent/analytics"
 import { ConsentBanner } from "@/components/consent/consent-banner"
+import { MotionGuard } from "@/components/motion-guard"
 import { ConsentProvider } from "@/components/consent/consent-provider"
 import { RestaurantJsonLd } from "@/components/site/restaurant-json-ld"
 import { SiteFooter } from "@/components/site/site-footer"
@@ -46,6 +47,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           </a>
           <SiteHeader />
           <main id="content" className="flex-1">
+            <MotionGuard />
             {children}
           </main>
           <SiteFooter />

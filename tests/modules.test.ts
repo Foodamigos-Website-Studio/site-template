@@ -63,7 +63,7 @@ describe("module pages", () => {
     expect(indexedPaths("de", { menu: true, locations: true, reservations: false, giftCards: true })).toEqual([
       "/",
       "/speisekarte",
-      "/standort-und-oeffnungszeiten",
+      "/standorte",
       "/gutscheine",
       "/angebote",
     ])
