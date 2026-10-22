@@ -19,7 +19,7 @@ so the template has no influence on how v0 designs the site.
 | The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |
 | Paths in the site's language: the pages above live in English folders and show under the language's path | `lib/localized-routes.ts`, `proxy.ts` |
 | The site API client | `lib/studio-api.ts`, `lib/config.ts` |
-| SEO base: metadata (each page's tags from `GET /page-meta`, kept by Max and the manager in Website Studio's SEO tab; the page's own as fallback), sitemap, robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
+| SEO base: metadata (each page's tags from `GET /page-meta`; the site's title template, verification codes, X card, category and image preview from the project's `meta`; the one share image `og_image_url`; the favicon, also as Apple touch icon; the iOS app banner), sitemap (the template's pages plus every page registered in `/page-meta`), robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
 
 ## For v0: keep, design, add
 
@@ -31,13 +31,15 @@ unstyled default markup: replace any page's markup freely, keep its data, hooks 
   prominent buttons, the footer's `<LegalLinks />`, the consent gate around embeds, or `proxy.ts`.
 - **Design** the header, footer, home page and the site's own pages like the inspiration.
 - **Name every new page's path in the site's language** (SEO): on a German site `app/kontakt`, `app/ueber-uns`,
-  never `app/contact`. Add it to `lib/site-pages.ts` (the sitemap).
+  never `app/contact`. Max registers it in Website Studio (`page_meta_update`), which puts it in the sitemap and the
+  SEO tab; never hard-code meta tags or sitemap entries.
 - The legal pages stay `noindex` and out of the sitemap; the coupons page stays out of the navigation.
-- **SEO optimization**: rewrite the coupons page's texts in `lib/seo-pages.ts` only to rank better (the restaurant's
-  name, cuisine, city, dietary options), keeping its structure. Wrap videos, iframes and third-party widgets in
+- **SEO optimization** happens in Website Studio, not in code: page tags (`page_meta_update`), the site's tags
+  (`site_meta_update`) and the coupons page's texts (`seo_page_update`). Wrap videos, iframes and third-party widgets in
   `<ConsentGate category="embedded_media">`.
 - Restaurant data always comes from `lib/studio-api.ts`; never hard-code it. Every page's `generateMetadata` goes
-  through `pageMetadata()` (lib/seo.ts), so Website Studio's tags for its path apply.
+  through `pageMetadata()` (lib/seo.ts), so Website Studio's tags for its path apply; `app/layout.tsx` keeps
+  `siteMetadata()`.
 
 ## Settings
 

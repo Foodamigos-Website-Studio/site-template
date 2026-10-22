@@ -10,17 +10,14 @@ import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
 import { SITE_LANGUAGE } from "@/lib/config"
 import { CONSENT_COOKIE, consentFromCookie } from "@/lib/consent"
-import { getSiteUrl } from "@/lib/seo"
+import { getSiteUrl, siteMetadata } from "@/lib/seo"
 import { getLegal, getProject } from "@/lib/studio-api"
 
 import "./globals.css"
 
 export async function generateMetadata(): Promise<Metadata> {
   const [project, origin] = await Promise.all([getProject(), getSiteUrl()])
-  return {
-    metadataBase: new URL(origin),
-    icons: project?.favicon_url ? { icon: project.favicon_url } : undefined,
-  }
+  return siteMetadata(project, origin)
 }
 
 // Keep the ConsentProvider, ConsentBanner, Analytics and RestaurantJsonLd: they are the site's legal and SEO base.

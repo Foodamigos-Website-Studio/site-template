@@ -23,7 +23,19 @@ export type Project = {
   favicon_url: string | null
   og_image_url: string | null
   google_maps_api_key: string | null
+  mobile_app?: { name: string | null; asc_app_id: number | null; released: boolean } | null
+  meta?: SiteMeta
   umami_website_id?: string | null
+}
+
+/** The site's own meta tags, set by Max (site_meta_update) or the manager (SEO tab). */
+export type SiteMeta = {
+  title_template: string | null
+  google_site_verification: string | null
+  bing_site_verification: string | null
+  twitter_card: "summary" | "summary_large_image"
+  category: string | null
+  max_image_preview: "none" | "standard" | "large"
 }
 
 export type OpeningPoint = { day: number; hour: number; minute: number }
@@ -206,8 +218,8 @@ export type PageMetaEntry = {
   keywords: string[]
   og_title: string | null
   og_description: string | null
-  og_image_url: string | null
   noindex: boolean
+  nofollow?: boolean
 }
 
 export function getPageMeta(language = SITE_LANGUAGE) {

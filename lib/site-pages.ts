@@ -1,6 +1,8 @@
-// The site's own pages (not the legal ones): add every page you create here, so the sitemap lists exactly the
-// visible pages. /menu is the online shop's, never a page of the site.
+// The sitemap: the template's pages the site shows, plus every page Website Studio knows (GET /page-meta, one entry per
+// page, written by Max when a page is added and removed when it is deleted). /menu is the online shop's, never a page
+// of the site; legal pages are noindex and never in the sitemap.
 import { localizedPath } from "./localized-routes"
+import type { PageMetaEntry } from "./studio-api"
 import { seoPaths } from "./seo-pages"
 
 export const SITE_PAGES: readonly string[] = ["/"]
@@ -21,4 +23,19 @@ export function indexedPaths(language: string, modules: ModulePages = { menu: fa
     ...(modules.giftCards ? [localizedPath("gift-cards", language)] : []),
     ...seoPaths(language),
   ]
+}
+
+/**
+ * Every path for the sitemap: indexedPaths plus the pages registered in Website Studio without noindex (pages v0 added),
+ * never a module page whose module is off.
+ */
+export function sitemapPaths(language: string, modules: ModulePages, entries: readonly PageMetaEntry[] | null): string[] {
+  const off = [
+    ...(modules.menu ? [] : [localizedPath("our-menu", language)]),
+    ...(modules.locations ? [] : [localizedPath("location-and-hours", language)]),
+    ...(modules.reservations ? [] : [localizedPath("reservations", language)]),
+    ...(modules.giftCards ? [] : [localizedPath("gift-cards", language)]),
+  ]
+  const registered = (entries ?? []).filter((entry) => !entry.noindex && !off.includes(entry.path)).map((entry) => entry.path)
+  return [...new Set([...indexedPaths(language, modules), ...registered])]
 }
