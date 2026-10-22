@@ -18,29 +18,29 @@ export function OrderSection({ companies, orderOn }: { companies: Company[]; ord
           <SectionHeading sparkleClassName="text-background">Order pickup and delivery</SectionHeading>
         </Reveal>
 
-        <div className="mt-12 grid items-center gap-12 md:mt-16 md:grid-cols-2">
+        <div className="mt-12 grid gap-12 md:mt-16 md:grid-cols-2 md:items-stretch">
           <Reveal className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[7px] border-2 border-background">
               <Image
-                src={PHOTO.gordo.src}
-                alt={PHOTO.gordo.alt}
+                src={PHOTO.hero.src}
+                alt={PHOTO.hero.alt}
                 fill
                 sizes="(min-width: 768px) 560px, 100vw"
                 className="object-cover"
               />
             </div>
-            <Reveal direction="right" className="absolute -bottom-8 right-2 w-32 sm:-right-3 sm:w-44 md:-right-8">
+            <Reveal direction="right" className="absolute -bottom-8 right-4 w-32 sm:-right-3 sm:w-44 md:-right-8">
               <Mascot media={MASCOT.shake} sticker className="rotate-6" sizes="176px" />
             </Reveal>
           </Reveal>
 
-          <div className="flex flex-col gap-8">
+          <div className="flex min-w-0 flex-col justify-center gap-8">
             {orderOn ? (
               <Reveal className="flex flex-wrap gap-4">
-                <ButtonLink href={ORDER_PATH} size="md">
+                <ButtonLink href={ORDER_PATH} size="md" className="h-12">
                   Order pickup
                 </ButtonLink>
-                <ButtonLink href={ORDER_PATH} size="md">
+                <ButtonLink href={ORDER_PATH} size="md" className="h-12">
                   Order delivery
                 </ButtonLink>
               </Reveal>
@@ -49,7 +49,7 @@ export function OrderSection({ companies, orderOn }: { companies: Company[]; ord
               {companies.map((company, index) => (
                 <li key={company.uuid}>
                   <Reveal index={index}>
-                    <p className="font-heading text-xl uppercase sm:text-2xl">{company.name}</p>
+                    <p className="font-heading text-[32px] uppercase leading-tight">{company.name}</p>
                     <p className="mt-1 text-lg leading-relaxed">{fullAddress(company)}</p>
                     <a
                       href={mapsUrl(fullAddress(company))}

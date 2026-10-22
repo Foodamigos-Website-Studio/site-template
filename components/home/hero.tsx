@@ -18,9 +18,9 @@ export function Hero({ name, city, orderOn }: { name: string; city: string | nul
         sizes="100vw"
         className="-z-20 object-cover"
       />
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-charcoal/70" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-charcoal/45" />
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 pt-24 text-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 pt-24 text-center [text-shadow:0_2px_12px_rgb(0_0_0/0.45)]">
         <p className="flex items-center justify-center gap-3 font-heading text-sm uppercase tracking-widest sm:text-lg">
           <Sparkle className="size-5 shrink-0 text-primary" />
           <span className="whitespace-normal text-center text-[14px] sm:text-lg">
@@ -37,7 +37,7 @@ export function Hero({ name, city, orderOn }: { name: string; city: string | nul
         </p>
       </div>
 
-      <div className="flex flex-col items-stretch gap-3 px-6 pb-28 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-5 sm:pb-20">
+      <div className="flex flex-col items-stretch gap-3 px-6 pb-28 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:pb-20">
         {orderOn ? (
           <ButtonLink href={ORDER_PATH} className="w-full sm:w-auto">
             Order online

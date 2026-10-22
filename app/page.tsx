@@ -5,6 +5,7 @@ import { Gallery } from "@/components/home/gallery"
 import { Hero } from "@/components/home/hero"
 import { Intro } from "@/components/home/intro"
 import { LocationsSection } from "@/components/home/locations-section"
+import { MascotBand } from "@/components/home/mascot-band"
 import { OrderSection } from "@/components/home/order-section"
 import { PhotoStrip } from "@/components/home/photo-strip"
 import { Reviews } from "@/components/home/reviews"
@@ -41,6 +42,7 @@ export default async function Home() {
       <PhotoStrip orderOn={orderOn} />
       <WhatsHot products={featuredProducts(menu)} orderOn={orderOn} />
       <Dietary options={project?.dietary_attributes ?? []} />
+      <MascotBand />
       {locations.length ? <LocationsSection companies={locations} orderOn={orderOn} /> : null}
       <Reviews reviews={latestReviews(companies)} rating={googleRating(companies)} />
       <Gallery orderOn={orderOn} />

@@ -4,9 +4,9 @@ import type { ReactNode } from "react"
 import { cn } from "@/lib/utils"
 
 const VARIANTS = {
-  red: "border-charcoal bg-primary text-background shadow-[0_4px_0_0_var(--color-charcoal)]",
-  charcoal: "border-charcoal bg-charcoal text-background shadow-[0_4px_0_0_var(--color-charcoal)]",
-  light: "border-charcoal bg-background text-charcoal shadow-[0_4px_0_0_var(--color-charcoal)]",
+  red: "border-charcoal bg-primary text-background shadow-[6px_6px_0_0_var(--color-charcoal)]",
+  charcoal: "border-charcoal bg-charcoal text-background shadow-[6px_6px_0_0_var(--color-charcoal)]",
+  light: "border-charcoal bg-background text-charcoal shadow-[6px_6px_0_0_var(--color-charcoal)]",
   outline: "border-background bg-transparent text-background",
 } as const
 
@@ -20,8 +20,8 @@ export type ButtonVariant = keyof typeof VARIANTS
 
 export function buttonClasses(variant: ButtonVariant = "red", size: keyof typeof SIZES = "lg", className?: string) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-[7px] border-2 text-center font-heading uppercase leading-none tracking-wide",
-    "transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px] motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+    "inline-flex items-center justify-center gap-2 rounded-[999px] border-2 text-center font-heading uppercase leading-none tracking-wide",
+    "transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[2px] motion-reduce:transition-none motion-reduce:hover:translate-y-0",
     VARIANTS[variant],
     SIZES[size],
     className,

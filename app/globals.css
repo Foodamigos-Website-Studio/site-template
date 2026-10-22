@@ -65,6 +65,27 @@ body {
   background-size: 7px 7px;
 }
 
+/* Mascot tiles bob gently on hover (uses `translate`, so the tile's rotation is untouched). */
+@keyframes mascot-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+}
+
+.mascot-bob:hover {
+  animation: mascot-bob 900ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-bob:hover {
+    animation: none;
+  }
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }

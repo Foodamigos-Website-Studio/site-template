@@ -45,7 +45,7 @@ export function ProductSlider({ items, href }: { items: Item[]; href: string }) 
                 />
               </div>
               <div className="flex flex-col gap-1 p-4">
-                <h3 className="line-clamp-2 min-h-[2.5rem] font-heading text-base uppercase leading-tight">{item.name}</h3>
+                <h3 className="min-h-[2.5rem] font-heading text-[14px] uppercase leading-tight">{item.name}</h3>
                 {item.price ? <p className="text-lg font-bold text-primary">{item.price}</p> : null}
               </div>
             </a>
