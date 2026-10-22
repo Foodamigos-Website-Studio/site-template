@@ -1,4 +1,110 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* No design here on purpose: v0 sets the site's colours, fonts and spacing from the inspiration. */
+@theme static {
+  --color-accent: #3898ec;
+  --color-primary: #ed2023;
+  --color-charcoal: #2b2f36;
+  --color-secondary: #0082f3;
+  --color-background: #ffffff;
+  --color-text-primary: #2b2f36;
+}
+
+@theme inline {
+  --color-foreground: var(--color-text-primary);
+  --font-heading: var(--font-bowlby), "Bowlby One", "Arial Black", sans-serif;
+  --font-sans: var(--font-space), "Space Grotesk", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-background);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 3px;
+}
+
+/* Checkerboard divider strip: two rows of 12px squares. */
+.checker {
+  height: 24px;
+  background: conic-gradient(
+      var(--color-charcoal) 25%,
+      var(--color-background) 0 50%,
+      var(--color-charcoal) 0 75%,
+      var(--color-background) 0
+    )
+    0 0 / 24px 24px;
+}
+
+/* Subtle halftone dots on charcoal blocks. */
+.texture-dots {
+  background-color: var(--color-charcoal);
+  background-image: radial-gradient(rgb(255 255 255 / 0.07) 1.2px, transparent 1.4px);
+  background-size: 7px 7px;
+}
+
+.texture-dots-red {
+  background-color: var(--color-primary);
+  background-image: radial-gradient(rgb(0 0 0 / 0.08) 1.2px, transparent 1.4px);
+  background-size: 7px 7px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Map of the locations page (LocationMap is unstyled). */
+[data-slot="map"] {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 2px solid var(--color-charcoal);
+  border-radius: 7px;
+}
+
+[data-slot="map-placeholder"] {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  border: 2px dashed var(--color-charcoal);
+  border-radius: 7px;
+  background: var(--color-background);
+}
+
+[data-slot="map-placeholder"] button {
+  padding: 0.875rem 1.5rem;
+  border: 2px solid var(--color-charcoal);
+  border-radius: 7px;
+  background: var(--color-primary);
+  color: var(--color-background);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  box-shadow: 0 4px 0 0 var(--color-charcoal);
+  transition: transform 150ms ease;
+}
+
+[data-slot="map-placeholder"] button:hover {
+  transform: translateY(-2px);
+}
