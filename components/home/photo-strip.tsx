@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/section-heading"
 import { PHOTO, type Media } from "@/lib/media"
 import { ORDER_PATH } from "@/lib/restaurant"
 
-const PHOTOS: Media[] = [PHOTO.bbq, PHOTO.chilli, PHOTO.fries, PHOTO.shake, PHOTO.ingredients, PHOTO.cheese]
+const PHOTOS: Media[] = [PHOTO.fries, PHOTO.chilli, PHOTO.bbq, PHOTO.shake, PHOTO.ingredients, PHOTO.cheese]
 
 export function PhotoStrip({ orderOn }: { orderOn: boolean }) {
   return (

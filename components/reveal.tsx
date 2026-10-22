@@ -13,7 +13,7 @@ const HIDDEN: Record<Direction, string> = {
 /**
  * Scroll reveal: server-rendered HTML stays visible; once mounted, an element below 45% of the viewport is pushed
  * down (or sideways for the mascots) and slides to its place when its top reaches 45% of the viewport, once.
- * Content is never fully transparent, so screenshots, crawlers and print always show it.
+ * Content always rests at full opacity and colour, so screenshots, crawlers and print show it exactly as designed.
  */
 export function Reveal({
   children,
@@ -65,11 +65,11 @@ export function Reveal({
       className={className}
       style={{
         transform: hidden ? HIDDEN[direction] : "none",
-        opacity: hidden && direction === "up" ? 0.85 : 1,
+        opacity: 1,
         transition: hidden
           ? "none"
           : direction === "up"
-            ? `opacity 330ms ease-out ${index * 100}ms, transform 330ms ease-out ${index * 100}ms`
+            ? `transform 330ms ease-out ${index * 100}ms`
             : `transform 1070ms ease-out ${index * 100}ms`,
       }}
     >

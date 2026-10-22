@@ -27,7 +27,7 @@ export function ProductSlider({ items, href }: { items: Item[]; href: string }) 
         ref={list}
         tabIndex={0}
         aria-label="Popular products, scroll sideways"
-        className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 pt-2 sm:px-[max(1.5rem,calc((100vw-1160px)/2))]"
+        className="no-scrollbar flex snap-x snap-mandatory scroll-pl-6 gap-5 overflow-x-auto px-6 pb-4 pt-2 [mask-image:linear-gradient(to_right,#000_calc(100%-96px),transparent)] sm:scroll-pl-[max(1.5rem,calc((100vw-1160px)/2))] sm:px-[max(1.5rem,calc((100vw-1160px)/2))]"
       >
         {items.map((item, index) => (
           <li key={item.id} className="w-64 shrink-0 snap-start sm:w-72">
