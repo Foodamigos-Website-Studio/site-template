@@ -197,3 +197,19 @@ export type SeoPage = {
 export function getSeoPage(page: SeoPage["page"], language = SITE_LANGUAGE) {
   return request<SeoPage>(`/seo-pages/${page}?lang=${encodeURIComponent(language)}`)
 }
+
+/** One page's meta tags, managed in Website Studio (Max or the manager in the SEO tab). */
+export type PageMetaEntry = {
+  path: string
+  title: string
+  description: string
+  keywords: string[]
+  og_title: string | null
+  og_description: string | null
+  og_image_url: string | null
+  noindex: boolean
+}
+
+export function getPageMeta(language = SITE_LANGUAGE) {
+  return request<PageMetaEntry[]>(`/page-meta?lang=${encodeURIComponent(language)}`)
+}

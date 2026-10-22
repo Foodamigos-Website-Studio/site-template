@@ -19,7 +19,7 @@ so the template has no influence on how v0 designs the site.
 | The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |
 | Paths in the site's language: the pages above live in English folders and show under the language's path | `lib/localized-routes.ts`, `proxy.ts` |
 | The site API client | `lib/studio-api.ts`, `lib/config.ts` |
-| SEO base: metadata, sitemap, robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
+| SEO base: metadata (each page's tags from `GET /page-meta`, kept by Max and the manager in Website Studio's SEO tab; the page's own as fallback), sitemap, robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
 
 ## For v0: keep, design, add
 
@@ -36,7 +36,8 @@ unstyled default markup: replace any page's markup freely, keep its data, hooks 
 - **SEO optimization**: rewrite the coupons page's texts in `lib/seo-pages.ts` only to rank better (the restaurant's
   name, cuisine, city, dietary options), keeping its structure. Wrap videos, iframes and third-party widgets in
   `<ConsentGate category="embedded_media">`.
-- Restaurant data always comes from `lib/studio-api.ts`; never hard-code it.
+- Restaurant data always comes from `lib/studio-api.ts`; never hard-code it. Every page's `generateMetadata` goes
+  through `pageMetadata()` (lib/seo.ts), so Website Studio's tags for its path apply.
 
 ## Settings
 
