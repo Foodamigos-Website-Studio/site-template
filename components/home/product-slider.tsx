@@ -9,7 +9,7 @@ import { SafeImage } from "@/components/ui/safe-image"
 type Item = { id: string; name: string; imageUrl: string; price: string | null }
 
 const arrowClasses =
-  "inline-flex h-14 w-16 items-center justify-center rounded-full border-2 border-charcoal bg-background text-charcoal transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px]"
+  "inline-flex h-14 w-16 items-center justify-center rounded-full border-2 border-charcoal bg-background text-charcoal transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[2px]"
 
 export function ProductSlider({ items, href }: { items: Item[]; href: string }) {
   const list = useRef<HTMLUListElement>(null)

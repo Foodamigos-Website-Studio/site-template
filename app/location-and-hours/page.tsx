@@ -37,21 +37,21 @@ export default async function LocationsPage() {
         Come by for a smash burger, or order online for pickup and delivery from {project?.name}.
       </PageHero>
       <section data-slot="locations" className="bg-background pb-24 pt-16 sm:pt-20">
-        <ul className="mx-auto flex max-w-[1160px] flex-col gap-12 px-6">
-          {companies.map((company) => {
+        <ul className="mx-auto grid max-w-[1360px] gap-12 px-6 lg:grid-cols-2 lg:gap-10">
+          {companies.map((company, index) => {
             const address = fullAddress(company)
             const open = isOpenNow(company.opening_hours, company.timezone, now)
             return (
               <li key={company.uuid}>
-                <Reveal>
+                <Reveal index={index} className="h-full">
                   <article
                     data-slot="location"
                     data-open={open || undefined}
-                    className="grid gap-8 rounded-[7px] border-2 border-charcoal bg-background p-6 shadow-[8px_8px_0_0_var(--color-primary)] sm:p-10 lg:grid-cols-2"
+                    className="flex h-full flex-col gap-8 rounded-[7px] border-2 border-charcoal bg-background p-6 shadow-[8px_8px_0_0_var(--color-primary)] sm:p-8"
                   >
                     <div className="flex flex-col gap-6">
                       <div className="flex flex-wrap items-start justify-between gap-3">
-                        <h2 className="font-heading text-3xl uppercase leading-none sm:text-5xl">{company.name}</h2>
+                        <h2 className="font-heading text-3xl uppercase leading-none sm:text-4xl">{company.name}</h2>
                         <span
                           className={cn(
                             "rounded-[7px] border-2 border-charcoal px-3 py-1 text-xs font-bold uppercase",
@@ -101,7 +101,7 @@ export default async function LocationsPage() {
                         ) : null}
                       </div>
                     </div>
-                    <div className="min-h-72 overflow-hidden rounded-[7px] border-2 border-charcoal bg-muted [&_iframe]:h-full [&_iframe]:min-h-72 [&_iframe]:w-full [&_iframe]:border-0">
+                    <div className="min-h-72 flex-1 overflow-hidden rounded-[7px] border-2 border-charcoal bg-muted [&_iframe]:h-full [&_iframe]:min-h-72 [&_iframe]:w-full [&_iframe]:border-0">
                       <LocationMap
                         apiKey={project?.google_maps_api_key}
                         address={address}

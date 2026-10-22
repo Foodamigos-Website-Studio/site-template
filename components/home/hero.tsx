@@ -21,13 +21,13 @@ export function Hero({ name, city, orderOn }: { name: string; city: string | nul
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-charcoal/45" />
 
       <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 pt-24 text-center [text-shadow:0_2px_12px_rgb(0_0_0/0.45)]">
-        <p className="flex items-center justify-center gap-3 font-heading text-sm uppercase tracking-widest sm:text-lg">
-          <Sparkle className="size-5 shrink-0 text-primary" />
-          <span className="whitespace-normal text-center text-[14px] sm:text-lg">
+        <p className="flex max-w-full items-center justify-center gap-2 font-heading text-[11px] uppercase tracking-[0.12em] sm:gap-3 sm:text-lg sm:tracking-widest">
+          <Sparkle className="size-2 shrink-0 text-primary sm:size-5" />
+          <span className="whitespace-nowrap text-center">
             {name}
             {city ? ` · ${city}` : null}
           </span>
-          <Sparkle className="size-5 shrink-0 text-primary" />
+          <Sparkle className="size-2 shrink-0 text-primary sm:size-5" />
         </p>
         <h1 className="max-w-5xl text-balance font-heading text-5xl uppercase leading-[0.9] sm:text-7xl lg:text-[120px]">
           Fresh smash burgers, made to order

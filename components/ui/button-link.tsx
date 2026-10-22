@@ -7,14 +7,12 @@ const VARIANTS = {
   red: "border-charcoal bg-primary text-background shadow-[6px_6px_0_0_var(--color-charcoal)]",
   charcoal: "border-charcoal bg-charcoal text-background shadow-[6px_6px_0_0_var(--color-charcoal)]",
   light: "border-charcoal bg-background text-charcoal shadow-[6px_6px_0_0_var(--color-charcoal)]",
-  outline: "border-background bg-transparent text-background",
+  outline: "border-charcoal bg-background text-charcoal shadow-[6px_6px_0_0_var(--color-charcoal)]",
 } as const
 
-const SIZES = {
-  lg: "px-6 py-4 text-base sm:px-[30px] sm:py-5 sm:text-[22px]",
-  md: "px-5 py-3 text-base",
-  sm: "px-4 py-2 text-sm",
-} as const
+/** One chunky pill for every button; the keys remain so existing call sites keep working. */
+const PILL = "min-h-12 px-7 py-[14px] text-base sm:text-lg"
+const SIZES = { lg: PILL, md: PILL, sm: PILL } as const
 
 export type ButtonVariant = keyof typeof VARIANTS
 

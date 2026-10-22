@@ -51,7 +51,7 @@ export function HeaderBar({
             aria-expanded={open}
             aria-controls="site-menu"
             aria-label="Open menu"
-            className="inline-flex size-12 items-center justify-center rounded-[7px] border-2 border-charcoal bg-background text-charcoal shadow-[0_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px]"
+            className="inline-flex size-12 items-center justify-center rounded-[999px] border-2 border-charcoal bg-background text-charcoal shadow-[4px_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[2px]"
           >
             <Menu className="size-6" strokeWidth={3} aria-hidden="true" />
           </button>
@@ -66,9 +66,18 @@ export function HeaderBar({
 
         <div className="flex justify-end">
           {orderHref ? (
-            <ButtonLink href={orderHref} size="md" className="hidden sm:inline-flex">
-              Order online
-            </ButtonLink>
+            <>
+              <ButtonLink
+                href={orderHref}
+                size="sm"
+                className="h-10 min-h-10 px-4 py-0 text-sm shadow-[3px_3px_0_0_var(--color-charcoal)] sm:hidden"
+              >
+                Order
+              </ButtonLink>
+              <ButtonLink href={orderHref} size="md" className="hidden sm:inline-flex">
+                Order online
+              </ButtonLink>
+            </>
           ) : null}
         </div>
       </div>
@@ -88,7 +97,7 @@ export function HeaderBar({
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="inline-flex size-12 items-center justify-center rounded-[7px] border-2 border-charcoal bg-background text-charcoal shadow-[0_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[3px]"
+              className="inline-flex size-12 items-center justify-center rounded-[999px] border-2 border-charcoal bg-background text-charcoal shadow-[4px_4px_0_0_var(--color-charcoal)] transition-transform duration-[150ms] ease-[ease] hover:-translate-y-[2px]"
             >
               <X className="size-6" strokeWidth={3} aria-hidden="true" />
             </button>
