@@ -1,0 +1,41 @@
+# FoodAmigos site template
+
+The base every FoodAmigos Website Studio website starts from. Max (the Website Studio agent) creates each website's
+v0 chat from this repository (`POST /chats/from-repo`), writes the restaurant's values into `lib/site-defaults.ts`,
+and v0 then designs the restaurant's own pages. Everything every site must have is already here, so v0 never builds
+it again:
+
+| What | Where |
+|---|---|
+| Legal pages from the site API, per language: Impressum, privacy policy, cookie policy | `app/impressum`, `app/datenschutzerklaerung` · `app/privacy-policy`, `app/cookie-richtlinie` · `app/cookie-policy`, `components/legal` |
+| Cookie banner and consent (analytics, embedded media and restaurant scripts only after Accept) | `components/consent`, `lib/consent.ts` |
+| Umami analytics after consent | `components/consent/analytics.tsx` |
+| The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |
+| The site API client | `lib/studio-api.ts`, `lib/config.ts` |
+| SEO base: metadata, sitemap, robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
+
+## For v0: keep, design, add
+
+- **Keep** the files above working: restyle them freely, never remove a legal page, the banner, its two equally
+  prominent buttons, the footer's `<LegalLinks />`, the consent gate around embeds, or `proxy.ts`.
+- **Design** the header, footer, home page and the site's own pages like the inspiration.
+- **Add** every page you create to `lib/site-pages.ts` (the sitemap). Wrap videos, iframes and third-party widgets in
+  `<ConsentGate category="embedded_media">`.
+- Restaurant data always comes from `lib/studio-api.ts`; never hard-code it.
+
+## Settings
+
+Env vars (set by Studio on the Vercel project) win over `lib/site-defaults.ts` (written by Studio for the v0 preview):
+`NEXT_PUBLIC_STUDIO_API_URL`, `NEXT_PUBLIC_PROJECT_UUID`, `NEXT_PUBLIC_SITE_LANGUAGE`, `NEXT_PUBLIC_SITE_MODULES`
+(e.g. `online_shop,reservations`), `ONLINE_SHOP_EMBED_ORIGIN`, `ONLINE_SHOP_EMBED_DOMAIN`, `NEXT_PUBLIC_UMAMI_SCRIPT_URL`.
+
+## Develop
+
+```bash
+pnpm install
+pnpm test        # unit tests (consent, inline markup, legal paths, /menu)
+pnpm typecheck
+NEXT_PUBLIC_STUDIO_API_URL=http://localhost:8095 NEXT_PUBLIC_PROJECT_UUID=<project uuid> pnpm dev
+```
+
+The legal texts themselves live in the Website Studio backend (`resources/legal`, `GET /api/projects/{uuid}/legal`).
