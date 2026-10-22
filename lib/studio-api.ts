@@ -180,3 +180,20 @@ export function getLegal(language = SITE_LANGUAGE) {
 export function getLegalPage(page: LegalPageKey, language = SITE_LANGUAGE) {
   return request<LegalPage>(`/legal/${page}?lang=${encodeURIComponent(language)}`)
 }
+
+export type SeoPage = {
+  page: "coupons"
+  language: string
+  fallback: boolean
+  slug: string
+  overridden: boolean
+  meta_title: string
+  meta_description: string
+  keywords: string[]
+  title: string
+  faq: { question: string; answer: string }[]
+}
+
+export function getSeoPage(page: SeoPage["page"], language = SITE_LANGUAGE) {
+  return request<SeoPage>(`/seo-pages/${page}?lang=${encodeURIComponent(language)}`)
+}

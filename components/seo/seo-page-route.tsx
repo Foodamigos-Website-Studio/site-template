@@ -1,35 +1,27 @@
-// A page for search engines as a route: app/angebote and app/coupons re-export it. A path of the other language
-// redirects to the site's own. Unstyled on purpose: style it like the site (one h1, the FAQ).
+// A page for search engines as a route (app/coupons re-exports it; proxy.ts serves it under /angebote on a German
+// site). Texts from the site API. Unstyled on purpose: style it like the site (one h1, the FAQ).
 import type { Metadata } from "next"
-import { permanentRedirect } from "next/navigation"
+import { notFound } from "next/navigation"
 
 import { SITE_LANGUAGE } from "@/lib/config"
+import { localizedPath } from "@/lib/localized-routes"
 import { pageMetadata } from "@/lib/seo"
-import { seoPageContent, seoSlug, type SeoPageKey } from "@/lib/seo-pages"
-import { getCompanies, getProject } from "@/lib/studio-api"
+import type { SeoPageKey } from "@/lib/seo-pages"
+import { getSeoPage } from "@/lib/studio-api"
 
-async function content(page: SeoPageKey) {
-  const [project, companies] = await Promise.all([getProject(), getCompanies()])
-  const main = companies?.[0]
-  return seoPageContent(page, SITE_LANGUAGE, {
-    name: project?.name ?? "",
-    city: main?.city ?? "",
-    email: main?.business_profile?.email || main?.email || "",
-  })
-}
-
-export function seoPageRoute(page: SeoPageKey, path: string) {
+export function seoPageRoute(page: SeoPageKey) {
   async function generateMetadata(): Promise<Metadata> {
-    const texts = await content(page)
+    const texts = await getSeoPage(page)
+    if (!texts) return {}
     return {
-      ...(await pageMetadata({ title: texts.metaTitle, description: texts.metaDescription, path: seoSlug(page, SITE_LANGUAGE) })),
+      ...(await pageMetadata({ title: texts.meta_title, description: texts.meta_description, path: localizedPath(page, SITE_LANGUAGE) })),
       keywords: texts.keywords,
     }
   }
 
   async function SeoPageRoute() {
-    if (seoSlug(page, SITE_LANGUAGE) !== path) permanentRedirect(seoSlug(page, SITE_LANGUAGE))
-    const texts = await content(page)
+    const texts = await getSeoPage(page)
+    if (!texts) notFound()
     const faq = {
       "@context": "https://schema.org",
       "@type": "FAQPage",

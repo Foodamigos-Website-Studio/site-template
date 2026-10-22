@@ -12,6 +12,7 @@ describe("legal paths", () => {
 
   it("keeps the legal pages out of the sitemap: only the site's pages and the SEO pages are indexed", () => {
     expect(indexedPaths("de")).toEqual(["/", "/angebote"])
+    expect(indexedPaths("en")).toEqual(["/", "/coupons"])
     for (const path of legalPaths("de")) expect(indexedPaths("de")).not.toContain(path)
   })
 })

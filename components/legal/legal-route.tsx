@@ -1,7 +1,7 @@
-// One legal page as a route: app/impressum, app/datenschutzerklaerung, app/privacy-policy, app/cookie-richtlinie and
-// app/cookie-policy each re-export it. A path of the other language redirects to the site's own.
+// One legal page as a route: app/impressum, app/privacy-policy and app/cookie-policy re-export it; proxy.ts serves them
+// under the site's language's paths (/datenschutzerklaerung, /cookie-richtlinie on a German site).
 import type { Metadata } from "next"
-import { notFound, permanentRedirect } from "next/navigation"
+import { notFound } from "next/navigation"
 
 import { SITE_LANGUAGE } from "@/lib/config"
 import { legalSlug } from "@/lib/legal"
@@ -18,7 +18,7 @@ function legalDescription(legal: LegalPage | null): string {
   return text.length > 155 ? `${text.slice(0, 154).trimEnd()}…` : text
 }
 
-export function legalRoute(page: LegalPageKey, path: string) {
+export function legalRoute(page: LegalPageKey) {
   async function generateMetadata(): Promise<Metadata> {
     const [legal, index, project] = await Promise.all([getLegalPage(page), getLegal(), getProject()])
     const label = index?.pages.find((entry) => entry.page === page)?.label ?? legal?.title ?? ""
@@ -31,7 +31,6 @@ export function legalRoute(page: LegalPageKey, path: string) {
   }
 
   async function LegalPageRoute() {
-    if (legalSlug(page, SITE_LANGUAGE) !== path) permanentRedirect(legalSlug(page, SITE_LANGUAGE))
     const legal = await getLegalPage(page)
     if (!legal) notFound()
     return <LegalBlocks page={legal} />
