@@ -65,7 +65,7 @@ export function Reveal({
       className={className}
       style={{
         transform: hidden ? HIDDEN[direction] : "none",
-        opacity: hidden && direction === "up" ? 0.55 : 1,
+        opacity: hidden && direction === "up" ? 0.85 : 1,
         transition: hidden
           ? "none"
           : direction === "up"
