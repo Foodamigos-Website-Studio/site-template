@@ -5,6 +5,7 @@ import type { ReactNode } from "react"
 import { Analytics } from "@/components/consent/analytics"
 import { ConsentBanner } from "@/components/consent/consent-banner"
 import { ConsentProvider } from "@/components/consent/consent-provider"
+import { PageLoader } from "@/components/site/page-loader"
 import { RestaurantJsonLd } from "@/components/site/restaurant-json-ld"
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
@@ -20,13 +21,15 @@ export async function generateMetadata(): Promise<Metadata> {
   return siteMetadata(project, origin)
 }
 
-// Keep the ConsentProvider, ConsentBanner, Analytics and RestaurantJsonLd: they are the site's legal and SEO base.
+// Keep the ConsentProvider, ConsentBanner, Analytics and RestaurantJsonLd: they are the site's legal and SEO base, and
+// the PageLoader, which shows that the next page is loading.
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const [cookieStore, legal, project] = await Promise.all([cookies(), getLegal(), getProject()])
   const consent = consentFromCookie(`${CONSENT_COOKIE}=${cookieStore.get(CONSENT_COOKIE)?.value ?? ""}`)
   return (
     <html lang={SITE_LANGUAGE}>
       <body>
+        <PageLoader />
         <ConsentProvider initial={consent}>
           <SiteHeader />
           <main id="content">{children}</main>
