@@ -263,8 +263,11 @@ describe("/menu in the chosen language", () => {
     expect(menuRoute({ ...base, language: "en" })).toEqual({ kind: "rewrite", url: "https://embed.test/menu/gift-cards/checkout?value=2500", cookies: { storefront_base_path: "/menu", storefront_locale: "en" } })
   })
 
-  it("opens the standalone shop's language page, and its own pages for the site's language", () => {
-    expect(menuRoute({ ...base, host: "preview.vercel.app", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/en/gift-cards/checkout?value=2500" })
+  it("opens the standalone shop in the chosen language through ?lng=, never a /{language} path (WT.QF0.2)", () => {
+    expect(menuRoute({ ...base, host: "preview.vercel.app", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/gift-cards/checkout?value=2500&lng=en" })
+    expect(menuRoute({ ...base, host: "preview.vercel.app", pathname: "/menu", search: "", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de?lng=en" })
+    expect(menuRoute({ ...base, host: "preview.vercel.app", pathname: "/menu", search: "", language: "de", siteLanguage: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de?lng=de" })
+    // The site's own language needs nothing: the shop opens in its own language.
     expect(menuRoute({ ...base, host: "preview.vercel.app", language: "de" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/gift-cards/checkout?value=2500" })
   })
 })

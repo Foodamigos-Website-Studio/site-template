@@ -16,7 +16,7 @@ export function menuRoute(input: {
   onlineShopUrl: string | null
   /** The language the visitor reads the site in (the DE/EN switch), which the shop opens in. */
   language: string
-  /** The site's own language: the standalone shop opens a different choice under its /{language} pages. */
+  /** The site's own language: the standalone shop opens a different choice through ?lng={language}. */
   siteLanguage?: string
 }): MenuRoute {
   if (!input.shopOn) return { kind: "next" }
@@ -30,6 +30,10 @@ export function menuRoute(input: {
   }
   if (!input.onlineShopUrl) return { kind: "next" }
   const rest = input.pathname.replace(/^\/menu/, "")
-  const locale = input.siteLanguage && input.language !== input.siteLanguage ? `/${input.language}` : ""
-  return { kind: "redirect", url: `${input.onlineShopUrl.replace(/\/+$/, "")}${locale}${rest}${input.search}` }
+  // WT.QF0.2: the standalone shop has no /{language} pages (it reads "/en" as a company and shows its 404); it takes
+  // the visitor's language from ?lng=, so a choice that differs from the site's language rides along as that.
+  const query = new URLSearchParams(input.search)
+  if (input.siteLanguage && input.language !== input.siteLanguage) query.set("lng", input.language)
+  const search = query.toString()
+  return { kind: "redirect", url: `${input.onlineShopUrl.replace(/\/+$/, "")}${rest}${search ? `?${search}` : ""}` }
 }
