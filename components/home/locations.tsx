@@ -8,7 +8,6 @@ import { reservationLink } from "@/lib/nav"
 import type { Company, Project } from "@/lib/studio-api"
 
 export function Locations({ project, companies }: { project: Project | null; companies: Company[] }) {
-  if (!companies.length) return null
   const reserve = reservationLink(project)
 
   return (
@@ -20,6 +19,8 @@ export function Locations({ project, companies }: { project: Project | null; com
             Standorte
           </h2>
         </Reveal>
+
+        {companies.length === 0 ? <p className="mx-auto mt-12 max-w-[32rem] text-center text-lg leading-relaxed">Unsere Standorte und Öffnungszeiten findest du hier in Kürze.</p> : null}
 
         <div className="mt-20 grid gap-20 md:grid-cols-2 md:gap-16">
           {companies.map((company, index) => {

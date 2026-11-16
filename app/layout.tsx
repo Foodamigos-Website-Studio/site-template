@@ -50,7 +50,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <ConsentBanner texts={legal?.consent_banner ?? null} />
           <Analytics umamiWebsiteId={project?.umami_website_id} />
         </ConsentProvider>
-        <RestaurantJsonLd />
+        <RestaurantJsonLd cuisine="Italienisch" />
       </body>
     </html>
   )
