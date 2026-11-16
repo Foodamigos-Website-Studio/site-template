@@ -263,8 +263,15 @@ describe("/menu in the chosen language", () => {
     expect(menuRoute({ ...base, language: "en" })).toEqual({ kind: "rewrite", url: "https://embed.test/menu/gift-cards/checkout?value=2500", cookies: { storefront_base_path: "/menu", storefront_locale: "en" } })
   })
 
-  it("opens the standalone shop's language page, and its own pages for the site's language", () => {
-    expect(menuRoute({ ...base, host: "preview.vercel.app", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/en/gift-cards/checkout?value=2500" })
-    expect(menuRoute({ ...base, host: "preview.vercel.app", language: "de" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/gift-cards/checkout?value=2500" })
+  it("opens the standalone shop in the chosen language through ?lng=, never a /{language} path (WT.QF0.2)", () => {
+    expect(menuRoute({ ...base, host: "preview.vercel.app", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/gift-cards/checkout?value=2500&lng=en" })
+    expect(menuRoute({ ...base, host: "preview.vercel.app", pathname: "/menu", search: "", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de?lng=en" })
+    expect(menuRoute({ ...base, host: "preview.vercel.app", pathname: "/menu", search: "", language: "de", siteLanguage: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de?lng=de" })
+    // The site's own language too: without lng the shop opens in the restaurant's language (Sterling review).
+    expect(menuRoute({ ...base, host: "preview.vercel.app", language: "de" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/gift-cards/checkout?value=2500&lng=de" })
+    expect(menuRoute({ ...base, host: "preview.vercel.app", pathname: "/menu", search: "", language: "en", siteLanguage: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de?lng=en" })
+    // The visitor's query goes along as it came; a lng it carries already wins.
+    expect(menuRoute({ ...base, host: "preview.vercel.app", search: "?q=pizza%20margherita&flag", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/gift-cards/checkout?q=pizza%20margherita&flag&lng=en" })
+    expect(menuRoute({ ...base, host: "preview.vercel.app", search: "?lng=it", language: "en" })).toEqual({ kind: "redirect", url: "https://bestellen.trattoria.de/gift-cards/checkout?lng=it" })
   })
 })
