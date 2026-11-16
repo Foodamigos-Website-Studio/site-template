@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { createElement } from "react"
+import { createElement, StrictMode } from "react"
 import { act } from "react"
 import { createRoot } from "react-dom/client"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
@@ -159,20 +159,22 @@ describe("text the page changes in place (WT.2 review)", () => {
 })
 
 describe("the switch and the page translator together", () => {
-  async function mount(siteLanguage = "de") {
+  async function mount(siteLanguage = "de", { strict = false } = {}) {
     const header = document.createElement("header")
     const main = document.createElement("main")
     main.innerHTML = "<p>Willkommen</p>"
     document.body.append(header, main)
-    vi.stubGlobal("fetch", vi.fn(async (_url: string, init: RequestInit) => {
+    const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
       const { texts, target } = JSON.parse(String(init.body)) as { texts: string[]; target: string }
       return new Response(JSON.stringify({ translations: texts.map((text) => `[${target}] ${text}`) }))
-    }))
-    const root = createRoot(header)
-    await act(async () => {
-      root.render([createElement(LanguageSwitch, { key: "s", siteLanguage }), createElement(PageTranslation, { key: "t", siteLanguage, apiUrl: "https://api.test/api/projects/p" })])
     })
-    return root
+    vi.stubGlobal("fetch", fetchMock)
+    const root = createRoot(header)
+    const children = [createElement(LanguageSwitch, { key: "s", siteLanguage }), createElement(PageTranslation, { key: "t", siteLanguage, apiUrl: "https://api.test/api/projects/p" })]
+    await act(async () => {
+      root.render(strict ? createElement(StrictMode, null, children) : children)
+    })
+    return Object.assign(root, { fetchMock })
   }
 
   it("translates at once on EN, keeps the choice for the next page and back on DE", async () => {
@@ -203,6 +205,23 @@ describe("the switch and the page translator together", () => {
     later.textContent = "Neue Gerichte"
     await act(async () => document.querySelector("main")!.append(later))
     await vi.waitFor(() => expect(later.textContent).toBe("[en] Neue Gerichte"), { timeout: 2000 })
+    root.unmount()
+    vi.unstubAllGlobals()
+  })
+
+  it("translates once after a reload in English under StrictMode (v0 previews, next dev), and DE restores German (WT.QF0.1)", async () => {
+    window.localStorage.setItem("site_language", "en")
+    const root = await mount("de", { strict: true })
+    await vi.waitFor(() => expect(document.querySelector("main p")!.textContent).toBe("[en] Willkommen"))
+    // Past the page-change debounce: a second pass would take the English for the original and translate it again.
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 300)))
+    expect(document.querySelector("main p")!.textContent).toBe("[en] Willkommen")
+    const sent = root.fetchMock.mock.calls.flatMap(([, init]) => (JSON.parse(String(init.body)) as { texts: string[] }).texts)
+    expect(sent).toEqual(["Willkommen"])
+
+    await act(async () => document.querySelector<HTMLButtonElement>("button[lang='de']")!.click())
+    await vi.waitFor(() => expect(document.querySelector("main p")!.textContent).toBe("Willkommen"))
+    expect(document.documentElement.lang).toBe("de")
     root.unmount()
     vi.unstubAllGlobals()
   })

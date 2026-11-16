@@ -3,7 +3,7 @@
 // in the root layout. The server HTML stays in the site's language.
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 
 import { PROJECT_UUID, SITE_LANGUAGE, STUDIO_API_URL } from "@/lib/config"
 import {
@@ -25,8 +25,16 @@ function storedLanguage(): string | null {
 }
 
 export function PageTranslation({ siteLanguage = SITE_LANGUAGE, apiUrl = `${STUDIO_API_URL}/api/projects/${PROJECT_UUID}` }: { siteLanguage?: string; apiUrl?: string }) {
+  // Made once and kept across the effect's runs: React StrictMode (v0 previews, next dev) runs the effect twice, and a
+  // page translation made on the second run would take the first run's English for the page's originals, translate
+  // it again and never restore German (WT.QF0.1). Kept, the second run supersedes the first's pending translation and
+  // shares its request.
+  const translator = useRef<{ apiUrl: string; translate: ReturnType<typeof createTranslator> } | null>(null)
+  const pageTranslation = useRef<ReturnType<typeof createPageTranslation> | null>(null)
+
   useEffect(() => {
-    const page = createPageTranslation(() => document.body, createTranslator(siteApiTranslate(apiUrl)))
+    if (translator.current?.apiUrl !== apiUrl) translator.current = { apiUrl, translate: createTranslator(siteApiTranslate(apiUrl)) }
+    const page = (pageTranslation.current ??= createPageTranslation(() => document.body, (texts, target) => translator.current!.translate(texts, target)))
     let language = chosenLanguage(storedLanguage(), siteLanguage)
     let pending: ReturnType<typeof setTimeout> | null = null
 
