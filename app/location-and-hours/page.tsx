@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 
 import { LocationMap } from "@/components/locations/location-map"
 import { PageIntro } from "@/components/site/page-intro"
@@ -23,7 +22,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function LocationsPage() {
   const [project, companies, legal] = await Promise.all([getProject(), getCompanies(), getLegal()])
-  if (!companies?.length) notFound()
+  if (!companies?.length) {
+    return (
+      <main data-slot="locations" className="pb-32">
+        <PageIntro kicker="Besuche uns" title="Standorte" />
+        <p className="mx-auto max-w-[32rem] px-5 text-center text-lg leading-relaxed">Unsere Standorte und Öffnungszeiten findest du hier in Kürze.</p>
+      </main>
+    )
+  }
   return (
     <main data-slot="locations" className="pb-32">
       <PageIntro kicker="Besuche uns" title="Standorte" />

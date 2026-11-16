@@ -21,7 +21,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ReservationsPage() {
   const project = await getProject()
-  if (!reservationsOn(project) || !project?.reservation_url) notFound()
+  if (project && !reservationsOn(project)) notFound()
+  if (!project?.reservation_url) {
+    return (
+      <main data-slot="reservations" className="pb-24">
+        <PageIntro kicker="Wir halten einen Platz für dich frei" title="Tisch reservieren" />
+        <p className="mx-auto max-w-[32rem] px-5 text-center text-lg leading-relaxed">Die Online-Reservierung ist gerade nicht erreichbar. Ruf uns gern direkt an.</p>
+      </main>
+    )
+  }
   return (
     <main data-slot="reservations" className="pb-24">
       <PageIntro kicker="Wir halten einen Platz für dich frei" title="Tisch reservieren" />

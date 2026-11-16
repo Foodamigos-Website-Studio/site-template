@@ -32,7 +32,7 @@ export default async function AboutPage() {
         <Reveal>
           <div className="max-w-[30rem]">
             <h2 className="display-caps text-xl sm:text-2xl">Familie Rossi</h2>
-            {project?.about ? <p className="mt-8 text-lg leading-relaxed">{project.about}</p> : null}
+            <p className="mt-8 text-lg leading-relaxed">{project?.about ?? "Unsere Geschichte erzählen wir dir gern persönlich vor Ort."}</p>
             <div className="mt-10 flex flex-wrap gap-3">
               <Link href={paths.menu} className="btn">
                 Speisekarte

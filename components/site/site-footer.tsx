@@ -1,4 +1,6 @@
 import { LegalLinks } from "@/components/legal/legal-links"
+import { FooterHours } from "@/components/site/footer-hours"
+import { groupedHours } from "@/lib/hours-groups"
 import { getCompanies, getProject } from "@/lib/studio-api"
 
 export async function SiteFooter() {
@@ -10,13 +12,16 @@ export async function SiteFooter() {
     <footer className="on-dark bg-ink px-5 pb-12 pt-24 sm:px-8">
       <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-16 text-center">
         {locations.length ? (
-          <div className="flex flex-col items-center gap-12 md:flex-row md:gap-24">
+          <div className="grid w-full gap-20 md:grid-cols-2 md:gap-16">
             {locations.map((company) => (
-              <address key={company.uuid} className="display-caps text-sm not-italic sm:text-base">
-                <span className="block">{company.name}</span>
-                <span className="mt-2 block">{company.address}</span>
-                <span className="block">{[company.zip_code, company.city].filter(Boolean).join(" ")}</span>
-              </address>
+              <div key={company.uuid} className="flex flex-col items-center gap-10">
+                <address className="display-caps text-sm not-italic leading-loose sm:text-base">
+                  <span className="block">{company.name}</span>
+                  <span className="mt-2 block">{company.address}</span>
+                  <span className="block">{[company.zip_code, company.city].filter(Boolean).join(" ")}</span>
+                </address>
+                <FooterHours timezone={company.timezone} groups={groupedHours(company)} />
+              </div>
             ))}
           </div>
         ) : null}

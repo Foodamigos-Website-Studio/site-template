@@ -25,6 +25,7 @@ export default async function ContactPage() {
       <PageIntro kicker="Wir freuen uns auf dich" title="Kontakt">
         <p>Ruf uns an, schreib uns oder komm einfach vorbei.</p>
       </PageIntro>
+      {companies?.length ? null : <p className="mx-auto max-w-[32rem] px-5 text-center text-lg leading-relaxed">Unsere Kontaktdaten findest du hier in Kürze.</p>}
       <div className="mx-auto grid max-w-[1000px] gap-16 px-5 sm:px-8 md:grid-cols-2">
         {(companies ?? []).map((company) => {
           const address = [company.address, [company.zip_code, company.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")
