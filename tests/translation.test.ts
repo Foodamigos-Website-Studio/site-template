@@ -13,6 +13,7 @@ import {
   createTranslator,
   LANGUAGE_CHANGE_EVENT,
   menuLanguage,
+  menuLinkWithLanguage,
   siteApiTranslate,
   switchLanguages,
 } from "@/lib/translation"
@@ -38,8 +39,12 @@ describe("the switch's languages and the stored choice", () => {
     expect(chosenLanguage("en", "de")).toBe("en")
     expect(chosenLanguage("fr", "de")).toBe("de")
     expect(chosenLanguage(null, "de")).toBe("de")
-    expect(menuLanguage("en", "de")).toBe("en")
-    expect(menuLanguage("xx", "de")).toBe("de")
+    expect(menuLanguage({ cookie: "en" }, "de")).toBe("en")
+    expect(menuLanguage({ cookie: "xx" }, "de")).toBe("de")
+    // WT.QF0.5: the link's ?lng= wins over the cookie; an invalid one falls back.
+    expect(menuLanguage({ query: "en", cookie: "de" }, "de")).toBe("en")
+    expect(menuLanguage({ query: "it", cookie: "en" }, "de")).toBe("en")
+    expect(menuLanguage({ query: "it", cookie: null }, "de")).toBe("de")
   })
 })
 
@@ -158,25 +163,26 @@ describe("text the page changes in place (WT.2 review)", () => {
   })
 })
 
-describe("the switch and the page translator together", () => {
-  async function mount(siteLanguage = "de", { strict = false } = {}) {
-    const header = document.createElement("header")
-    const main = document.createElement("main")
-    main.innerHTML = "<p>Willkommen</p>"
-    document.body.append(header, main)
-    const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
-      const { texts, target } = JSON.parse(String(init.body)) as { texts: string[]; target: string }
-      return new Response(JSON.stringify({ translations: texts.map((text) => `[${target}] ${text}`) }))
-    })
-    vi.stubGlobal("fetch", fetchMock)
-    const root = createRoot(header)
-    const children = [createElement(LanguageSwitch, { key: "s", siteLanguage }), createElement(PageTranslation, { key: "t", siteLanguage, apiUrl: "https://api.test/api/projects/p" })]
-    await act(async () => {
-      root.render(strict ? createElement(StrictMode, null, children) : children)
-    })
-    return Object.assign(root, { fetchMock })
-  }
+/** The header's switch and the page translator, mounted as the root layout has them; `fetch` answers "[target] text". */
+async function mount(siteLanguage = "de", { strict = false, navigate }: { strict?: boolean; navigate?: (url: string) => void } = {}) {
+  const header = document.createElement("header")
+  const main = document.createElement("main")
+  main.innerHTML = "<p>Willkommen</p>"
+  document.body.append(header, main)
+  const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
+    const { texts, target } = JSON.parse(String(init.body)) as { texts: string[]; target: string }
+    return new Response(JSON.stringify({ translations: texts.map((text) => `[${target}] ${text}`) }))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+  const root = createRoot(header)
+  const children = [createElement(LanguageSwitch, { key: "s", siteLanguage }), createElement(PageTranslation, { key: "t", siteLanguage, apiUrl: "https://api.test/api/projects/p", navigate })]
+  await act(async () => {
+    root.render(strict ? createElement(StrictMode, null, children) : children)
+  })
+  return Object.assign(root, { fetchMock })
+}
 
+describe("the switch and the page translator together", () => {
   it("translates at once on EN, keeps the choice for the next page and back on DE", async () => {
     const root = await mount()
     const buttons = [...document.querySelectorAll("button")]
@@ -270,6 +276,103 @@ describe("the switch and the page translator together", () => {
     await act(async () => [...document.querySelectorAll("button")][1]!.click())
     expect((heard.mock.calls[0]![0] as CustomEvent).detail).toBe("en")
     window.removeEventListener(LANGUAGE_CHANGE_EVENT, heard)
+    root.unmount()
+    vi.unstubAllGlobals()
+  })
+})
+
+describe("/menu links carry the visitor's choice (WT.QF0.5)", () => {
+  const page = "https://preview.test/standort"
+
+  it("adds ?lng= to /menu and /menu/… links only, keeping their query and hash", () => {
+    expect(menuLinkWithLanguage("/menu", page, "en")).toBe("/menu?lng=en")
+    expect(menuLinkWithLanguage("/menu/gift-cards/checkout?value=2500#pay", page, "en")).toBe("/menu/gift-cards/checkout?value=2500&lng=en#pay")
+    expect(menuLinkWithLanguage("https://preview.test/menu", page, "de")).toBe("/menu?lng=de")
+    expect(menuLinkWithLanguage("/menu?lng=de", page, "en")).toBeNull()
+    expect(menuLinkWithLanguage("/menu", page, null)).toBeNull()
+    for (const href of ["/", "/menus", "/impressum", "https://shop.example/menu", "#menu", "mailto:hallo@trattoria.de"]) expect(menuLinkWithLanguage(href, page, "en")).toBeNull()
+  })
+
+  function links() {
+    document.querySelector("main")!.insertAdjacentHTML(
+      "beforeend",
+      `<a id="menu" href="/menu">Speisekarte</a><a id="checkout" href="/menu/gift-cards/checkout?value=2500">Kaufen</a><a id="legal" href="/impressum">Impressum</a><a id="tab" href="/menu" target="_blank">Shop</a>`,
+    )
+    // What reached the page after the template's handler; jsdom can't navigate, so nothing goes further.
+    const seen: { id: string; prevented: boolean; href: string | null }[] = []
+    const record = (event: Event) => {
+      const link = (event.target as Element).closest("a")
+      seen.push({ id: link?.id ?? "", prevented: event.defaultPrevented, href: link?.getAttribute("href") ?? null })
+      event.preventDefault()
+    }
+    document.addEventListener("click", record)
+    return { seen, done: () => document.removeEventListener("click", record) }
+  }
+
+  it("opens /menu links with the stored choice and leaves other links alone", async () => {
+    window.localStorage.setItem("site_language", "en")
+    const navigate = vi.fn()
+    const root = await mount("de", { navigate })
+    const { seen, done } = links()
+    for (const id of ["menu", "checkout", "legal"]) document.getElementById(id)!.click()
+    expect(navigate.mock.calls).toEqual([["/menu?lng=en"], ["/menu/gift-cards/checkout?value=2500&lng=en"]])
+    expect(seen.map(({ id, prevented }) => [id, prevented])).toEqual([["menu", true], ["checkout", true], ["legal", false]])
+    expect(document.getElementById("menu")!.getAttribute("href")).toBe("/menu")
+    done()
+    root.unmount()
+    vi.unstubAllGlobals()
+  })
+
+  it("follows the switch, and adds nothing before the visitor chose", async () => {
+    const navigate = vi.fn()
+    const root = await mount("de", { navigate })
+    const { done } = links()
+    document.getElementById("menu")!.click()
+    expect(navigate).not.toHaveBeenCalled()
+
+    await act(async () => document.querySelector<HTMLButtonElement>("button[lang='en']")!.click())
+    document.getElementById("menu")!.click()
+    await act(async () => document.querySelector<HTMLButtonElement>("button[lang='de']")!.click())
+    document.getElementById("menu")!.click()
+    expect(navigate.mock.calls).toEqual([["/menu?lng=en"], ["/menu?lng=de"]])
+    done()
+    root.unmount()
+    vi.unstubAllGlobals()
+  })
+
+  it("gives a link opened in a new tab the choice for that click only", async () => {
+    window.localStorage.setItem("site_language", "en")
+    const navigate = vi.fn()
+    const root = await mount("de", { navigate })
+    const { seen, done } = links()
+    document.getElementById("tab")!.click()
+    document.getElementById("menu")!.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, ctrlKey: true }))
+    expect(navigate).not.toHaveBeenCalled()
+    expect(seen).toEqual([
+      { id: "tab", prevented: false, href: "/menu?lng=en" },
+      { id: "menu", prevented: false, href: "/menu?lng=en" },
+    ])
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 10)))
+    expect(document.getElementById("tab")!.getAttribute("href")).toBe("/menu")
+    expect(document.getElementById("menu")!.getAttribute("href")).toBe("/menu")
+    done()
+    root.unmount()
+    vi.unstubAllGlobals()
+  })
+
+  it("runs before React's click handlers, so a <Link> to /menu leaves the page load to it", async () => {
+    window.localStorage.setItem("site_language", "en")
+    const navigate = vi.fn()
+    const root = await mount("de", { navigate })
+    const holder = document.createElement("div")
+    document.querySelector("main")!.append(holder)
+    const linkRoot = createRoot(holder)
+    const reactSaw = vi.fn()
+    await act(async () => linkRoot.render(createElement("a", { href: "/menu", onClick: (event: { defaultPrevented: boolean }) => reactSaw(event.defaultPrevented) }, "Menu")))
+    holder.querySelector("a")!.click()
+    expect(reactSaw).toHaveBeenCalledWith(true)
+    expect(navigate).toHaveBeenCalledWith("/menu?lng=en")
+    linkRoot.unmount()
     root.unmount()
     vi.unstubAllGlobals()
   })
