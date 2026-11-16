@@ -129,7 +129,15 @@ export function createPageTranslation(root: () => Element | null, translate: (te
     const walker = element.ownerDocument.createTreeWalker(element, 4 /* NodeFilter.SHOW_TEXT */)
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const text = node as Text
-      if (text.data.trim() === "" || excluded(text.parentElement)) continue
+      if (excluded(text.parentElement)) continue
+      if (text.data.trim() === "") {
+        // The page emptied a text it had: forget it, so switching back never puts the old text back.
+        if (original.text.has(text) && text.data !== written.text.get(text)) {
+          original.text.delete(text)
+          written.text.delete(text)
+        }
+        continue
+      }
       const expected = written.text.get(text) ?? original.text.get(text)
       if (expected === undefined || text.data !== expected) {
         original.text.set(text, text.data)
@@ -140,7 +148,14 @@ export function createPageTranslation(root: () => Element | null, translate: (te
       if (excluded(el)) continue
       for (const name of ATTRIBUTES) {
         const value = el.getAttribute(name)
-        if (!value?.trim()) continue
+        if (!value?.trim()) {
+          // The page removed or emptied an attribute it had: forget it, so switching back never sets it again.
+          if (original.attributes.get(el)?.has(name) && value !== written.attributes.get(el)?.get(name)) {
+            original.attributes.get(el)!.delete(name)
+            written.attributes.get(el)?.delete(name)
+          }
+          continue
+        }
         const saved = original.attributes.get(el) ?? new Map<string, string>()
         const expected = written.attributes.get(el)?.get(name) ?? saved.get(name)
         if (expected === undefined || value !== expected) {
@@ -173,8 +188,11 @@ export function createPageTranslation(root: () => Element | null, translate: (te
     for (const [el] of original.attributes) if (!el.isConnected) (original.attributes.delete(el), written.attributes.delete(el))
 
     if (language === siteLanguage || (language !== "de" && language !== "en")) {
-      for (const [node, text] of original.text) writeText(node, text)
-      for (const [el, saved] of original.attributes) for (const [name, value] of saved) writeAttribute(el, name, value)
+      // Only what still shows this translation's own write goes back: anything else is the page's current content.
+      for (const [node, text] of original.text) if (node.data === (written.text.get(node) ?? text)) writeText(node, text)
+      for (const [el, saved] of original.attributes) {
+        for (const [name, value] of saved) if (el.getAttribute(name) === (written.attributes.get(el)?.get(name) ?? value)) writeAttribute(el, name, value)
+      }
       return
     }
 

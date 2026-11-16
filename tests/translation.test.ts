@@ -111,6 +111,41 @@ describe("text the page changes in place (WT.2 review)", () => {
     expect(fakeTranslate.mock.calls.flatMap(([texts]) => texts)).not.toContain("[en] Geschlossen")
   })
 
+  it("never puts back a text the page emptied or an attribute it removed (WT.2 review 2)", async () => {
+    document.body.innerHTML = `<p>Heute geschlossen</p><button title="Mehr erfahren">i</button><input placeholder="Dein Name">`
+    const page = createPageTranslation(() => document.body, createTranslator(fakeTranslate))
+    const text = document.querySelector("p")!.firstChild as Text
+    const button = document.querySelector("button")!
+    const input = document.querySelector("input")!
+
+    await page.apply("en", "de")
+    expect(button.getAttribute("title")).toBe("[en] Mehr erfahren")
+    // React empties the text, drops the conditional title and empties the placeholder.
+    text.data = ""
+    button.removeAttribute("title")
+    input.setAttribute("placeholder", "")
+
+    await page.apply("de", "de")
+    expect(text.data).toBe("")
+    expect(button.hasAttribute("title")).toBe(false)
+    expect(input.getAttribute("placeholder")).toBe("")
+
+    await page.apply("en", "de")
+    expect(text.data).toBe("")
+    expect(button.hasAttribute("title")).toBe(false)
+  })
+
+  it("leaves a change the page made between collecting and restoring alone", async () => {
+    document.body.innerHTML = `<p>Geschlossen</p>`
+    const page = createPageTranslation(() => document.body, createTranslator(fakeTranslate))
+    const text = document.querySelector("p")!.firstChild as Text
+    await page.apply("en", "de")
+    text.data = ""
+    text.data = "[en] Geschlossen" // the same value again, written by the page: still restored as ours
+    await page.apply("de", "de")
+    expect(text.data).toBe("Geschlossen")
+  })
+
   it("tells its own writes from the page's", async () => {
     document.body.innerHTML = `<p>Willkommen</p>`
     const page = createPageTranslation(() => document.body, createTranslator(fakeTranslate))
