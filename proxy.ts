@@ -52,8 +52,6 @@ export const config = {
     "/cookie-richtlinie",
     "/coupons",
     "/angebote",
-    "/our-menu",
-    "/speisekarte",
     "/reservations",
     "/reservierungen",
     "/gift-cards",
