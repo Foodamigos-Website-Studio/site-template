@@ -2,44 +2,34 @@
 
 import { useEffect, useState } from "react"
 
+import { localTime } from "@/lib/hours"
 import type { HoursGroup } from "@/lib/hours-groups"
 
-export type BoardLocation = { slug: string; name: string; timezone: string; groups: HoursGroup[] }
+/** Today's hours (once the page is in the browser) plus the weekly hours of one location. */
+export function LocationHours({ timezone, groups }: { timezone: string; groups: HoursGroup[] }) {
+  const [today, setToday] = useState<number | null>(null)
+  useEffect(() => setToday(localTime(new Date(), timezone).day), [timezone])
 
-function dayIn(timezone: string, now: Date): number {
-  const weekday = new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: timezone }).format(now)
-  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(weekday)
-}
-
-/** Opening hours in large type; the run of days that contains today is highlighted once the page is in the browser. */
-export function HoursBoard({ locations, todayLabel }: { locations: BoardLocation[]; todayLabel: string }) {
-  const [now, setNow] = useState<Date | null>(null)
-  useEffect(() => setNow(new Date()), [])
+  const current = today === null ? null : groups.find((group) => group.days.includes(today))
 
   return (
-    <div className="grid gap-10 md:grid-cols-2">
-      {locations.map((location) => {
-        const today = now ? dayIn(location.timezone, now) : -1
-        return (
-          <div key={location.slug}>
-            {locations.length > 1 ? <h3 className="label mb-3">{location.name}</h3> : null}
-            <ul className="flex flex-col gap-2">
-              {location.groups.map((group) => {
-                const isToday = group.days.includes(today)
-                return (
-                  <li key={group.label} className={`flex flex-wrap items-baseline justify-between gap-x-4 border-b border-text-primary/20 pb-2 ${isToday ? "text-accent" : ""}`}>
-                    <span className="display text-xl sm:text-2xl">
-                      {group.label}
-                      {isToday ? <span className="label ml-3 align-middle text-xs">{todayLabel}</span> : null}
-                    </span>
-                    <span className="display text-2xl sm:text-3xl">{group.ranges.length ? group.ranges.join(", ") : "geschlossen"}</span>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )
-      })}
+    <div>
+      {current ? (
+        <p className="label text-accent">
+          Heute: <span className="text-ink">{current.ranges.length ? current.ranges.join(", ") : "geschlossen"}</span>
+        </p>
+      ) : null}
+      <ul className="mt-4 flex flex-col">
+        {groups.map((group) => {
+          const isToday = today !== null && group.days.includes(today)
+          return (
+            <li key={group.label} className={`flex flex-wrap justify-between gap-x-4 border-b border-accent/30 py-2 text-sm ${isToday ? "text-ink" : ""}`}>
+              <span>{group.label}</span>
+              <span>{group.ranges.length ? group.ranges.join(", ") : "geschlossen"}</span>
+            </li>
+          )
+        })}
+      </ul>
     </div>
   )
 }

@@ -1,77 +1,36 @@
 import Image from "next/image"
-import type { ReactNode } from "react"
 
 import type { Photo } from "@/lib/media"
 
-/** A framed photo with a small caption ("OBEN: …" or a rotated side caption). */
-export function FramedPhoto({
+/** A photo with a slow hover zoom and an optional small uppercase caption plus short text below. */
+export function PhotoFigure({
   photo,
-  caption,
-  captionLabel = "Oben",
-  ratio = "aspect-[4/3]",
-  sizes = "(min-width: 1024px) 640px, 100vw",
+  ratio = "aspect-[4/5]",
+  sizes = "(min-width: 1024px) 50vw, 100vw",
   priority,
-  side,
+  title,
+  children,
+  className = "",
 }: {
   photo: Photo
-  caption?: string
-  captionLabel?: string
   ratio?: string
   sizes?: string
   priority?: boolean
-  side?: "left" | "right"
+  title?: string
+  children?: React.ReactNode
+  className?: string
 }) {
-  const figure = (
-    <figure className="min-w-0 flex-1">
-      <div className={`frame ${ratio}`}>
+  return (
+    <figure className={className}>
+      <div className={`img-zoom relative w-full rounded-[4px] ${ratio}`}>
         <Image src={photo.src} alt={photo.alt} fill sizes={sizes} priority={priority} className="object-cover" />
       </div>
-      {caption && !side ? (
-        <figcaption className="caption">
-          <strong className="uppercase">{captionLabel}:</strong> {caption}
+      {title || children ? (
+        <figcaption className="mt-6 max-w-sm">
+          {title ? <span className="label block text-accent">{title}</span> : null}
+          {children ? <p className="mt-3 leading-relaxed">{children}</p> : null}
         </figcaption>
       ) : null}
     </figure>
-  )
-  if (!side || !caption) return figure
-  const sideCaption = (
-    <p className="caption text-sm [writing-mode:vertical-rl] rotate-180 self-end m-0">
-      <strong className="uppercase">{captionLabel}:</strong> {caption}
-    </p>
-  )
-  return (
-    <div className="flex gap-2">
-      {side === "left" ? sideCaption : null}
-      {figure}
-      {side === "right" ? sideCaption : null}
-    </div>
-  )
-}
-
-export function Diamonds() {
-  return (
-    <div aria-hidden="true" className="flex items-center justify-center gap-1">
-      {Array.from({ length: 11 }).map((_, index) => (
-        <span key={index} className="block size-1.5 rotate-45 bg-text-primary" />
-      ))}
-    </div>
-  )
-}
-
-export function SectionShell({
-  section,
-  className = "",
-  children,
-  label,
-}: {
-  section: number
-  className?: string
-  children: ReactNode
-  label?: string
-}) {
-  return (
-    <section data-section={section} aria-label={label} className={className}>
-      {children}
-    </section>
   )
 }

@@ -10,8 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const project = await getProject()
   const name = project?.name ?? "Trattoria Bella"
   return pageMetadata({
-    title: `${name} – Kontakt in Berlin Mitte und Kreuzberg`,
-    description: `So erreichst du die ${name}: Telefon, E-Mail und Adressen unserer beiden italienischen Restaurants in Berlin Mitte und Kreuzberg.`,
+    title: `${name} – Kontakt`,
+    description: `So erreichst du die ${name}: Telefon, E-Mail und Adressen unserer Standorte in Berlin.`,
     path: CONTACT_PATH,
   })
 }
@@ -21,22 +21,22 @@ export default async function ContactPage() {
   const instagram = project?.socials?.instagram
 
   return (
-    <main className="pb-24">
+    <main className="pb-32">
       <PageIntro kicker="Wir freuen uns auf dich" title="Kontakt">
-        <p>Ruf uns an, schreib uns oder komm einfach vorbei. Für Reservierungen und Fragen zu glutenfreien, veganen oder vegetarischen Gerichten sind wir gern für dich da.</p>
+        <p>Ruf uns an, schreib uns oder komm einfach vorbei.</p>
       </PageIntro>
-      <div className="mx-auto grid max-w-[1000px] gap-8 px-5 sm:px-8 md:grid-cols-2">
+      <div className="mx-auto grid max-w-[1000px] gap-16 px-5 sm:px-8 md:grid-cols-2">
         {(companies ?? []).map((company) => {
           const address = [company.address, [company.zip_code, company.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")
           return (
-            <section key={company.uuid} className="card-label !text-left !p-8">
-              <h2 className="display text-2xl sm:text-3xl">{company.name}</h2>
-              <address className="mt-4 text-lg not-italic leading-loose">
+            <section key={company.uuid} className="border-t border-accent/40 pt-10">
+              <h2 className="display-caps text-lg sm:text-xl">{company.name}</h2>
+              <address className="mt-6 text-lg not-italic leading-loose">
                 {address}
                 {company.phone_number ? (
                   <>
                     <br />
-                    <a className="underline underline-offset-4" href={`tel:${company.phone_number.replace(/\s+/g, "")}`}>
+                    <a className="hover:text-accent" href={`tel:${company.phone_number.replace(/\s+/g, "")}`}>
                       {company.phone_number}
                     </a>
                   </>
@@ -44,14 +44,14 @@ export default async function ContactPage() {
                 {company.email ? (
                   <>
                     <br />
-                    <a className="underline underline-offset-4" href={`mailto:${company.email}`}>
+                    <a className="hover:text-accent" href={`mailto:${company.email}`}>
                       {company.email}
                     </a>
                   </>
                 ) : null}
               </address>
               {address ? (
-                <a href={mapsUrl(address)} target="_blank" rel="noopener noreferrer" className="btn mt-6">
+                <a href={mapsUrl(address)} target="_blank" rel="noopener noreferrer" className="link-thin mt-8">
                   Route
                 </a>
               ) : null}
@@ -60,9 +60,8 @@ export default async function ContactPage() {
         })}
       </div>
       {instagram ? (
-        <p className="mt-12 text-center text-lg">
-          Folge uns auf{" "}
-          <a href={instagram} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+        <p className="mt-20 text-center">
+          <a href={instagram} target="_blank" rel="noopener noreferrer" className="link-thin">
             Instagram
           </a>
         </p>

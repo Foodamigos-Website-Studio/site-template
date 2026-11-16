@@ -1,6 +1,6 @@
 import { SITE_LANGUAGE } from "@/lib/config"
 import { localizedPath } from "@/lib/localized-routes"
-import { giftCardsOn, reservationsOn } from "@/lib/modules"
+import { reservationsOn } from "@/lib/modules"
 import type { Project } from "@/lib/studio-api"
 
 export const ORDER_PATH = "/menu"
@@ -24,11 +24,13 @@ export type NavLink = { href: string; label: string }
 /** The main navigation: module pages only when their module is on. */
 export function mainNav(project: Project | null): NavLink[] {
   const paths = sitePaths()
+  const reserve = reservationLink(project)
   return [
-    { href: paths.menu, label: "Menü" },
+    { href: "/", label: "Start" },
+    { href: paths.menu, label: "Speisekarte" },
     { href: paths.locations, label: "Standorte" },
-    ...(giftCardsOn(project) ? [{ href: paths.giftCards, label: "Gutscheine" }] : []),
     { href: paths.about, label: "Über uns" },
+    ...(reserve ? [{ href: reserve.href, label: "Reservieren" }] : []),
   ]
 }
 

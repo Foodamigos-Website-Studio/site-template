@@ -1,17 +1,15 @@
 import { Star } from "lucide-react"
-import Link from "next/link"
 
 import { Reveal } from "@/components/reveal"
-import { siteLocale } from "@/lib/format"
 import { SITE_LANGUAGE } from "@/lib/config"
-import { sitePaths } from "@/lib/nav"
+import { siteLocale } from "@/lib/format"
 import type { Company, GoogleReview } from "@/lib/studio-api"
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <span className="flex items-center gap-0.5" role="img" aria-label={`${rating} von 5 Sternen`}>
+    <span className="flex items-center gap-1 text-accent" role="img" aria-label={`${rating} von 5 Sternen`}>
       {Array.from({ length: 5 }).map((_, index) => (
-        <Star key={index} className={`size-4 ${index < Math.round(rating) ? "fill-current" : "opacity-30"}`} aria-hidden="true" />
+        <Star key={index} className={`size-3.5 ${index < Math.round(rating) ? "fill-current" : "opacity-30"}`} aria-hidden="true" />
       ))}
     </span>
   )
@@ -36,31 +34,27 @@ export function Reviews({ companies }: { companies: Company[] }) {
   const format = new Intl.NumberFormat(siteLocale(SITE_LANGUAGE), { maximumFractionDigits: 1, minimumFractionDigits: 1 })
 
   return (
-    <section data-section="9" className="px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
-      <div className="mx-auto grid max-w-[1240px] gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
-        <Reveal>
-          <span className="label block">Google-Bewertungen</span>
-          <h2 className="display mt-1 text-3xl sm:text-4xl">Gäste, die gern wiederkommen</h2>
-          <p className="mt-5 flex items-center gap-3 text-lg">
-            <span className="display text-5xl">{format.format(rating)}</span>
-            <span className="flex flex-col gap-1">
-              <Stars rating={rating} />
-              <span className="text-sm">{count ? `bei ${count} Bewertungen` : "bei Google"}</span>
-            </span>
-          </p>
-          <Link href={sitePaths().locations} className="btn mt-8">
-            Unsere Standorte
-          </Link>
+    <section aria-labelledby="reviews-heading" className="px-5 pb-28 sm:px-8 lg:px-10 lg:pb-44">
+      <div className="mx-auto max-w-[1200px]">
+        <Reveal className="flex flex-col items-center text-center">
+          <p className="label text-accent">Google-Bewertungen</p>
+          <h2 id="reviews-heading" className="display mt-6 text-5xl sm:text-6xl">
+            {format.format(rating)}
+          </h2>
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <Stars rating={rating} />
+            <span className="label">{count ? `bei ${count} Bewertungen` : "bei Google"}</span>
+          </div>
         </Reveal>
 
-        <ul className="grid gap-6 sm:grid-cols-2">
+        <ul className="mt-20 grid gap-x-12 gap-y-14 md:grid-cols-2">
           {reviews.slice(0, 4).map((review, index) => (
             <li key={`${review.author_name}${review.published_at}`}>
               <Reveal index={index}>
-                <figure className="card-label !p-6 !text-left">
+                <figure className="border-t border-accent/40 pt-8">
                   <Stars rating={review.rating} />
-                  <blockquote className="mt-3 text-base leading-relaxed">{review.text}</blockquote>
-                  <figcaption className="label mt-4 text-xs">{review.author_name}</figcaption>
+                  <blockquote className="mt-5 leading-relaxed">{review.text}</blockquote>
+                  <figcaption className="label mt-6 text-ink">{review.author_name}</figcaption>
                 </figure>
               </Reveal>
             </li>

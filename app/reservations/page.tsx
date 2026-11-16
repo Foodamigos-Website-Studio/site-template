@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const name = project?.name ?? "Trattoria Bella"
   return pageMetadata({
     title: `${name} – Tisch reservieren in Berlin`,
-    description: `Reserviere deinen Tisch in der ${name} in Berlin Mitte oder Kreuzberg – auch für den Familienbrunch am Sonntag.`,
+    description: `Reserviere deinen Tisch in der ${name} in Berlin.`,
     path: localizedPath("reservations", SITE_LANGUAGE),
   })
 }
@@ -24,9 +24,7 @@ export default async function ReservationsPage() {
   if (!reservationsOn(project) || !project?.reservation_url) notFound()
   return (
     <main data-slot="reservations" className="pb-24">
-      <PageIntro kicker="Wir halten einen Platz für dich frei" title="Tisch reservieren">
-        <p>Für ein Abendessen zu zweit, einen Familientisch oder den Familienbrunch am Sonntag.</p>
-      </PageIntro>
+      <PageIntro kicker="Wir halten einen Platz für dich frei" title="Tisch reservieren" />
       <div className="mx-auto max-w-[900px] px-5 sm:px-8">
         <div className="frame">
           <ReservationWidget url={project.reservation_url} title={project.name} loadingLabel="Reservierung wird geladen …" />

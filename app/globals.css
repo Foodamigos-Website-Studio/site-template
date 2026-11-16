@@ -2,28 +2,30 @@
 @import "tw-animate-css";
 
 @theme {
-  --color-link: #1863dc;
-  --color-accent: #1863dc;
-  --color-primary: #2563eb;
-  --color-background: #f0ece0;
-  --color-text-primary: #353839;
-  --color-ink: #1c1d1e;
+  --color-link: #a58a5e;
+  --color-accent: #a58a5e;
+  --color-primary: #a58a5e;
+  --color-background: #f7f6f5;
+  --color-text-primary: #77726c;
+  --color-ink: #212225;
 
-  --font-serif: var(--font-old-standard), "Old Standard TT", Georgia, serif;
-  --font-sans: var(--font-cabin), "Cabin", system-ui, sans-serif;
+  --font-serif: var(--font-libre-bodoni), "Libre Bodoni", Georgia, serif;
+  --font-sans: var(--font-roboto), "Roboto", system-ui, sans-serif;
 
-  --radius: 3px;
+  --radius: 4px;
   --ease-site: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root {
-  --site-accent: var(--color-accent);
   --fg: var(--color-text-primary);
+  --heading: var(--color-ink);
   --bg: var(--color-background);
 }
 
-.tone-dark {
-  --fg: var(--color-background);
+/* Dark surfaces: light text, brass rules. */
+.on-dark {
+  --fg: #d9d5cf;
+  --heading: var(--color-background);
   --bg: var(--color-ink);
   color: var(--fg);
 }
@@ -36,10 +38,11 @@ html {
 body {
   background: var(--color-background);
   color: var(--color-text-primary);
-  font-family: var(--font-serif);
-  font-size: 1.125rem;
-  line-height: 1.5;
-  letter-spacing: 0.02em;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -67,24 +70,25 @@ summary:focus-visible {
 }
 
 ::selection {
-  background: var(--color-text-primary);
+  background: var(--color-ink);
   color: var(--color-background);
 }
 
-/* Cabin: small uppercase labels, navigation and buttons. */
+/* Roboto: small uppercase labels, navigation and buttons. */
 .label {
   font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 .display {
   font-family: var(--font-serif);
   font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 1.15;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--heading, var(--color-ink));
   text-wrap: balance;
 }
 
@@ -92,177 +96,107 @@ summary:focus-visible {
   font-family: var(--font-serif);
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  line-height: 1.2;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  color: var(--heading, var(--color-ink));
   text-wrap: balance;
 }
 
-@keyframes hero-fade {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-.hero-fade {
-  animation: hero-fade 6s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-fade {
-    animation: none;
-    opacity: 1;
-  }
-}
-
-.justify {
-  text-align: justify;
-  hyphens: auto;
-}
-
-/* Square outlined button with an inner hairline, like the inspiration. */
+/* Slim outlined button with a brass border; fills on hover. */
 .btn {
-  --btn-fg: var(--fg);
-  --btn-bg: var(--bg);
-  position: relative;
+  --btn-fg: var(--heading, var(--color-ink));
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  border: 2px solid var(--btn-fg);
-  border-radius: 3px;
+  padding: 0.7rem 1.75rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
   background: transparent;
   color: var(--btn-fg);
   font-family: var(--font-sans);
-  font-size: 0.9375rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
   cursor: pointer;
 }
-.btn::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border: 1px solid color-mix(in srgb, var(--btn-fg) 40%, transparent);
-  border-radius: 1px;
-  pointer-events: none;
-  transition: border-color 300ms var(--ease-site);
-}
 .btn:hover {
-  background: var(--btn-fg);
-  color: var(--btn-bg);
-  opacity: 0.92;
-}
-.btn:hover::after {
-  border-color: color-mix(in srgb, var(--btn-bg) 40%, transparent);
+  background: var(--color-accent);
+  color: var(--color-ink);
 }
 .btn-solid {
-  background: var(--btn-fg);
-  color: var(--btn-bg);
-}
-.btn-solid::after {
-  border-color: color-mix(in srgb, var(--btn-bg) 40%, transparent);
+  background: var(--color-accent);
+  color: var(--color-ink);
 }
 .btn-solid:hover {
   background: transparent;
   color: var(--btn-fg);
 }
-.btn-solid:hover::after {
-  border-color: color-mix(in srgb, var(--btn-fg) 40%, transparent);
-}
-.btn-pill {
-  border-radius: 999px;
-  padding: 0.5rem 1.25rem;
-  border-width: 1px;
-  font-size: 0.875rem;
-}
-.btn-pill::after {
-  display: none;
+.btn-sm {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.6875rem;
 }
 .btn-lg {
-  padding: 1.1rem 2.5rem;
-  font-size: 1.0625rem;
+  padding: 0.9rem 2.25rem;
 }
 
-/* A photo in a double-line frame. */
+/* Thin brass text link. */
+.link-thin {
+  display: inline-block;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.link-thin:hover {
+  color: var(--heading, var(--color-ink));
+}
+
+/* Plain boxes used by template pages, forms and the consent banner. */
 .frame {
   position: relative;
-  border: 3px solid var(--color-text-primary);
-  border-radius: 3px;
-  box-shadow:
-    0 0 0 3px var(--color-background),
-    0 0 0 4px var(--color-text-primary);
-  margin: 4px;
   overflow: hidden;
-  background: var(--color-text-primary);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
+  background: var(--color-background);
 }
-
-.caption {
-  margin-top: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.4;
-}
-.caption strong {
-  font-family: var(--font-sans);
-  letter-spacing: 0.04em;
-}
-
-/* Double-rule eyebrow. */
-.eyebrow {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding-top: 0.9rem;
-  position: relative;
-}
-.eyebrow::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 6rem;
-  height: 6px;
-  border-top: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-}
-
-/* Boxed double-line label on the image cards. */
 .card-label {
-  position: relative;
-  border: 2px solid var(--color-text-primary);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
   background: var(--color-background);
   color: var(--color-text-primary);
-  border-radius: 3px;
-  padding: 0.9rem 1rem 0.8rem;
-  text-align: center;
-  box-shadow: 0 0 0 3px var(--color-background);
-}
-.card-label::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border: 1px solid var(--color-text-primary);
-  pointer-events: none;
+  padding: 1.25rem;
+  text-align: left;
 }
 
-.ornament-rule {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+/* Slow hover zoom on images. */
+.img-zoom {
+  overflow: hidden;
 }
-.ornament-rule::before,
-.ornament-rule::after {
-  content: "";
-  height: 1px;
-  width: 4.5rem;
-  background: currentColor;
+.img-zoom img {
+  transition: transform 1400ms var(--ease-site);
+}
+.img-zoom:hover img {
+  transform: scale(1.04);
+}
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+.hero-zoom {
+  animation: hero-zoom 28s ease-out both;
 }
 
 /* Template pages: forms, widgets and consent placeholders. */
@@ -274,8 +208,8 @@ summary:focus-visible {
   justify-content: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border: 1px solid currentColor;
-  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 4px;
   background: color-mix(in srgb, var(--color-background) 92%, transparent);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
@@ -283,30 +217,29 @@ summary:focus-visible {
 }
 [data-slot="map-placeholder"] {
   min-height: 18rem;
-  border-style: dashed;
 }
 [data-slot="consent-placeholder"] button,
 [data-slot="map-placeholder"] button {
-  border: 1px solid currentColor;
-  border-radius: 3px;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
   padding: 0.35rem 0.9rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 [data-slot="consent-placeholder"] button:hover,
 [data-slot="map-placeholder"] button:hover {
-  background: var(--color-text-primary);
-  color: var(--color-background);
+  background: var(--color-accent);
+  color: var(--color-ink);
 }
 [data-slot="map"] {
   display: block;
   width: 100%;
   min-height: 20rem;
-  border: 3px solid var(--color-text-primary);
-  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
 }
 
 .form-skin {
-  font-size: 1.0625rem;
+  font-size: 1rem;
 }
 .form-skin form,
 .form-skin fieldset {
@@ -320,21 +253,19 @@ summary:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  font-family: var(--font-sans);
-  font-size: 0.9375rem;
-  font-weight: 700;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 .form-skin input,
 .form-skin select,
 .form-skin textarea {
   width: 100%;
-  border: 1px solid var(--color-text-primary);
-  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 4px;
   background: transparent;
   padding: 0.7rem 0.85rem;
-  font-family: var(--font-serif);
-  font-size: 1.0625rem;
-  font-weight: 400;
+  font-size: 1rem;
+  font-weight: 300;
 }
 .form-skin input[type="radio"],
 .form-skin input[type="checkbox"] {
@@ -342,15 +273,17 @@ summary:focus-visible {
 }
 .form-skin button {
   align-self: flex-start;
-  border: 2px solid var(--color-text-primary);
-  border-radius: 3px;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
   padding: 0.7rem 1.75rem;
-  font-family: var(--font-sans);
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 .form-skin button:hover:not(:disabled) {
-  background: var(--color-text-primary);
-  color: var(--color-background);
+  background: var(--color-accent);
+  color: var(--color-ink);
 }
 .form-skin button:disabled {
   opacity: 0.5;
@@ -358,8 +291,8 @@ summary:focus-visible {
 .form-skin iframe {
   width: 100%;
   min-height: 42rem;
-  border: 3px solid var(--color-text-primary);
-  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
   background: var(--color-background);
 }
 

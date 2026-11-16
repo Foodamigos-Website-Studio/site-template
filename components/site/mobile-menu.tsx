@@ -6,7 +6,8 @@ import { useEffect, useState } from "react"
 
 import type { NavLink } from "@/lib/nav"
 
-export function MobileMenu({ links, reserve, orderHref }: { links: NavLink[]; reserve: NavLink | null; orderHref: string }) {
+/** Hamburger on the left of the header that opens a full-screen navigation overlay. */
+export function NavOverlay({ links, contactHref, orderHref, reserveHref }: { links: NavLink[]; contactHref: string; orderHref: string; reserveHref: string | null }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -23,39 +24,43 @@ export function MobileMenu({ links, reserve, orderHref }: { links: NavLink[]; re
   const close = () => setOpen(false)
 
   return (
-    <div className="lg:hidden">
-      <button type="button" onClick={() => setOpen(true)} aria-expanded={open} aria-controls="mobile-menu" className="label flex items-center gap-2 py-2 text-sm">
+    <>
+      <button type="button" onClick={() => setOpen(true)} aria-expanded={open} aria-controls="site-nav" aria-label="Menü öffnen" className="-ml-2 flex size-10 items-center justify-center hover:opacity-70">
         <Menu className="size-5" aria-hidden="true" />
-        <span>Menü</span>
       </button>
       {open ? (
-        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation" className="tone-dark fixed inset-0 z-50 flex flex-col bg-ink px-6 py-5">
-          <div className="flex justify-end">
-            <button type="button" onClick={close} aria-label="Menü schließen" className="p-2">
-              <X className="size-6" aria-hidden="true" />
+        <div id="site-nav" role="dialog" aria-modal="true" aria-label="Navigation" className="on-dark fixed inset-0 z-50 flex flex-col bg-ink px-6 py-3">
+          <div className="flex h-14 items-center">
+            <button type="button" onClick={close} aria-label="Menü schließen" className="-ml-2 flex size-10 items-center justify-center hover:opacity-70">
+              <X className="size-5" aria-hidden="true" />
             </button>
           </div>
-          <ul className="mt-6 flex flex-1 flex-col gap-5">
+          <ul className="flex flex-1 flex-col items-center justify-center gap-6 text-center sm:gap-8">
             {links.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} onClick={close} className="display text-4xl hover:opacity-70">
+              <li key={link.href + link.label}>
+                <Link href={link.href} onClick={close} className="display-caps text-2xl hover:text-accent sm:text-4xl">
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="flex flex-col gap-3 pb-4">
-            {reserve ? (
-              <Link href={reserve.href} onClick={close} className="btn">
-                {reserve.label}
+          <div className="flex flex-col items-center gap-4 pb-6">
+            <div className="flex flex-wrap justify-center gap-3">
+              {reserveHref ? (
+                <Link href={reserveHref} onClick={close} className="btn" style={{ color: "var(--color-background)" }}>
+                  Tisch reservieren
+                </Link>
+              ) : null}
+              <Link href={orderHref} onClick={close} className="btn btn-solid">
+                Jetzt bestellen
               </Link>
-            ) : null}
-            <Link href={orderHref} onClick={close} className="btn btn-solid">
-              Jetzt bestellen
+            </div>
+            <Link href={contactHref} onClick={close} className="label hover:text-accent">
+              Kontakt
             </Link>
           </div>
         </div>
       ) : null}
-    </div>
+    </>
   )
 }

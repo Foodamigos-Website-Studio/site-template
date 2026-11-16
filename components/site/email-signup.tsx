@@ -136,7 +136,7 @@ export function EmailSignup({ apiBase, currency, language, name }: { apiBase: st
                 <p className="mt-3 text-base">
                   {deal
                     ? `Trag dich ein und sichere dir ${deal.value} Rabatt auf deine Bestellung.${deal.threshold ? ` Gilt ab einem Bestellwert von ${deal.threshold}.` : ""}${deal.max ? ` Der Rabatt beträgt höchstens ${deal.max}.` : ""}`
-                    : "Neuigkeiten, Aktionen und der Familienbrunch am Sonntag: Trag dich in unseren Newsletter ein."}
+                    : "Neuigkeiten und Aktionen direkt in dein Postfach: Trag dich in unseren Newsletter ein."}
                 </p>
                 <form onSubmit={submit} className="mt-5 flex flex-col gap-3">
                   <label className="flex flex-col gap-1 text-sm">
