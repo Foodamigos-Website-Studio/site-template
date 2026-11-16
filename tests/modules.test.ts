@@ -58,11 +58,9 @@ describe("module pages", () => {
   })
 
   it("shows the module pages under the site's language's paths and lists only the ones it has", () => {
-    expect(localizedRoute("/speisekarte", "de")).toEqual({ kind: "rewrite", path: "/our-menu" })
     expect(localizedRoute("/gutscheine", "de")).toEqual({ kind: "rewrite", path: "/gift-cards" })
-    expect(indexedPaths("de", { menu: true, locations: true, reservations: false, giftCards: true })).toEqual([
+    expect(indexedPaths("de", { locations: true, reservations: false, giftCards: true })).toEqual([
       "/",
-      "/speisekarte",
       "/standort-und-oeffnungszeiten",
       "/gutscheine",
       "/angebote",

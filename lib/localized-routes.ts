@@ -7,7 +7,6 @@ export type LocalizedPage =
   | "privacy-policy"
   | "cookie-policy"
   | "coupons"
-  | "our-menu"
   | "reservations"
   | "gift-cards"
   | "location-and-hours"
@@ -18,8 +17,6 @@ const ROUTES: Record<LocalizedPage, { folder: string; localized: Record<string, 
   "privacy-policy": { folder: "/privacy-policy", localized: { de: "/datenschutzerklaerung" } },
   "cookie-policy": { folder: "/cookie-policy", localized: { de: "/cookie-richtlinie" } },
   coupons: { folder: "/coupons", localized: { de: "/angebote" } },
-  // /menu is the online shop's: the site's own menu is /our-menu (/speisekarte on a German site).
-  "our-menu": { folder: "/our-menu", localized: { de: "/speisekarte" } },
   reservations: { folder: "/reservations", localized: { de: "/reservierungen" } },
   "gift-cards": { folder: "/gift-cards", localized: { de: "/gutscheine" } },
   "location-and-hours": { folder: "/location-and-hours", localized: { de: "/standort-und-oeffnungszeiten" } },
