@@ -13,6 +13,7 @@ import {
   LANGUAGE_CHANGE_EVENT,
   LANGUAGE_STORAGE_KEY,
   siteApiTranslate,
+  TRANSLATED_ATTRIBUTES,
 } from "@/lib/translation"
 
 function storedLanguage(): string | null {
@@ -35,16 +36,17 @@ export function PageTranslation({ siteLanguage = SITE_LANGUAGE, apiUrl = `${STUD
       language = chosenLanguage((event as CustomEvent<string>).detail, siteLanguage)
       void apply()
     }
-    // New content (a client-side page change, a section loading later): translate it too. The translation itself only
-    // changes text in place and never adds nodes, so it never triggers this.
+    // New content (a client-side page change, a section loading later) and text or attributes the page rewrites in
+    // place (opening state, counters, form hints): translate them too. The translation's own writes are recognised and
+    // ignored, so it never triggers itself.
     const observer = new MutationObserver((records) => {
-      if (language === siteLanguage || !records.some((record) => record.addedNodes.length > 0)) return
+      if (language === siteLanguage || records.every((record) => page.isOwnWrite(record))) return
       if (pending) clearTimeout(pending)
       pending = setTimeout(() => void apply(), 150)
     })
 
     window.addEventListener(LANGUAGE_CHANGE_EVENT, onChange)
-    observer.observe(document.body, { childList: true, subtree: true })
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: [...TRANSLATED_ATTRIBUTES] })
     if (language !== siteLanguage) void apply()
     else document.documentElement.lang = siteLanguage
 

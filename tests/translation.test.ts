@@ -88,6 +88,41 @@ describe("the page translation", () => {
   })
 })
 
+describe("text the page changes in place (WT.2 review)", () => {
+  it("takes a text React rewrote as the new original: DE shows it, EN translates it", async () => {
+    document.body.innerHTML = `<p>Geschlossen</p><input placeholder="Dein Name">`
+    const page = createPageTranslation(() => document.body, createTranslator(fakeTranslate))
+    const text = document.querySelector("p")!.firstChild as Text
+    const input = document.querySelector("input")!
+
+    await page.apply("en", "de")
+    expect(text.data).toBe("[en] Geschlossen")
+    // React updates the text node and the attribute in place, without adding nodes.
+    text.data = "Jetzt geöffnet"
+    input.setAttribute("placeholder", "Deine E-Mail")
+
+    await page.apply("de", "de")
+    expect(text.data).toBe("Jetzt geöffnet")
+    expect(input.getAttribute("placeholder")).toBe("Deine E-Mail")
+
+    await page.apply("en", "de")
+    expect(text.data).toBe("[en] Jetzt geöffnet")
+    expect(input.getAttribute("placeholder")).toBe("[en] Deine E-Mail")
+    expect(fakeTranslate.mock.calls.flatMap(([texts]) => texts)).not.toContain("[en] Geschlossen")
+  })
+
+  it("tells its own writes from the page's", async () => {
+    document.body.innerHTML = `<p>Willkommen</p>`
+    const page = createPageTranslation(() => document.body, createTranslator(fakeTranslate))
+    const text = document.querySelector("p")!.firstChild as Text
+    await page.apply("en", "de")
+    expect(page.isOwnWrite({ type: "characterData", target: text })).toBe(true)
+    text.data = "Neu"
+    expect(page.isOwnWrite({ type: "characterData", target: text })).toBe(false)
+    expect(page.isOwnWrite({ type: "childList", target: document.body })).toBe(false)
+  })
+})
+
 describe("the switch and the page translator together", () => {
   async function mount(siteLanguage = "de") {
     const header = document.createElement("header")
@@ -133,6 +168,34 @@ describe("the switch and the page translator together", () => {
     later.textContent = "Neue Gerichte"
     await act(async () => document.querySelector("main")!.append(later))
     await vi.waitFor(() => expect(later.textContent).toBe("[en] Neue Gerichte"), { timeout: 2000 })
+    root.unmount()
+    vi.unstubAllGlobals()
+  })
+
+  it("translates text the page rewrites in place while English is on", async () => {
+    const root = await mount()
+    await act(async () => [...document.querySelectorAll("button")][1]!.click())
+    await vi.waitFor(() => expect(document.querySelector("main p")!.textContent).toBe("[en] Willkommen"))
+
+    const text = document.querySelector("main p")!.firstChild as Text
+    await act(async () => {
+      text.data = "Heute geöffnet"
+    })
+    await vi.waitFor(() => expect(text.data).toBe("[en] Heute geöffnet"), { timeout: 2000 })
+    root.unmount()
+    vi.unstubAllGlobals()
+  })
+
+  it("keeps two switches (header and mobile menu) in step", async () => {
+    const root = await mount()
+    const second = document.createElement("nav")
+    document.body.append(second)
+    const secondRoot = createRoot(second)
+    await act(async () => secondRoot.render(createElement(LanguageSwitch, { siteLanguage: "de" })))
+
+    await act(async () => [...document.querySelectorAll<HTMLButtonElement>("header button")][1]!.click())
+    expect([...second.querySelectorAll("button")].map((b) => b.getAttribute("aria-pressed"))).toEqual(["false", "true"])
+    secondRoot.unmount()
     root.unmount()
     vi.unstubAllGlobals()
   })

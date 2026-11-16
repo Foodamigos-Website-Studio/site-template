@@ -17,6 +17,10 @@ export function LanguageSwitch({ siteLanguage = SITE_LANGUAGE }: { siteLanguage?
     } catch {
       // storage blocked: the site's language
     }
+    // Another switch on the page (the header's and the mobile menu's) changed the language: show it here too.
+    const follow = (event: Event) => setLanguage(chosenLanguage((event as CustomEvent<string>).detail, siteLanguage))
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, follow)
+    return () => window.removeEventListener(LANGUAGE_CHANGE_EVENT, follow)
   }, [siteLanguage])
 
   const choose = (next: string) => {

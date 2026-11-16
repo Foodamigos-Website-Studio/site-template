@@ -95,9 +95,15 @@ const ATTRIBUTES = ["placeholder", "alt", "title", "aria-label"] as const
 
 type Original = { text: Map<Text, string>; attributes: Map<Element, Map<string, string>> }
 
-/** What the page showed in the site's language, so switching back restores it exactly. */
+/**
+ * What the page showed in the site's language, so switching back restores it exactly. The page keeps changing after a
+ * translation (React rewrites text and attributes in place: opening state, counters, form hints), so the last value
+ * written to each text and attribute is kept too: a value that differs from it was written by the page, and becomes
+ * that node's new original (WT.2 review).
+ */
 export function createPageTranslation(root: () => Element | null, translate: (texts: readonly string[], target: SwitchLanguage) => Promise<string[]>) {
   const original: Original = { text: new Map(), attributes: new Map() }
+  const written = { text: new Map<Text, string>(), attributes: new Map<Element, Map<string, string>>() }
   let run = 0
 
   const excluded = (element: Element | null): boolean => {
@@ -107,12 +113,28 @@ export function createPageTranslation(root: () => Element | null, translate: (te
     return false
   }
 
-  /** Remembers every visible text and translatable attribute not seen yet, in the site's language. */
+  const writeText = (node: Text, value: string) => {
+    written.text.set(node, value)
+    if (node.data !== value) node.data = value
+  }
+  const writeAttribute = (el: Element, name: string, value: string) => {
+    const saved = written.attributes.get(el) ?? new Map<string, string>()
+    saved.set(name, value)
+    written.attributes.set(el, saved)
+    if (el.getAttribute(name) !== value) el.setAttribute(name, value)
+  }
+
+  /** Remembers every visible text and translatable attribute in the site's language: new ones, and ones the page changed. */
   const collect = (element: Element) => {
     const walker = element.ownerDocument.createTreeWalker(element, 4 /* NodeFilter.SHOW_TEXT */)
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const text = node as Text
-      if (!original.text.has(text) && text.data.trim() !== "" && !excluded(text.parentElement)) original.text.set(text, text.data)
+      if (text.data.trim() === "" || excluded(text.parentElement)) continue
+      const expected = written.text.get(text) ?? original.text.get(text)
+      if (expected === undefined || text.data !== expected) {
+        original.text.set(text, text.data)
+        written.text.delete(text)
+      }
     }
     for (const el of [element, ...element.querySelectorAll("*")]) {
       if (excluded(el)) continue
@@ -120,10 +142,24 @@ export function createPageTranslation(root: () => Element | null, translate: (te
         const value = el.getAttribute(name)
         if (!value?.trim()) continue
         const saved = original.attributes.get(el) ?? new Map<string, string>()
-        if (!saved.has(name)) saved.set(name, value)
+        const expected = written.attributes.get(el)?.get(name) ?? saved.get(name)
+        if (expected === undefined || value !== expected) {
+          saved.set(name, value)
+          written.attributes.get(el)?.delete(name)
+        }
         original.attributes.set(el, saved)
       }
     }
+  }
+
+  /** True when a mutation only shows what this translation wrote itself (so it is no change of the page). */
+  function isOwnWrite(record: { type: string; target: Node; attributeName?: string | null }): boolean {
+    if (record.type === "characterData") return written.text.get(record.target as Text) === (record.target as Text).data
+    if (record.type === "attributes" && record.attributeName) {
+      const el = record.target as Element
+      return written.attributes.get(el)?.get(record.attributeName) === el.getAttribute(record.attributeName)
+    }
+    return false
   }
 
   /** Shows the page in `language`: the originals for the site's language, translations for the other one. */
@@ -133,27 +169,37 @@ export function createPageTranslation(root: () => Element | null, translate: (te
     const current = ++run
     element.ownerDocument.documentElement.lang = language
     collect(element)
-    for (const [node, text] of original.text) if (!node.isConnected) original.text.delete(node)
-    for (const [el] of original.attributes) if (!el.isConnected) original.attributes.delete(el)
+    for (const [node] of original.text) if (!node.isConnected) (original.text.delete(node), written.text.delete(node))
+    for (const [el] of original.attributes) if (!el.isConnected) (original.attributes.delete(el), written.attributes.delete(el))
 
     if (language === siteLanguage || (language !== "de" && language !== "en")) {
-      for (const [node, text] of original.text) node.data = text
-      for (const [el, saved] of original.attributes) for (const [name, value] of saved) el.setAttribute(name, value)
+      for (const [node, text] of original.text) writeText(node, text)
+      for (const [el, saved] of original.attributes) for (const [name, value] of saved) writeAttribute(el, name, value)
       return
     }
 
-    const texts = [...original.text.values()].map((text) => text.trim())
-    const attributeValues = [...original.attributes.values()].flatMap((saved) => [...saved.values()].map((value) => value.trim()))
-    const translated = await translate([...texts, ...attributeValues], language)
+    const textNodes = [...original.text]
+    const attributes = [...original.attributes].flatMap(([el, saved]) => [...saved].map(([name, value]) => ({ el, name, value })))
+    const translated = await translate([...textNodes.map(([, text]) => text.trim()), ...attributes.map(({ value }) => value.trim())], language)
     if (current !== run) return // a newer switch or page change won
 
     let index = 0
-    for (const [node, text] of original.text) {
+    for (const [node, text] of textNodes) {
+      const value = translated[index++]!
+      // The page changed this text while it was being translated: leave it, the next pass translates the new one.
+      if (node.data !== (written.text.get(node) ?? text)) continue
       const [, lead, , trail] = text.match(/^(\s*)([\s\S]*?)(\s*)$/) ?? ["", "", text, ""]
-      node.data = `${lead}${translated[index++]}${trail}`
+      writeText(node, `${lead}${value}${trail}`)
     }
-    for (const [el, saved] of original.attributes) for (const [name] of saved) el.setAttribute(name, translated[index++]!)
+    for (const { el, name, value } of attributes) {
+      const translation = translated[index++]!
+      if (el.getAttribute(name) !== (written.attributes.get(el)?.get(name) ?? value)) continue
+      writeAttribute(el, name, translation)
+    }
   }
 
-  return { apply }
+  return { apply, isOwnWrite }
 }
+
+/** The attributes the page translation translates (for a MutationObserver's attributeFilter). */
+export const TRANSLATED_ATTRIBUTES: readonly string[] = ATTRIBUTES
