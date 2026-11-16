@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 
 import { GiftCardBalanceForm, type BalanceLabels } from "@/components/gift-cards/gift-card-balance-form"
 import { GiftCardPurchaseForm, type PurchaseLabels } from "@/components/gift-cards/gift-card-purchase-form"
+import { PageIntro } from "@/components/site/page-intro"
 import { SITE_LANGUAGE } from "@/lib/config"
 import { localizedPath } from "@/lib/localized-routes"
 import { giftCardsOn } from "@/lib/modules"
@@ -48,10 +49,18 @@ export default async function GiftCardsPage() {
   const labels = LABELS[SITE_LANGUAGE === "de" ? "de" : "en"]
   const currency = menu?.currency ?? "EUR"
   return (
-    <section data-slot="gift-cards">
-      <h1>{project?.name}</h1>
-      <GiftCardPurchaseForm currency={currency} language={SITE_LANGUAGE} labels={labels.purchase} />
-      <GiftCardBalanceForm language={SITE_LANGUAGE} labels={labels.balance} />
-    </section>
+    <main data-slot="gift-cards" className="pb-24">
+      <PageIntro kicker="Ein Abend zum Verschenken" title="Gutscheine">
+        <p>Verschenke Pasta, Pizza und einen schönen Abend in der {project?.name ?? "Trattoria Bella"}.</p>
+      </PageIntro>
+      <div className="mx-auto grid max-w-[1040px] gap-12 px-5 sm:px-8 md:grid-cols-2">
+        <div className="gift-form frame bg-background p-6 sm:p-8">
+          <GiftCardPurchaseForm currency={currency} language={SITE_LANGUAGE} labels={labels.purchase} />
+        </div>
+        <div className="gift-form frame bg-background p-6 sm:p-8">
+          <GiftCardBalanceForm language={SITE_LANGUAGE} labels={labels.balance} />
+        </div>
+      </div>
+    </main>
   )
 }

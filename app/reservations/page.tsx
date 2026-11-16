@@ -1,9 +1,8 @@
-// Table reservations: the reservation service's widget (reservation_url from the site API), only when the module is
-// on. Unstyled default markup v0 may replace, keeping ReservationWidget (or opening it in a dialog from the header).
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { ReservationWidget } from "@/components/reservations/reservation-widget"
+import { PageIntro } from "@/components/site/page-intro"
 import { SITE_LANGUAGE } from "@/lib/config"
 import { localizedPath } from "@/lib/localized-routes"
 import { reservationsOn } from "@/lib/modules"
@@ -12,16 +11,27 @@ import { getProject } from "@/lib/studio-api"
 
 export async function generateMetadata(): Promise<Metadata> {
   const project = await getProject()
-  return pageMetadata({ title: project?.name ?? "", description: project?.tagline ?? project?.name ?? "", path: localizedPath("reservations", SITE_LANGUAGE) })
+  const name = project?.name ?? "Trattoria Bella"
+  return pageMetadata({
+    title: `${name} – Tisch reservieren in Berlin`,
+    description: `Reserviere deinen Tisch in der ${name} in Berlin Mitte oder Kreuzberg – auch für den Familienbrunch am Sonntag.`,
+    path: localizedPath("reservations", SITE_LANGUAGE),
+  })
 }
 
 export default async function ReservationsPage() {
   const project = await getProject()
   if (!reservationsOn(project) || !project?.reservation_url) notFound()
   return (
-    <section data-slot="reservations">
-      <h1>{project.name}</h1>
-      <ReservationWidget url={project.reservation_url} title={project.name} loadingLabel="…" />
-    </section>
+    <main data-slot="reservations" className="pb-24">
+      <PageIntro kicker="Wir halten einen Platz für dich frei" title="Tisch reservieren">
+        <p>Für ein Abendessen zu zweit, einen Familientisch oder den Familienbrunch am Sonntag.</p>
+      </PageIntro>
+      <div className="mx-auto max-w-[900px] px-5 sm:px-8">
+        <div className="frame">
+          <ReservationWidget url={project.reservation_url} title={project.name} loadingLabel="Reservierung wird geladen …" />
+        </div>
+      </div>
+    </main>
   )
 }
