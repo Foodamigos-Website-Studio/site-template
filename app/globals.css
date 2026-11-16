@@ -1,4 +1,305 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* No design here on purpose: v0 sets the site's colours, fonts and spacing from the inspiration. */
+@theme {
+  --color-link: #a58a5e;
+  --color-accent: #a58a5e;
+  --color-primary: #a58a5e;
+  --color-background: #f7f6f5;
+  --color-text-primary: #77726c;
+  --color-ink: #212225;
+
+  --font-serif: var(--font-libre-bodoni), "Libre Bodoni", Georgia, serif;
+  --font-sans: var(--font-roboto), "Roboto", system-ui, sans-serif;
+
+  --radius: 4px;
+  --ease-site: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root {
+  --fg: var(--color-text-primary);
+  --heading: var(--color-ink);
+  --bg: var(--color-background);
+}
+
+/* Dark surfaces: light text, brass rules. */
+.on-dark {
+  --fg: #d9d5cf;
+  --heading: var(--color-background);
+  --bg: var(--color-ink);
+  color: var(--fg);
+}
+
+html {
+  background: var(--color-background);
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 4.5rem;
+  }
+}
+
+a,
+button {
+  transition-property: opacity, color, background-color, border-color;
+  transition-duration: 300ms;
+  transition-timing-function: var(--ease-site);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-background);
+}
+
+/* Roboto: small uppercase labels, navigation and buttons. */
+.label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--heading, var(--color-ink));
+  text-wrap: balance;
+}
+
+.display-caps {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  color: var(--heading, var(--color-ink));
+  text-wrap: balance;
+}
+
+/* Slim outlined button with a brass border; fills on hover. */
+.btn {
+  --btn-fg: var(--heading, var(--color-ink));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.75rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--btn-fg);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+.btn-solid {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+.btn-solid:hover {
+  background: transparent;
+  color: var(--btn-fg);
+}
+.btn-sm {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.6875rem;
+}
+.btn-lg {
+  padding: 0.9rem 2.25rem;
+}
+
+/* Thin brass text link. */
+.link-thin {
+  display: inline-block;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.link-thin:hover {
+  color: var(--heading, var(--color-ink));
+}
+
+/* Plain boxes used by template pages, forms and the consent banner. */
+.frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
+  background: var(--color-background);
+}
+.card-label {
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  padding: 1.25rem;
+  text-align: left;
+}
+
+/* Slow hover zoom on images. */
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform 1400ms var(--ease-site);
+}
+.img-zoom:hover img {
+  transform: scale(1.04);
+}
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+.hero-zoom {
+  animation: hero-zoom 28s ease-out both;
+}
+
+/* Template pages: forms, widgets and consent placeholders. */
+[data-slot="consent-placeholder"],
+[data-slot="map-placeholder"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-background) 92%, transparent);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+}
+[data-slot="map-placeholder"] {
+  min-height: 18rem;
+}
+[data-slot="consent-placeholder"] button,
+[data-slot="map-placeholder"] button {
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  padding: 0.35rem 0.9rem;
+  font-weight: 500;
+}
+[data-slot="consent-placeholder"] button:hover,
+[data-slot="map-placeholder"] button:hover {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+[data-slot="map"] {
+  display: block;
+  width: 100%;
+  min-height: 20rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
+}
+
+.form-skin {
+  font-size: 1rem;
+}
+.form-skin form,
+.form-skin fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 0;
+  padding: 0;
+}
+.form-skin label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.form-skin input,
+.form-skin select,
+.form-skin textarea {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 4px;
+  background: transparent;
+  padding: 0.7rem 0.85rem;
+  font-size: 1rem;
+  font-weight: 300;
+}
+.form-skin input[type="radio"],
+.form-skin input[type="checkbox"] {
+  width: auto;
+}
+.form-skin button {
+  align-self: flex-start;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  padding: 0.7rem 1.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.form-skin button:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+.form-skin button:disabled {
+  opacity: 0.5;
+}
+.form-skin iframe {
+  width: 100%;
+  min-height: 42rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 4px;
+  background: var(--color-background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
