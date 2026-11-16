@@ -1,21 +1,15 @@
-// The home page: v0 designs it from the brief (a placeholder until then).
-import type { Metadata } from "next"
+import Link from "next/link"
 
-import { pageMetadata } from "@/lib/seo"
-import { getProject } from "@/lib/studio-api"
-
-export async function generateMetadata(): Promise<Metadata> {
-  const project = await getProject()
-  const name = project?.name ?? "Restaurant"
-  return pageMetadata({ title: name, description: project?.tagline ?? name, path: "/" })
-}
-
-export default async function Home() {
-  const project = await getProject()
+export default function HomePage() {
   return (
-    <section>
-      <h1>{project?.name}</h1>
-      {project?.tagline ? <p>{project.tagline}</p> : null}
-    </section>
+    <main>
+      <h1>Willkommen in der Trattoria Bella</h1>
+      <p>Hausgemachte Pasta mitten in Berlin, jeden Tag frisch.</p>
+      <input placeholder="Deine E-Mail-Adresse" aria-label="E-Mail für den Newsletter" />
+      <img src="/placeholder.svg" alt="Unser Gastraum am Abend" width={120} height={80} />
+      <nav>
+        <Link href="/ueber-uns">Über uns</Link> · <a href="/menu">Speisekarte ansehen</a>
+      </nav>
+    </main>
   )
 }
