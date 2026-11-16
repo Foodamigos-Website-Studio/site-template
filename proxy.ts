@@ -5,6 +5,7 @@ import { NextResponse, type NextRequest } from "next/server"
 import { hasModule, ONLINE_SHOP_EMBED_DOMAIN, ONLINE_SHOP_EMBED_ORIGIN, SITE_LANGUAGE } from "@/lib/config"
 import { localizedRoute } from "@/lib/localized-routes"
 import { menuRoute } from "@/lib/menu-route"
+import { LANGUAGE_COOKIE, menuLanguage } from "@/lib/translation"
 import { getProject } from "@/lib/studio-api"
 
 export async function proxy(request: NextRequest) {
@@ -21,7 +22,9 @@ export async function proxy(request: NextRequest) {
       embedDomain: ONLINE_SHOP_EMBED_DOMAIN,
       embedOrigin: ONLINE_SHOP_EMBED_ORIGIN,
       onlineShopUrl,
-      language: SITE_LANGUAGE,
+      // F-WT: the visitor's DE/EN choice (components/site/language-switch.tsx), else the site's language.
+      language: menuLanguage(request.cookies.get(LANGUAGE_COOKIE)?.value, SITE_LANGUAGE),
+      siteLanguage: SITE_LANGUAGE,
     })
     if (route.kind === "redirect") return NextResponse.redirect(route.url, 307)
     if (route.kind === "rewrite") {

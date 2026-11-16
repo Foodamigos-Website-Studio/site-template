@@ -14,7 +14,10 @@ export function menuRoute(input: {
   embedDomain: string
   embedOrigin: string
   onlineShopUrl: string | null
+  /** The language the visitor reads the site in (the DE/EN switch), which the shop opens in. */
   language: string
+  /** The site's own language: the standalone shop opens a different choice under its /{language} pages. */
+  siteLanguage?: string
 }): MenuRoute {
   if (!input.shopOn) return { kind: "next" }
   const host = input.host.toLowerCase().replace(/^www\./, "").replace(/:\d+$/, "")
@@ -27,5 +30,6 @@ export function menuRoute(input: {
   }
   if (!input.onlineShopUrl) return { kind: "next" }
   const rest = input.pathname.replace(/^\/menu/, "")
-  return { kind: "redirect", url: `${input.onlineShopUrl.replace(/\/+$/, "")}${rest}${input.search}` }
+  const locale = input.siteLanguage && input.language !== input.siteLanguage ? `/${input.language}` : ""
+  return { kind: "redirect", url: `${input.onlineShopUrl.replace(/\/+$/, "")}${locale}${rest}${input.search}` }
 }
