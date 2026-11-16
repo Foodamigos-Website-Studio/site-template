@@ -22,8 +22,9 @@ export async function proxy(request: NextRequest) {
       embedDomain: ONLINE_SHOP_EMBED_DOMAIN,
       embedOrigin: ONLINE_SHOP_EMBED_ORIGIN,
       onlineShopUrl,
-      // F-WT: the visitor's DE/EN choice (components/site/language-switch.tsx), else the site's language.
-      language: menuLanguage(request.cookies.get(LANGUAGE_COOKIE)?.value, SITE_LANGUAGE),
+      // F-WT: the visitor's DE/EN choice, else the site's language. The link's ?lng= first (WT.QF0.5: v0's preview
+      // proxy drops the cookie), then the cookie (components/site/language-switch.tsx).
+      language: menuLanguage({ query: request.nextUrl.searchParams.get("lng"), cookie: request.cookies.get(LANGUAGE_COOKIE)?.value }, SITE_LANGUAGE),
       siteLanguage: SITE_LANGUAGE,
     })
     if (route.kind === "redirect") return NextResponse.redirect(route.url, 307)

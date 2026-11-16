@@ -1,7 +1,9 @@
 // The DE/EN switch (F-WT): visitors read the site in its own language or the other of German and English. The server
 // HTML stays in the site's language (search engines see that); the browser translates the visible text in place
 // through the site API's POST /translations (Google behind a shared cache and a daily budget). No /en paths: the
-// choice lives in localStorage and a cookie, which /menu passes on to the shop (proxy.ts).
+// choice lives in localStorage and a cookie, which /menu passes on to the shop (proxy.ts). In v0's preview /menu never
+// sees the cookie (its preview proxy drops the Cookie header; a third-party iframe may block it), so /menu links also
+// carry the choice as ?lng= (WT.QF0.5, <PageTranslation />).
 
 export const LANGUAGE_STORAGE_KEY = "site_language"
 export const LANGUAGE_COOKIE = "site_language"
@@ -19,9 +21,27 @@ export function chosenLanguage(stored: string | null | undefined, siteLanguage: 
   return stored && switchLanguages(siteLanguage).includes(stored) ? stored : siteLanguage
 }
 
-/** The language /menu opens the shop in: a valid cookie choice (de or en), else the site's language. */
-export function menuLanguage(cookie: string | null | undefined, siteLanguage: string): string {
-  return cookie === "de" || cookie === "en" ? cookie : siteLanguage
+/** The language /menu opens the shop in: a valid (de or en) ?lng= on the request, else the cookie's, else the site's. */
+export function menuLanguage(choice: { query?: string | null; cookie?: string | null }, siteLanguage: string): string {
+  for (const value of [choice.query, choice.cookie]) if (value === "de" || value === "en") return value
+  return siteLanguage
+}
+
+/**
+ * A link to /menu or /menu/… on this site with the visitor's choice added as ?lng= (WT.QF0.5); null for any other
+ * link, a /menu link that carries a lng already, or no choice. The link's query and hash stay as they are.
+ */
+export function menuLinkWithLanguage(href: string, pageUrl: string, choice: string | null): string | null {
+  if (!choice) return null
+  let url: URL
+  try {
+    url = new URL(href, pageUrl)
+  } catch {
+    return null
+  }
+  if (url.origin !== new URL(pageUrl).origin || (url.pathname !== "/menu" && !url.pathname.startsWith("/menu/"))) return null
+  if (/(?:^\?|&)lng=/.test(url.search)) return null
+  return `${url.pathname}${url.search}${url.search ? "&" : "?"}lng=${encodeURIComponent(choice)}${url.hash}`
 }
 
 /** The cookie that carries the choice to /menu, for a year. */
