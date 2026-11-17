@@ -1,18 +1,18 @@
-// The site's paths: /menu is the online shop's (lib/menu-route.ts), and the legal and SEO pages show under the path in
-// the site's language (lib/localized-routes.ts).
+// The site's paths: /menu is the online shop's (lib/menu-route.ts, with the project cached by lib/menu-project.ts),
+// and the legal and SEO pages show under the path in the site's language (lib/localized-routes.ts).
 import { NextResponse, type NextRequest } from "next/server"
 
 import { hasModule, ONLINE_SHOP_EMBED_DOMAIN, ONLINE_SHOP_EMBED_ORIGIN, SITE_LANGUAGE } from "@/lib/config"
 import { localizedRoute } from "@/lib/localized-routes"
+import { getMenuProject } from "@/lib/menu-project"
 import { menuRoute } from "@/lib/menu-route"
-import { getProject } from "@/lib/studio-api"
 
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
 
   if (pathname === "/menu" || pathname.startsWith("/menu/")) {
     const shopOn = hasModule("online_shop")
-    const onlineShopUrl = shopOn ? ((await getProject())?.online_shop_url ?? null) : null
+    const project = shopOn ? await getMenuProject() : null
     const route = menuRoute({
       host: request.headers.get("host") ?? "",
       pathname,
@@ -20,9 +20,9 @@ export async function proxy(request: NextRequest) {
       shopOn,
       embedDomain: ONLINE_SHOP_EMBED_DOMAIN,
       embedOrigin: ONLINE_SHOP_EMBED_ORIGIN,
-      onlineShopUrl,
+      onlineShopUrl: project?.online_shop_url ?? null,
       language: SITE_LANGUAGE,
-      googleMapsApiKey: null,
+      googleMapsApiKey: project?.google_maps_api_key ?? null,
     })
     if (route.kind === "redirect") return NextResponse.redirect(route.url, 307)
     if (route.kind === "rewrite") {
