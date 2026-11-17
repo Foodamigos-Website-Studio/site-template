@@ -22,6 +22,7 @@ export async function proxy(request: NextRequest) {
       embedOrigin: ONLINE_SHOP_EMBED_ORIGIN,
       onlineShopUrl,
       language: SITE_LANGUAGE,
+      googleMapsApiKey: null,
     })
     if (route.kind === "redirect") return NextResponse.redirect(route.url, 307)
     if (route.kind === "rewrite") {
