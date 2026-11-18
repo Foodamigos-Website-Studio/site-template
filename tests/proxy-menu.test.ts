@@ -155,6 +155,33 @@ describe("proxy /menu: the project's Google Maps key", () => {
     expect(lookup).toHaveBeenCalledTimes(2)
   })
 
+  it("never makes a /menu request wait while the site API stays down, after the first failed lookup (MK.QF0.4)", async () => {
+    vi.useFakeTimers()
+    // The site API is down: every lookup fails only when the 8 s timeout runs out.
+    lookup.mockImplementation(
+      () => new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 8_000)),
+    )
+    const names = (response: Response) => cookieHeaders(response).map((cookie) => cookie.split("=")[0])
+
+    // Only the very first lookup after a start is waited for.
+    const first = open("/menu")
+    await vi.advanceTimersByTimeAsync(8_000)
+    expect(names(await first)).toEqual(["storefront_base_path", "storefront_locale"])
+
+    // Then, window after window, every request answers without the clock moving (an awaited lookup would hang
+    // here), with the shop rewrite and the two cookies, while one lookup per window runs in the background.
+    for (const wait of [FAILED_LOOKUP_SECONDS * 1000, 300_000, 300_000]) {
+      vi.advanceTimersByTime(wait)
+      const responses = await Promise.all([open("/menu"), open("/menu/checkout"), open("/menu")])
+      for (const response of responses) {
+        expect(response.headers.get("x-middleware-rewrite")).toMatch(/^https:\/\/www\.foodamigos-storefront-online-shop\.com\/menu/)
+        expect(names(response)).toEqual(["storefront_base_path", "storefront_locale"])
+      }
+      await vi.advanceTimersByTimeAsync(8_000)
+    }
+    expect(lookup).toHaveBeenCalledTimes(4)
+  })
+
   it("keeps the last key when a refresh fails, and tries again after FAILED_LOOKUP_SECONDS (MK.QF0.2)", async () => {
     vi.useFakeTimers()
     lookup.mockResolvedValue(project("AIza-project-key"))
