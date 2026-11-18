@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { resetMenuProjectCache } from "@/lib/menu-project"
+import { FAILED_LOOKUP_SECONDS, resetMenuProjectCache } from "@/lib/menu-project"
 import { getProject, type Project } from "@/lib/studio-api"
 import { proxy } from "@/proxy"
 
@@ -92,17 +92,43 @@ describe("proxy /menu: the project's Google Maps key", () => {
     expect(cookies).toContain("storefront_google_maps_api_key_v1=AIza-rotated-key; Path=/; Max-Age=31536000; Secure; SameSite=none")
   })
 
-  it("keeps a failed lookup just as long, so the next requests don't wait for the site API again", async () => {
+  it("keeps a failed lookup only briefly, so the next requests don't wait for the site API again (MK.QF0.1)", async () => {
     vi.useFakeTimers()
     lookup.mockResolvedValue(null)
 
     await open("/menu")
-    await open("/menu")
-    vi.advanceTimersByTime(299_000)
+    await Promise.all([open("/menu"), open("/menu/checkout")])
+    vi.advanceTimersByTime((FAILED_LOOKUP_SECONDS - 1) * 1000)
     await open("/menu")
     expect(lookup).toHaveBeenCalledTimes(1)
 
     vi.advanceTimersByTime(1_000)
+    await open("/menu")
+    expect(lookup).toHaveBeenCalledTimes(2)
+  })
+
+  it("gets the key and the preview redirect back once the site API answers again, not five minutes later (MK.QF0.1)", async () => {
+    vi.useFakeTimers()
+    lookup.mockRejectedValue(new Error("500"))
+
+    expect(cookieHeaders(await open("/menu")).map((cookie) => cookie.split("=")[0])).toEqual([
+      "storefront_base_path",
+      "storefront_locale",
+    ])
+    expect((await open("/menu", "site.vercel.app")).headers.get("x-middleware-next")).toBe("1")
+
+    lookup.mockResolvedValue(project("AIza-project-key"))
+    vi.advanceTimersByTime(FAILED_LOOKUP_SECONDS * 1000)
+
+    expect(cookieHeaders(await open("/menu"))).toContain(
+      "storefront_google_maps_api_key_v1=AIza-project-key; Path=/; Max-Age=31536000; Secure; SameSite=none",
+    )
+    const preview = await open("/menu", "site.vercel.app")
+    expect(preview.status).toBe(307)
+    expect(lookup).toHaveBeenCalledTimes(2)
+
+    // A success is then kept the whole REVALIDATE_SECONDS again.
+    vi.advanceTimersByTime(299_000)
     await open("/menu")
     expect(lookup).toHaveBeenCalledTimes(2)
   })
