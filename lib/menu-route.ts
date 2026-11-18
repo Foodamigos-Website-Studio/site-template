@@ -23,7 +23,9 @@ export function menuRoute(input: {
   const host = input.host.toLowerCase().replace(/^www\./, "").replace(/:\d+$/, "")
   if (input.embedDomain && host === input.embedDomain.toLowerCase().replace(/^www\./, "")) {
     const cookies: Record<string, string> = { storefront_base_path: "/menu", storefront_locale: input.language }
-    if (input.googleMapsApiKey) cookies.storefront_google_maps_api_key_v1 = input.googleMapsApiKey
+    // A blank key (only spaces) is no key either (MK.QF0.7); one with stray spaces around it goes without them.
+    const googleMapsApiKey = input.googleMapsApiKey?.trim()
+    if (googleMapsApiKey) cookies.storefront_google_maps_api_key_v1 = googleMapsApiKey
     return {
       kind: "rewrite",
       url: `${input.embedOrigin.replace(/\/+$/, "")}${input.pathname}${input.search}`,
