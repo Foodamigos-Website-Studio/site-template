@@ -48,11 +48,20 @@ describe("menuRoute", () => {
       })
     })
 
-    it("sets no key cookie when the project has no key or an empty one", () => {
-      for (const googleMapsApiKey of [null, ""]) {
+    it("sets no key cookie when the project has no key, an empty one or a blank one (MK.QF0.7)", () => {
+      for (const googleMapsApiKey of [null, "", "  ", "\t\n"]) {
         const route = menuRoute({ ...embedded, googleMapsApiKey })
         expect(route).toEqual({ kind: "rewrite", url: rewriteUrl, cookies: { storefront_base_path: "/menu", storefront_locale: "de" } })
       }
+    })
+
+    it("is set without stray spaces around it (MK.QF0.7)", () => {
+      const route = menuRoute({ ...embedded, googleMapsApiKey: " AIza-project-key\n" })
+      expect(route).toEqual({
+        kind: "rewrite",
+        url: rewriteUrl,
+        cookies: { storefront_base_path: "/menu", storefront_locale: "de", storefront_google_maps_api_key_v1: "AIza-project-key" },
+      })
     })
 
     it("is set on the custom domain with or without www. and with a port", () => {
