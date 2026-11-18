@@ -1,5 +1,8 @@
 // The one client for the Website Studio site API: every page reads restaurant data through it, never hard-coded.
 // Responses are {data: ...}; a failed request returns null, so the page leaves that part out instead of guessing.
+// fetch's cache (next.revalidate) keeps only answers, so while the site API is down every render would wait for the
+// 8 s timeout again, once per request it makes (MK.QF0.3). A failed path is remembered for FAILED_REQUEST_SECONDS and
+// returns null at once until then; after that it is asked again.
 import { PROJECT_UUID, REVALIDATE_SECONDS, SITE_LANGUAGE, STUDIO_API_URL } from "./config"
 
 const BASE_URL = `${STUDIO_API_URL}/api/projects/${PROJECT_UUID}`
@@ -130,19 +133,36 @@ export type Menu = {
   companies: MenuCompany[]
 }
 
+/** How long a failed request (timeout, network error, non-2xx) is answered with null without asking the site API. */
+export const FAILED_REQUEST_SECONDS = 30
+
+/** Path → when it may be asked again. */
+const failedUntil = new Map<string, number>()
+
 async function request<T>(path: string): Promise<T | null> {
+  const retryAt = failedUntil.get(path)
+  if (retryAt !== undefined) {
+    if (Date.now() < retryAt) return null
+    failedUntil.delete(path)
+  }
   try {
     const response = await fetch(`${BASE_URL}${path}`, {
       headers: { Accept: "application/json" },
       next: { revalidate: REVALIDATE_SECONDS },
       signal: AbortSignal.timeout(8000),
     })
-    if (!response.ok) return null
+    if (!response.ok) throw new Error(`Site API answered ${response.status}`)
     const json = (await response.json()) as { data?: T }
     return json.data ?? null
   } catch {
+    failedUntil.set(path, Date.now() + FAILED_REQUEST_SECONDS * 1000)
     return null
   }
+}
+
+/** Tests only: forget the failed requests. */
+export function resetFailedRequests() {
+  failedUntil.clear()
 }
 
 export function getProject() {
