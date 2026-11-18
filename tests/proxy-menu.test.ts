@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { FAILED_LOOKUP_SECONDS, resetMenuProjectCache } from "@/lib/menu-project"
+import { FAILED_LOOKUP_SECONDS, MAX_STALE_SECONDS, resetMenuProjectCache, STALE_WAIT_MS } from "@/lib/menu-project"
 import { getProject, type Project } from "@/lib/studio-api"
 import { proxy } from "@/proxy"
 
@@ -142,7 +142,76 @@ describe("proxy /menu: the project's Google Maps key", () => {
     expect(lookup).toHaveBeenCalledTimes(2)
   })
 
-  it("never makes a /menu request wait for the site API once a project was read (MK.QF0.2)", async () => {
+  it("gets the rotated key on the first /menu after the site was idle past MAX_STALE_SECONDS (MK.QF0.6)", async () => {
+    vi.useFakeTimers()
+    lookup.mockResolvedValue(project("AIza-old-key"))
+    await open("/menu")
+
+    // Idle for 12 minutes, the key rotated meanwhile: the first request waits for the new lookup and gets the new key.
+    lookup.mockResolvedValue(project("AIza-rotated-key"))
+    vi.advanceTimersByTime(12 * 60_000)
+    expect(cookieHeaders(await open("/menu"))).toContain(keyCookie("AIza-rotated-key"))
+    expect(lookup).toHaveBeenCalledTimes(2)
+  })
+
+  it("waits for a slow lookup past MAX_STALE_SECONDS, shared by the requests arriving together (MK.QF0.6)", async () => {
+    vi.useFakeTimers()
+    lookup.mockResolvedValue(project("AIza-old-key"))
+    await open("/menu")
+
+    lookup.mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve(project("AIza-rotated-key")), 400)))
+    vi.advanceTimersByTime(MAX_STALE_SECONDS * 1000)
+    const responses = Promise.all([open("/menu"), open("/menu/checkout")])
+    await vi.advanceTimersByTimeAsync(400)
+    for (const response of await responses) expect(cookieHeaders(response)).toContain(keyCookie("AIza-rotated-key"))
+    expect(lookup).toHaveBeenCalledTimes(2)
+  })
+
+  it("waits at most STALE_WAIT_MS past MAX_STALE_SECONDS, then serves the cached key (MK.QF0.6)", async () => {
+    vi.useFakeTimers()
+    lookup.mockResolvedValue(project("AIza-old-key"))
+    await open("/menu")
+
+    // The site API hangs: the requests in the wait share one deadline, then get the cached key.
+    lookup.mockReturnValue(new Promise(() => {}))
+    vi.advanceTimersByTime(MAX_STALE_SECONDS * 1000)
+    let answered = false
+    const responses = Promise.all([open("/menu"), open("/menu/checkout")]).finally(() => (answered = true))
+    await vi.advanceTimersByTimeAsync(STALE_WAIT_MS - 1)
+    expect(answered).toBe(false)
+    await vi.advanceTimersByTimeAsync(1)
+    for (const response of await responses) expect(cookieHeaders(response)).toContain(keyCookie("AIza-old-key"))
+
+    // Requests after the deadline answer at once (the clock doesn't move), while the one lookup still runs.
+    expect(cookieHeaders(await open("/menu"))).toContain(keyCookie("AIza-old-key"))
+    expect(lookup).toHaveBeenCalledTimes(2)
+  })
+
+  it("past MAX_STALE_SECONDS, only the first request waits while the site API is down (MK.QF0.6, MK.QF0.4)", async () => {
+    vi.useFakeTimers()
+    lookup.mockResolvedValue(project("AIza-project-key"))
+    await open("/menu")
+
+    lookup.mockImplementation(
+      () => new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 8_000)),
+    )
+    vi.advanceTimersByTime(MAX_STALE_SECONDS * 1000)
+    const first = open("/menu")
+    await vi.advanceTimersByTimeAsync(STALE_WAIT_MS)
+    expect(cookieHeaders(await first)).toContain(keyCookie("AIza-project-key"))
+    await vi.advanceTimersByTimeAsync(8_000)
+
+    // Known down: window after window, every request answers without the clock moving, with the last key.
+    for (const wait of [FAILED_LOOKUP_SECONDS * 1000, 300_000, 300_000]) {
+      vi.advanceTimersByTime(wait)
+      const responses = await Promise.all([open("/menu"), open("/menu/checkout")])
+      for (const response of responses) expect(cookieHeaders(response)).toContain(keyCookie("AIza-project-key"))
+      await vi.advanceTimersByTimeAsync(8_000)
+    }
+    expect(lookup).toHaveBeenCalledTimes(5)
+  })
+
+  it("never makes a /menu request wait for the site API within MAX_STALE_SECONDS once a project was read (MK.QF0.2)", async () => {
     vi.useFakeTimers()
     lookup.mockResolvedValue(project("AIza-project-key"))
     await open("/menu")
