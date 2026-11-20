@@ -40,6 +40,30 @@ describe("the promo bar (F-PB)", () => {
     expect(html).toContain("Aktionscode:")
   })
 
+  // SV.QF0.4 (SV.1): on a built site the bar was plain left-aligned text with no background and the × on its own line,
+  // at 1440 and 375 px: no build step restyles it. It comes with a neutral look of its own.
+  it("comes styled: one centred line in the page's colours swapped, the close button at its right end", () => {
+    const html = render(codes)
+    const bar = /<div data-slot="promo-bar"[^>]*class="([^"]+)"/.exec(html)?.[1] ?? ""
+    expect(bar.split(" ")).toEqual(
+      expect.arrayContaining([
+        "relative",
+        "bg-[var(--foreground,CanvasText)]",
+        "text-[var(--background,Canvas)]",
+        "text-center",
+        "py-2",
+      ]),
+    )
+    // Room for the close button on the right, so text and button never share or swap lines.
+    expect(bar).toContain("pr-11")
+    const list = /<ul class="([^"]+)"/.exec(html)?.[1] ?? ""
+    expect(list.split(" ")).toEqual(expect.arrayContaining(["flex", "flex-wrap", "items-center", "justify-center"]))
+    const button = /<button[^>]*class="([^"]+)"/.exec(html)?.[1] ?? ""
+    expect(button.split(" ")).toEqual(
+      expect.arrayContaining(["absolute", "top-1/2", "right-1", "-translate-y-1/2", "text-inherit"]),
+    )
+  })
+
   it("renders nothing without codes", () => {
     expect(render([])).toBe("")
   })
