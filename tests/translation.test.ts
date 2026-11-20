@@ -4,13 +4,18 @@ import { act } from "react"
 import { createRoot } from "react-dom/client"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
+import { renderToStaticMarkup } from "react-dom/server"
+
 import { LanguageSwitch } from "@/components/site/language-switch"
 import { PageTranslation } from "@/components/site/page-translation"
+import { PromoBarView } from "@/components/site/promo-bar-view"
+import { promoBarTexts } from "@/lib/promo-bar"
 import { menuRoute } from "@/lib/menu-route"
 import {
   chosenLanguage,
   createPageTranslation,
   createTranslator,
+  fixedText,
   LANGUAGE_CHANGE_EVENT,
   menuLanguage,
   menuLinkWithLanguage,
@@ -90,6 +95,50 @@ describe("the page translation", () => {
     expect(document.querySelector("h1")!.textContent).toBe(" Unsere Speisekarte ")
     expect(document.querySelector("img")!.getAttribute("alt")).toBe("Terrasse")
     expect(document.documentElement.lang).toBe("de")
+  })
+})
+
+describe("text that is never translated (SV.QF0.2)", () => {
+  // SV.1 local test: a German site with the promo bar (SV1SOMMER10), EN on the switch. The request to /translations
+  // carried "SV1SOMMER10", "©", "2026", ":" and the Impressum's phone and email, and the bar showed "[en] SV1SOMMER10".
+  // Google could make "SOMMER" "SUMMER" and show a code that does not exist.
+  const sent = () => fakeTranslate.mock.calls.flatMap(([texts]) => texts)
+
+  it("keeps the promo code out of the request and shows it as it is in English", async () => {
+    document.body.innerHTML = renderToStaticMarkup(
+      createElement(PromoBarView, { codes: [{ code: "SV1SOMMER10", text: "10 % Rabatt auf alles" }], texts: promoBarTexts("de") }),
+    )
+    const page = createPageTranslation(() => document.body, createTranslator(fakeTranslate))
+
+    await page.apply("en", "de")
+    expect(sent()).not.toContain("SV1SOMMER10")
+    expect(sent()).toContain("10 % Rabatt auf alles")
+    expect(document.querySelector("strong")!.textContent).toBe("SV1SOMMER10")
+    expect(document.body.textContent).not.toContain("[en] SV1SOMMER10")
+  })
+
+  it("never sends numbers, symbols, punctuation, emails, phone numbers, URLs or code-like tokens", async () => {
+    document.body.innerHTML =
+      `<footer><span>© </span><span>2026</span> <span>Trattoria Bella</span></footer>` +
+      `<p>Telefon<b>:</b> <a href="tel:+49301234567">+49 (0)30 123 45-67</a></p>` +
+      `<p><a href="mailto:info@trattoria.de">info@trattoria.de</a> <a href="https://trattoria.de">https://trattoria.de/</a> <span>www.trattoria.de</span></p>` +
+      `<p><strong>SOMMER10</strong> <span>11:30–22:00</span> <span>×</span> <span>12,50 €</span></p>`
+    const page = createPageTranslation(() => document.body, createTranslator(fakeTranslate))
+
+    await page.apply("en", "de")
+    expect(sent().sort()).toEqual(["Telefon", "Trattoria Bella"])
+    expect(document.querySelector("a[href^=tel]")!.textContent).toBe("+49 (0)30 123 45-67")
+    expect(document.querySelector("footer")!.textContent).toBe("© 2026 [en] Trattoria Bella")
+
+    await page.apply("de", "de")
+    expect(document.querySelector("footer")!.textContent).toBe("© 2026 Trattoria Bella")
+  })
+
+  it("tells fixed text from words by a small deterministic rule", () => {
+    for (const text of ["©", "2026", ":", "–", "+49 30 123456", "info@x.de", "https://x.de/a?b=1", "www.x.de", "SV1SOMMER10", "12,50 €", "24/7"])
+      expect(fixedText(text), text).toBe(true)
+    for (const text of ["Telefon", "Ab 20 €", "Mo–Fr", "FREI", "PIZZA", "Tel.: 030 1234", "10 % Rabatt", "Wir sind für dich da: info@x.de"])
+      expect(fixedText(text), text).toBe(false)
   })
 })
 

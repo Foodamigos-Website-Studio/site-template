@@ -32,9 +32,10 @@ describe("the promo bar (F-PB)", () => {
   it("shows every code with its text, each linking to the online shop at /menu, and a close button", () => {
     const html = render(codes)
     expect(html).toContain('data-slot="promo-bar"')
-    expect(html).toContain("<strong>SOMMER10</strong>")
+    // SV.QF0.2: the code is never translated (Google could make SOMMER SUMMER).
+    expect(html).toContain('<strong translate="no" data-no-translate="">SOMMER10</strong>')
     expect(html).toContain("10 % Rabatt ab 20 €")
-    expect(html).toContain("<strong>FREI</strong>")
+    expect(html).toContain('<strong translate="no" data-no-translate="">FREI</strong>')
     expect(html.match(/href="\/menu"/g)).toHaveLength(2)
     expect(html).toContain('aria-label="Schließen"')
     expect(html).toContain("Aktionscode:")

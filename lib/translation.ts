@@ -108,6 +108,24 @@ function batches(texts: readonly string[]): string[][] {
   return result
 }
 
+// --- Text that is never translated (SV.QF0.2) -------------------------------------------------------------------
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/u
+const URL_TEXT = /^(?:https?:\/\/|www\.)\S+$/iu
+/** One token of capitals and digits with at least one of each, like a promo code (SV1SOMMER10, SOMMER10). */
+const CODE = /^(?=.*\p{Lu})(?=.*\d)[\p{Lu}\d_-]{4,}$/u
+
+/**
+ * True for a text the translator must never get (SV.QF0.2): no letter at all (numbers, years, prices, times, phone
+ * numbers, symbols, punctuation such as "©", "2026", ":", "+49 30 123456", "12,50 €"), an email, a URL, or a code-like
+ * token. Google could turn the code SV1SOMMER10 into SV1SUMMER10, a code that does not exist. Anything with words is
+ * translated; mark fixed text inside words (a code in a sentence, a name) translate="no" or data-no-translate.
+ */
+export function fixedText(text: string): boolean {
+  const value = text.trim()
+  return !/\p{L}/u.test(value) || EMAIL.test(value) || URL_TEXT.test(value) || CODE.test(value)
+}
+
 // --- The page ------------------------------------------------------------------------------------------------------
 
 const SKIPPED = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "CODE", "PRE", "TEXTAREA", "SVG", "TEMPLATE", "IFRAME"])
@@ -216,8 +234,11 @@ export function createPageTranslation(root: () => Element | null, translate: (te
       return
     }
 
-    const textNodes = [...original.text]
-    const attributes = [...original.attributes].flatMap(([el, saved]) => [...saved].map(([name, value]) => ({ el, name, value })))
+    // Fixed text (codes, numbers, symbols, emails, phone numbers, URLs) is never sent and stays as it is (SV.QF0.2).
+    const textNodes = [...original.text].filter(([, text]) => !fixedText(text))
+    const attributes = [...original.attributes]
+      .flatMap(([el, saved]) => [...saved].map(([name, value]) => ({ el, name, value })))
+      .filter(({ value }) => !fixedText(value))
     const translated = await translate([...textNodes.map(([, text]) => text.trim()), ...attributes.map(({ value }) => value.trim())], language)
     if (current !== run) return // a newer switch or page change won
 
