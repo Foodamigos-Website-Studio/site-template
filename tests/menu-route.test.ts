@@ -22,7 +22,8 @@ describe("menuRoute", () => {
   it("redirects to the standalone shop on previews, and lets /menu through without a shop", () => {
     expect(menuRoute({ ...base, host: "site.vercel.app", shopOn: true, embedDomain: "trattoria-bella.de" })).toEqual({
       kind: "redirect",
-      url: "https://shop.example.com/trattoria/checkout?x=1",
+      // WT.QF0.2: the standalone shop always gets the visitor's language as ?lng=.
+      url: "https://shop.example.com/trattoria/checkout?x=1&lng=de",
     })
     expect(menuRoute({ ...base, host: "site.vercel.app", shopOn: true, embedDomain: "", onlineShopUrl: null })).toEqual({ kind: "next" })
   })
