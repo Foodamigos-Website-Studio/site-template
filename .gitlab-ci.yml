@@ -1,0 +1,26 @@
+# The same checks as .github/workflows/ci.yml (GitHub mirror), on GitLab: install, test, typecheck and build on Node 24.
+stages:
+  - check
+
+check:
+  stage: check
+  image: node:24
+  variables:
+    PNPM_STORE_DIR: .pnpm-store
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store
+  before_script:
+    - corepack enable
+    - pnpm config set store-dir $PNPM_STORE_DIR
+  script:
+    - pnpm install --frozen-lockfile
+    - pnpm test
+    - pnpm typecheck
+    - pnpm build
+  rules:
+    # Every pushed branch, like GitHub's on: push (an MR shows its branch's pipeline; no duplicate MR pipeline).
+    - if: $CI_COMMIT_BRANCH
