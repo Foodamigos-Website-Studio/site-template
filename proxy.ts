@@ -12,7 +12,7 @@ export async function proxy(request: NextRequest) {
 
   if (pathname === "/menu" || pathname.startsWith("/menu/")) {
     const shopOn = hasModule("online_shop")
-    const onlineShopUrl = shopOn ? ((await getProject())?.online_shop_url ?? null) : null
+    const project = shopOn ? await getProject() : null
     const route = menuRoute({
       host: request.headers.get("host") ?? "",
       pathname,
@@ -20,8 +20,9 @@ export async function proxy(request: NextRequest) {
       shopOn,
       embedDomain: ONLINE_SHOP_EMBED_DOMAIN,
       embedOrigin: ONLINE_SHOP_EMBED_ORIGIN,
-      onlineShopUrl,
+      onlineShopUrl: project?.online_shop_url ?? null,
       language: SITE_LANGUAGE,
+      googleMapsApiKey: project?.google_maps_api_key ?? null,
     })
     if (route.kind === "redirect") return NextResponse.redirect(route.url, 307)
     if (route.kind === "rewrite") {
