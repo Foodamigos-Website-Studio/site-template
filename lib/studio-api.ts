@@ -157,6 +157,14 @@ export function getMenu() {
   return request<Menu>("/menu")
 }
 
+/** An active promo code of the restaurant, with its short text already in the site's language (PB.1). */
+export type PromoCode = { code: string; text: string }
+
+/** The active master promo codes for the promo bar; [] when the restaurant shows none (contract://site-api/promo-codes). */
+export function getPromoCodes() {
+  return request<PromoCode[]>("/shop/promo-codes")
+}
+
 export type LegalPageKey = "impressum" | "privacy-policy" | "cookie-policy"
 
 export type LegalBlock =
