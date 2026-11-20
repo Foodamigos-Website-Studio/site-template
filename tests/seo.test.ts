@@ -58,14 +58,14 @@ describe("site metadata", () => {
 })
 
 describe("sitemap", () => {
-  const modules = { menu: true, locations: false, reservations: false, giftCards: false }
+  const modules = { locations: false, reservations: false, giftCards: false }
 
   it("adds the pages registered in Website Studio, without noindex ones or pages of modules that are off", () => {
     const paths = sitemapPaths("de", modules, [entry({ path: "/" }), entry({ path: "/kontakt" }), entry({ path: "/impressum", noindex: true }), entry({ path: "/reservierungen" })])
-    expect(paths).toEqual(["/", "/speisekarte", "/angebote", "/kontakt"])
+    expect(paths).toEqual(["/", "/angebote", "/kontakt"])
   })
 
   it("lists the template's pages when the site API is down", () => {
-    expect(sitemapPaths("de", modules, null)).toEqual(["/", "/speisekarte", "/angebote"])
+    expect(sitemapPaths("de", modules, null)).toEqual(["/", "/angebote"])
   })
 })

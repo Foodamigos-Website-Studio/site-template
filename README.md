@@ -12,11 +12,10 @@ so the template has no influence on how v0 designs the site.
 | Cookie banner and consent (analytics, embedded media and restaurant scripts only after Accept) | `components/consent`, `lib/consent.ts` |
 | Umami analytics after consent | `components/consent/analytics.tsx` |
 | The coupons page for search engines (`/angebote` · `/coupons`): h1, FAQ, FAQ JSON-LD; in the sitemap, not in the navigation | `app/angebote`, `app/coupons`, `components/seo`, `lib/seo-pages.ts` |
-| Menu page with prices and Menu JSON-LD (`/speisekarte` · `/our-menu`; `/menu` is the shop's) | `app/our-menu`, `lib/format.ts` |
 | Locations and opening hours with today's status, route link and map after consent (`/standort-und-oeffnungszeiten` · `/location-and-hours`) | `app/location-and-hours`, `lib/hours.ts`, `components/locations/location-map.tsx` |
 | Table reservations: the reservation service's widget (`/reservierungen` · `/reservations`), when the module is on | `app/reservations`, `components/reservations` |
 | Gift cards: purchase into the shop's checkout and balance check, as Server Actions (`/gutscheine` · `/gift-cards`), when the module is on | `app/gift-cards`, `hooks/use-gift-card-*`, `lib/gift-cards.ts` |
-| The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |
+| The online shop under `/menu` (when the module is on): the menu ("Speisekarte") opens there, the site has no menu page of its own; every shop link is `/menu/<shop path>` | `proxy.ts`, `lib/menu-route.ts`, `lib/navigation.ts` |
 | Paths in the site's language: the pages above live in English folders and show under the language's path | `lib/localized-routes.ts`, `proxy.ts` |
 | The site API client | `lib/studio-api.ts`, `lib/config.ts` |
 | SEO base: metadata (each page's tags from `GET /page-meta`; the site's title template, verification codes, X card, category and image preview from the project's `meta`; the one share image `og_image_url`; the favicon, also as Apple touch icon; the iOS app banner), sitemap (the template's pages plus every page registered in `/page-meta`), robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
