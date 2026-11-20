@@ -19,6 +19,7 @@ so the template has no influence on how v0 designs the site.
 | Paths in the site's language: the pages above live in English folders and show under the language's path | `lib/localized-routes.ts`, `proxy.ts` |
 | The site API client | `lib/studio-api.ts`, `lib/config.ts` |
 | DE/EN switch: the header's `<LanguageSwitch />` (the site's language and the other of German and English) and `<PageTranslation />`, which translates the visible text in the browser through `POST /translations`; the choice is kept in localStorage and a cookie, `<html lang>` follows it, `/menu` opens the shop in it; the server HTML (what search engines see) stays in the site's language, no `/en` paths | `components/site/language-switch.tsx`, `components/site/page-translation.tsx`, `lib/translation.ts` |
+| Social profiles: an icon link per set network (Instagram, Facebook, TikTok) in the footer and the menu, and the restaurant JSON-LD's `sameAs`; nothing when none is set | `components/site/social-links.tsx`, `lib/socials.ts`, `lib/restaurant-json-ld.ts` |
 | SEO base: metadata (each page's tags from `GET /page-meta`; the site's title template, verification codes, X card, category and image preview from the project's `meta`; the one share image `og_image_url`; the favicon, also as Apple touch icon; the iOS app banner), sitemap (the template's pages plus every page registered in `/page-meta`), robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
 
 ## For v0: keep, design, add
@@ -27,7 +28,7 @@ The rules for each module (when it is on, what it shows, how it is set up) are M
 this template holds their current working implementation. Logic lives in `lib/` and `hooks/`, the pages are
 unstyled default markup: replace any page's markup freely, keep its data, hooks and actions.
 
-- **Keep** the files above working: restyle them freely, never remove a legal page, the language switch (never build another one), the banner, its two equally
+- **Keep** the files above working: restyle them freely, never remove a legal page, the language switch (never build another one), the social links (`<SocialLinks />`), the banner, its two equally
   prominent buttons, the footer's `<LegalLinks />`, the consent gate around embeds, or `proxy.ts`.
 - **Design** the header, footer, home page and the site's own pages like the inspiration.
 - **Name every new page's path in the site's language** (SEO): on a German site `app/kontakt`, `app/ueber-uns`,
