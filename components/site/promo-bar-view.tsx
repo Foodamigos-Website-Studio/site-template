@@ -31,7 +31,9 @@ export function PromoBarView({ codes, texts }: { codes: PromoCode[]; texts: Prom
           <li key={promo.code}>
             {/* /menu is the online shop (proxy.ts), not a page of this app: a plain link, like the menu item. */}
             <a href="/menu">
-              {promo.text ? <span>{promo.text}</span> : null} <span>{texts.label}:</span> <strong>{promo.code}</strong>
+              {promo.text ? <span>{promo.text}</span> : null} <span>{texts.label}:</span>{" "}
+              {/* SV.QF0.2: the code is never translated (Google could turn SOMMER into SUMMER, a code that doesn't exist). */}
+              <strong translate="no" data-no-translate="">{promo.code}</strong>
             </a>
           </li>
         ))}
