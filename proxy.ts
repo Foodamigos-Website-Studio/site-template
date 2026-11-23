@@ -13,7 +13,7 @@ export async function proxy(request: NextRequest) {
 
   if (pathname === "/menu" || pathname.startsWith("/menu/")) {
     const shopOn = hasModule("online_shop")
-    const onlineShopUrl = shopOn ? ((await getProject())?.online_shop_url ?? null) : null
+    const project = shopOn ? await getProject() : null
     const route = menuRoute({
       host: request.headers.get("host") ?? "",
       pathname,
@@ -21,11 +21,12 @@ export async function proxy(request: NextRequest) {
       shopOn,
       embedDomain: ONLINE_SHOP_EMBED_DOMAIN,
       embedOrigin: ONLINE_SHOP_EMBED_ORIGIN,
-      onlineShopUrl,
+      onlineShopUrl: project?.online_shop_url ?? null,
       // F-WT: the visitor's DE/EN choice, else the site's language. The link's ?lng= first (WT.QF0.5: v0's preview
       // proxy drops the cookie), then the cookie (components/site/language-switch.tsx).
       language: menuLanguage({ query: request.nextUrl.searchParams.get("lng"), cookie: request.cookies.get(LANGUAGE_COOKIE)?.value }, SITE_LANGUAGE),
       siteLanguage: SITE_LANGUAGE,
+      googleMapsApiKey: project?.google_maps_api_key ?? null,
     })
     if (route.kind === "redirect") return NextResponse.redirect(route.url, 307)
     if (route.kind === "rewrite") {
