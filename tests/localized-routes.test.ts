@@ -1,3 +1,6 @@
+import { existsSync } from "node:fs"
+import { join } from "node:path"
+
 import { describe, expect, it } from "vitest"
 
 import { LOCALIZED_MATCHER, localizedPath, localizedRoute } from "@/lib/localized-routes"
@@ -17,6 +20,16 @@ describe("localized routes", () => {
     expect(localizedRoute("/datenschutzerklaerung", "en")).toEqual({ kind: "next" })
     expect(localizedPath("cookie-policy", "fr")).toBe("/cookie-policy")
     expect(seoPaths("de")).toEqual(["/angebote"])
+  })
+
+  it("has no menu page of its own: /our-menu and /speisekarte are not routes, the menu is the shop under /menu (ML.2)", () => {
+    expect(localizedRoute("/speisekarte", "de")).toEqual({ kind: "next" })
+    expect(localizedRoute("/our-menu", "de")).toEqual({ kind: "next" })
+    expect(LOCALIZED_MATCHER).not.toContain("/our-menu")
+    expect(LOCALIZED_MATCHER).not.toContain("/speisekarte")
+    expect(config.matcher).not.toContain("/our-menu")
+    expect(config.matcher).not.toContain("/speisekarte")
+    expect(existsSync(join(process.cwd(), "app/our-menu"))).toBe(false)
   })
 
   it("matches every localized path in the proxy", () => {

@@ -4,7 +4,8 @@ The base every FoodAmigos Website Studio website starts from. Max (the Website S
 v0 chat from this repository (`POST /chats/from-repo`), writes the restaurant's values into `lib/site-defaults.ts`,
 and v0 then designs the restaurant's own pages. Everything every site must have is already here, so v0 never builds
 it again. **None of it is styled**: plain semantic HTML with `data-slot` hooks, an empty theme and no UI components,
-so the template has no influence on how v0 designs the site.
+so the template has no influence on how v0 designs the site. The one exception is the promo bar, which no build step
+restyles: it comes with a neutral look (one centred line in the page's colours swapped, the close button at its end).
 
 | What | Where |
 |---|---|
@@ -12,13 +13,15 @@ so the template has no influence on how v0 designs the site.
 | Cookie banner and consent (analytics, embedded media and restaurant scripts only after Accept) | `components/consent`, `lib/consent.ts` |
 | Umami analytics after consent | `components/consent/analytics.tsx` |
 | The coupons page for search engines (`/angebote` · `/coupons`): h1, FAQ, FAQ JSON-LD; in the sitemap, not in the navigation | `app/angebote`, `app/coupons`, `components/seo`, `lib/seo-pages.ts` |
-| Menu page with prices and Menu JSON-LD (`/speisekarte` · `/our-menu`; `/menu` is the shop's) | `app/our-menu`, `lib/format.ts` |
 | Locations and opening hours with today's status, route link and map after consent (`/standort-und-oeffnungszeiten` · `/location-and-hours`) | `app/location-and-hours`, `lib/hours.ts`, `components/locations/location-map.tsx` |
 | Table reservations: the reservation service's widget (`/reservierungen` · `/reservations`), when the module is on | `app/reservations`, `components/reservations` |
 | Gift cards: purchase into the shop's checkout and balance check, as Server Actions (`/gutscheine` · `/gift-cards`), when the module is on | `app/gift-cards`, `hooks/use-gift-card-*`, `lib/gift-cards.ts` |
-| The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |
+| The online shop under `/menu` (when the module is on): the menu ("Speisekarte") opens there, the site has no menu page of its own; every shop link is `/menu/<shop path>` | `proxy.ts`, `lib/menu-route.ts`, `lib/navigation.ts` |
 | Paths in the site's language: the pages above live in English folders and show under the language's path | `lib/localized-routes.ts`, `proxy.ts` |
 | The site API client | `lib/studio-api.ts`, `lib/config.ts` |
+| DE/EN switch: the header's `<LanguageSwitch />` (the site's language and the other of German and English) and `<PageTranslation />`, which translates the visible text in the browser through `POST /translations`; the choice is kept in localStorage and a cookie, `<html lang>` follows it, `/menu` opens the shop in it; the server HTML (what search engines see) stays in the site's language, no `/en` paths | `components/site/language-switch.tsx`, `components/site/page-translation.tsx`, `lib/translation.ts` |
+| Promo bar: the restaurant's active promo codes at the top of every page, linking to `/menu`, closed for the visit with its × (sessionStorage); nothing while the online shop is off or there is no code; a neutral default look, restyle it freely | `components/site/promo-bar.tsx`, `components/site/promo-bar-view.tsx`, `lib/promo-bar.ts` |
+| Social profiles: an icon link per set network (Instagram, Facebook, TikTok) in the footer and the menu, and the restaurant JSON-LD's `sameAs`; nothing when none is set | `components/site/social-links.tsx`, `lib/socials.ts`, `lib/restaurant-json-ld.ts` |
 | SEO base: metadata (each page's tags from `GET /page-meta`; the site's title template, verification codes, X card, category and image preview from the project's `meta`; the one share image `og_image_url`; the favicon, also as Apple touch icon; the iOS app banner), sitemap (the template's pages plus every page registered in `/page-meta`), robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
 
 ## For v0: keep, design, add
@@ -27,8 +30,8 @@ The rules for each module (when it is on, what it shows, how it is set up) are M
 this template holds their current working implementation. Logic lives in `lib/` and `hooks/`, the pages are
 unstyled default markup: replace any page's markup freely, keep its data, hooks and actions.
 
-- **Keep** the files above working: restyle them freely, never remove a legal page, the banner, its two equally
-  prominent buttons, the footer's `<LegalLinks />`, the consent gate around embeds, or `proxy.ts`.
+- **Keep** the files above working: restyle them freely, never remove a legal page, the language switch (never build another one), the social links (`<SocialLinks />`), the banner, its two equally
+  prominent buttons, the footer's `<LegalLinks />`, the promo bar (`<PromoBar />`, its `/menu` link, close button and dismissal), the consent gate around embeds, or `proxy.ts`.
 - **Design** the header, footer, home page and the site's own pages like the inspiration.
 - **Name every new page's path in the site's language** (SEO): on a German site `app/kontakt`, `app/ueber-uns`,
   never `app/contact`. Max registers it in Website Studio (`page_meta_update`), which puts it in the sitemap and the

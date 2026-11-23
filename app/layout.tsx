@@ -6,6 +6,8 @@ import { Analytics } from "@/components/consent/analytics"
 import { ConsentBanner } from "@/components/consent/consent-banner"
 import { ConsentProvider } from "@/components/consent/consent-provider"
 import { PageLoader } from "@/components/site/page-loader"
+import { PageTranslation } from "@/components/site/page-translation"
+import { PromoBar } from "@/components/site/promo-bar"
 import { RestaurantJsonLd } from "@/components/site/restaurant-json-ld"
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
@@ -21,8 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return siteMetadata(project, origin)
 }
 
-// Keep the ConsentProvider, ConsentBanner, Analytics and RestaurantJsonLd: they are the site's legal and SEO base, and
-// the PageLoader, which shows that the next page is loading.
+// Keep the ConsentProvider, ConsentBanner, Analytics and RestaurantJsonLd: they are the site's legal and SEO base, the
+// PageLoader, which shows that the next page is loading, the PromoBar above the header (F-PB) and the PageTranslation
+// behind the header's DE/EN switch.
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const [cookieStore, legal, project] = await Promise.all([cookies(), getLegal(), getProject()])
   const consent = consentFromCookie(`${CONSENT_COOKIE}=${cookieStore.get(CONSENT_COOKIE)?.value ?? ""}`)
@@ -31,6 +34,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body>
         <PageLoader />
         <ConsentProvider initial={consent}>
+          <PromoBar />
           <SiteHeader />
           <main id="content">{children}</main>
           <SiteFooter />
@@ -38,6 +42,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <Analytics umamiWebsiteId={project?.umami_website_id} />
         </ConsentProvider>
         <RestaurantJsonLd />
+        <PageTranslation />
       </body>
     </html>
   )
