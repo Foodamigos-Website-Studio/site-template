@@ -10,8 +10,8 @@ import { FaqBlock } from "@/components/seo/faq-block"
 import { SITE_LANGUAGE } from "@/lib/config"
 import { formatPrice } from "@/lib/format"
 import { pageMetadata } from "@/lib/seo"
-import { getMenu, getProject, getTagPage, type TagPage } from "@/lib/studio-api"
-import { menuImageAllowed, type TagCta, type TagPageLabels, tagPageCtas, tagPageLabels, tagPath, type TagProduct, tagProducts } from "@/lib/tag-pages"
+import { getMenu, getProject, getTagPage, getTagPages, type TagPage } from "@/lib/studio-api"
+import { menuImageAllowed, type TagCta, type TagPageLabels, tagPageCtas, tagPageLabels, tagPageListed, tagPath, type TagProduct, tagProducts } from "@/lib/tag-pages"
 
 type TagPageProps = { params: Promise<{ slug: string }> }
 
@@ -57,16 +57,19 @@ export function TagPageView({ page, products, ctas, labels, language }: { page: 
 
 export async function generateTagPageMetadata({ params }: TagPageProps): Promise<Metadata> {
   const { slug } = await params
-  const page = await getTagPage(slug)
-  if (!page) return {}
+  const [page, pages] = await Promise.all([getTagPage(slug), getTagPages()])
+  if (!page || !tagPageListed(pages, slug)) return {}
   return pageMetadata({ title: page.metaTitle, description: page.metaDescription, path: tagPath(page.slug) })
 }
 
-/** An unknown slug, a draft or a removed dish is the site's 404 page (the site API answers 404 for all three). */
+/**
+ * An unknown slug, a draft or a removed dish is the site's 404 page: the site API answers 404 for all three, and the
+ * live list (GET /tag-pages) no longer has them. With the site API down, the cached page stays.
+ */
 export async function TagPageRoute({ params }: TagPageProps) {
   const { slug } = await params
-  const [page, project, menu] = await Promise.all([getTagPage(slug), getProject(), getMenu()])
-  if (!page) notFound()
+  const [page, pages, project, menu] = await Promise.all([getTagPage(slug), getTagPages(), getProject(), getMenu()])
+  if (!page || !tagPageListed(pages, slug)) notFound()
   return (
     <TagPageView
       page={page}

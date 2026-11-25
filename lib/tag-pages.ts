@@ -17,6 +17,15 @@ export function tagPaths(pages: readonly TagPageSummary[] | null): string[] {
   return (pages ?? []).map((page) => tagPath(page.slug))
 }
 
+/**
+ * Whether the site still shows this dish page: listed in GET /tag-pages (live pages only), or the list failed (site
+ * API down: keep the cached page). Needed because Next keeps a cached 200 of /tag-pages/{slug} when the refetch answers
+ * 404, so a page that became a draft or lost its keyword would otherwise stay up; the list's own 200 does refresh.
+ */
+export function tagPageListed(pages: readonly TagPageSummary[] | null, slug: string): boolean {
+  return pages === null || pages.some((page) => page.slug === slug)
+}
+
 export type TagProduct = MenuProduct & { currency: string }
 
 /** The dish page's menu products, in the page's order (productIds), each once, from every location's menus. */

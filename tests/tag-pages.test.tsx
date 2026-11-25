@@ -31,7 +31,7 @@ import { faqPageJsonLd } from "@/lib/faq"
 import { LOCALIZED_MATCHER, localizedRoute } from "@/lib/localized-routes"
 import { sitemapPaths } from "@/lib/site-pages"
 import { getMenu, getTagPage, getTagPages, type Menu, type Project, type TagPage } from "@/lib/studio-api"
-import { MENU_IMAGE_HOSTS, menuImageAllowed, tagPageCtas, tagPageLabels, TAG_PAGE_LABELS, tagPaths, tagProducts } from "@/lib/tag-pages"
+import { MENU_IMAGE_HOSTS, menuImageAllowed, tagPageCtas, tagPageLabels, tagPageListed, TAG_PAGE_LABELS, tagPaths, tagProducts } from "@/lib/tag-pages"
 import nextConfig from "@/next.config.mjs"
 import { config as proxyConfig } from "@/proxy"
 
@@ -166,6 +166,19 @@ describe("dish page", () => {
   it("answers an unknown slug with the site's 404 page (notFound)", async () => {
     replaySiteApi()
     await expect(TagPageRoute({ params: Promise.resolve({ slug: "does-not-exist" }) })).rejects.toMatchObject({ digest: "NEXT_HTTP_ERROR_FALLBACK;404" })
+  })
+
+  it("answers a page the live list no longer has (a cached draft or removed dish) with 404, and keeps it when the list failed", async () => {
+    expect(tagPageListed(tagPagesFixture.data, "poke-bowl")).toBe(true)
+    expect(tagPageListed(tagPagesEmptyFixture.data, "poke-bowl")).toBe(false)
+    expect(tagPageListed(null, "poke-bowl")).toBe(true)
+    replaySiteApi()
+    const listed = globalThis.fetch
+    vi.stubGlobal("fetch", async (input: string) => (new URL(input).pathname.endsWith("/tag-pages") ? new Response(JSON.stringify(tagPagesEmptyFixture), { status: 200 }) : listed(input)))
+    await expect(TagPageRoute({ params: Promise.resolve({ slug: "poke-bowl" }) })).rejects.toMatchObject({ digest: "NEXT_HTTP_ERROR_FALLBACK;404" })
+    expect(await generateTagPageMetadata({ params: Promise.resolve({ slug: "poke-bowl" }) })).toEqual({})
+    vi.stubGlobal("fetch", async (input: string) => (new URL(input).pathname.endsWith("/tag-pages") ? new Response("down", { status: 503 }) : listed(input)))
+    expect(renderToStaticMarkup(await TagPageRoute({ params: Promise.resolve({ slug: "poke-bowl" }) }))).toContain("Poke Bowl bei Trattoria Bella")
   })
 
   it("renders a live page from the site API and gives it its meta tags and canonical /tags path", async () => {
