@@ -1,5 +1,7 @@
 // /menu belongs to the online shop (when the module is on). On the custom domain the storefront build is embedded
 // under /menu; elsewhere (previews, Vercel URLs) /menu redirects to the standalone shop.
+// The embedded shop reads its settings from storefront_* cookies; storefront_google_maps_api_key_v1 hands it the
+// project's Google key (allowed on the custom domain), so the shop's address search and maps work under /menu.
 
 export type MenuRoute =
   | { kind: "next" }
@@ -18,6 +20,7 @@ export function menuRoute(input: {
   language: string
   /** The site's own language (the language when there is no choice); the standalone shop always gets ?lng={language}. */
   siteLanguage?: string
+  googleMapsApiKey: string | null
 }): MenuRoute {
   if (!input.shopOn) return { kind: "next" }
   const host = input.host.toLowerCase().replace(/^www\./, "").replace(/:\d+$/, "")
@@ -25,7 +28,11 @@ export function menuRoute(input: {
     return {
       kind: "rewrite",
       url: `${input.embedOrigin.replace(/\/+$/, "")}${input.pathname}${input.search}`,
-      cookies: { storefront_base_path: "/menu", storefront_locale: input.language },
+      cookies: {
+        storefront_base_path: "/menu",
+        storefront_locale: input.language,
+        ...(input.googleMapsApiKey ? { storefront_google_maps_api_key_v1: input.googleMapsApiKey } : {}),
+      },
     }
   }
   if (!input.onlineShopUrl) return { kind: "next" }

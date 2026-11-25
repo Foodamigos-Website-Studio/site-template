@@ -8,6 +8,7 @@ const base = {
   embedOrigin: "https://www.foodamigos-storefront-online-shop.com",
   onlineShopUrl: "https://shop.example.com/trattoria",
   language: "de",
+  googleMapsApiKey: null,
 }
 
 describe("menuRoute", () => {
@@ -16,6 +17,20 @@ describe("menuRoute", () => {
       kind: "rewrite",
       url: "https://www.foodamigos-storefront-online-shop.com/menu/checkout?x=1",
       cookies: { storefront_base_path: "/menu", storefront_locale: "de" },
+    })
+  })
+
+  it("hands the embedded shop the project's Google Maps key", () => {
+    const route = menuRoute({
+      ...base,
+      host: "trattoria-bella.de",
+      shopOn: true,
+      embedDomain: "trattoria-bella.de",
+      googleMapsApiKey: "test-browser-key",
+    })
+    expect(route).toMatchObject({
+      kind: "rewrite",
+      cookies: { storefront_base_path: "/menu", storefront_locale: "de", storefront_google_maps_api_key_v1: "test-browser-key" },
     })
   })
 

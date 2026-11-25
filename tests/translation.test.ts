@@ -428,7 +428,7 @@ describe("/menu links carry the visitor's choice (WT.QF0.5)", () => {
 })
 
 describe("/menu in the chosen language", () => {
-  const base = { host: "trattoria.de", pathname: "/menu/gift-cards/checkout", search: "?value=2500", shopOn: true, embedDomain: "trattoria.de", embedOrigin: "https://embed.test", onlineShopUrl: "https://bestellen.trattoria.de", siteLanguage: "de" }
+  const base = { host: "trattoria.de", pathname: "/menu/gift-cards/checkout", search: "?value=2500", shopOn: true, embedDomain: "trattoria.de", embedOrigin: "https://embed.test", onlineShopUrl: "https://bestellen.trattoria.de", siteLanguage: "de", googleMapsApiKey: null }
 
   it("passes the choice to the embedded shop as storefront_locale", () => {
     expect(menuRoute({ ...base, language: "en" })).toEqual({ kind: "rewrite", url: "https://embed.test/menu/gift-cards/checkout?value=2500", cookies: { storefront_base_path: "/menu", storefront_locale: "en" } })
