@@ -1,0 +1,34 @@
+{
+    "data": {
+        "slug": "poke-bowl",
+        "keyword": "Poke Bowl",
+        "title": "Poke Bowl bei Trattoria Bella",
+        "paragraphs": [
+            "Unsere Poke Bowls stellen wir jeden Tag frisch in Berlin Mitte zusammen: Reis, mariniertes Topping, knackiges Gemüse und hausgemachte Saucen.",
+            "Probier die Poke Your Style Bowl, die du selbst zusammenstellst, oder einen Klassiker wie die Green Cream Shrimp Bowl und die Vulcano Chicken Bowl.",
+            "Bestell online zum Abholen oder lass dir deine Bowl in Mitte liefern."
+        ],
+        "faq": [
+            {
+                "question": "Kann ich meine Poke Bowl selbst zusammenstellen?",
+                "answer": "Ja, mit der Poke Your Style Bowl wählst du Base, Protein, Toppings und Sauce selbst."
+            },
+            {
+                "question": "Gibt es vegane Poke Bowls?",
+                "answer": "Ja, zum Beispiel die Sesame Tofu Bowl und die Spicy Tropical Tofu Bowl."
+            },
+            {
+                "question": "Liefert ihr Poke Bowls?",
+                "answer": "Ja, in unser Liefergebiet Mitte, oder du holst sie bei uns ab."
+            }
+        ],
+        "metaTitle": "Poke Bowl in Berlin Mitte | Trattoria Bella",
+        "metaDescription": "Frische Poke Bowls in Berlin Mitte bei Trattoria Bella: selbst zusammenstellen, vegan oder mit Lachs. Online bestellen, abholen oder liefern lassen.",
+        "productIds": [
+            2,
+            1,
+            4
+        ],
+        "updatedAt": "2026-11-25T17:16:19+00:00"
+    }
+}

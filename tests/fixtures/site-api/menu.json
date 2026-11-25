@@ -1,0 +1,611 @@
+{
+    "data": {
+        "currency": "EUR",
+        "companies": [
+            {
+                "company_uuid": "4a274f18-01b8-437e-b95e-3f07d6df918f",
+                "name": "Trattoria Bella Kreuzberg",
+                "currency": "EUR",
+                "menus": [],
+                "services": [
+                    "pickup",
+                    "delivery"
+                ],
+                "delivery_zones": []
+            },
+            {
+                "company_uuid": "68160dae-dced-419a-a711-71af20b6047b",
+                "name": "Trattoria Bella Mitte",
+                "currency": "EUR",
+                "menus": [
+                    {
+                        "id": 1,
+                        "name": "Tagesmenü",
+                        "schedule": null,
+                        "categories": [
+                            {
+                                "id": 1,
+                                "name": "Bowl of the Month",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 21,
+                                        "name": "Palm Beach Bowl (pikant)",
+                                        "description": "mit Shrimps, Edamame, Gurke, Frühlingszwiebeln, Vul'Cano Soße, Granatapfel und Bananenchips. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/19c18cc91be1242dcce87e3ee0c0d13a",
+                                        "price": 16.9
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 2,
+                                "name": "Poké Your Style",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 2,
+                                        "name": "Poke Your Style Bowl",
+                                        "description": "wird mit Base nach Wahl, Zutaten nach Wahl, Flavour nach Wahl und Toppings nach Wahl zubereitet",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/36dbafb0e848292cf5972530a042809d",
+                                        "price": 12.4
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 3,
+                                "name": "Ma'Loa Favorites",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 1,
+                                        "name": "Green Cream Shrimp Bowl",
+                                        "description": "mit Shrimps, Edamame, Gurke, Frühlingszwiebeln, Green Cream Flavor, Seaweed Salad und Wasabinüsse. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/fc4f0fbe732e02e11a9ab867230b288f",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 4,
+                                        "name": "Vulcano Chicken Bowl (pikant)",
+                                        "description": "mit Chicken, Edamame, Gurke, Frühlingszwiebeln, Vul'Cano Flavor, Avocado und Cashewkerne. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/9e300f63fc64236d3a2c9f57438a7521",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 20,
+                                        "name": "Kauai Salmon Bowl (scharf)",
+                                        "description": "mit Lachs, Edamame, Gurke, Ananas, Korean Love Flavor, Kimchi und Cashewkerne. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/9088b5a9adaf9a762a401a6146ad43d2",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 22,
+                                        "name": "Sesame Tofu Bowl (vegan)",
+                                        "description": "mit Tofu, Edamame, Gurke, Rote Zwiebeln, Sesam Me Flavor, Mango und Erdnüsse. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/b9feb7f3925a164bd9ccbb6d98fe8457",
+                                        "price": 14.9
+                                    },
+                                    {
+                                        "id": 23,
+                                        "name": "Peanut Lover Chicken Bowl (pikant)",
+                                        "description": "mit Chicken, Edamame, Gurke, Frühlingszwiebeln, Peanut Butter Dream Flavor, Seaweed Salad und Erdnüsse. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/5cb791994fa12faeb480950eee8bff8c",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 27,
+                                        "name": "Spicy Tropical Tofu Bowl (vegan, scharf)",
+                                        "description": "mit Tofu, Gurke, Frühlingszwiebeln, Ananas, Korean Love Flavor, Mango und Kokoschips. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/f765f3a70081db762a17deb6971ae06a",
+                                        "price": 14.9
+                                    },
+                                    {
+                                        "id": 35,
+                                        "name": "Oahu Salmon Bowl",
+                                        "description": "mit Lachs, Edamame, Edameme, Gurke, Frühlingszwiebeln, Sweet Shoyu Flavor, Seaweed Salad und Cashewkerne. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/67109abccfdac47055bb98d26a8e9709",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 43,
+                                        "name": "Molokai Salmon Bowl",
+                                        "description": "mit Lachs, Edamame, Gurke, Rote Bete, Sesam Me Flavor, Seaweed Salad und Erdnüsse. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/6ed53562c05dbdc1b17bf5edf9ea79d3",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 44,
+                                        "name": "Big Island Tuna Bowl",
+                                        "description": "mit Ahi Tuna, Edamame, Gurke, Frühlingszwiebel, Rote Zwiebeln, Ma'Loa Flavor, Avocado und Erdnüsse. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/c8cf595ce39316e78bb34c411d3f4b69",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 59,
+                                        "name": "Crazy Beetroot Bowl (vegan)",
+                                        "description": "mit Grilled Beetroot Falafel, Gurke, Rote Zwiebeln, Rote Bete, Peanut Butter Dream Flavor, Guacamole und Beetroot-Crunch. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/6996dd1447fbddb7b935262d5428c964",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 62,
+                                        "name": "Lanai Tuna Bowl",
+                                        "description": "mit Ahi Tuna, Edamame, Gurken, Rote Bete, Koriander, Crazy Lime Flavor, Avocado und Erdnüsse. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/166011f6b100dac20a70cffea83875e8",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 66,
+                                        "name": "Maui Tuna Bowl (pikant)",
+                                        "description": "mit Ahi Tuna, Edamame, Frühlingszwiebeln, Rote Zwiebeln, Vul'Cano Flavor, Avocado und Masago. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/298c9256ebc45d707c778b8138cd30b5",
+                                        "price": 16.9
+                                    },
+                                    {
+                                        "id": 67,
+                                        "name": "Truffle'Loa Chicken Bowl",
+                                        "description": "mit Chicken, Edamame, Gurke, Rote Zwiebeln, Truffle'Loa Flavor, Avocado und Geröstete Zwiebeln. Wird mit Sesamkörnern garniert",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/3bae018fb022e2c81fe0c2c747355c75",
+                                        "price": 16.9
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 4,
+                                "name": "Hawaiian Currys",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 11,
+                                        "name": "Nu'i Cashew Vegan Curry",
+                                        "description": "Gelbes Gemüsecurry mit Reis, Cashewkernen, Brokkoli, Paprika, Karotten und Kokosmilch. Wird mit Sesamkörnern zubereitet",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/58832879cb7bfcaee876e733deb7a376",
+                                        "price": 14.9
+                                    },
+                                    {
+                                        "id": 34,
+                                        "name": "Kau'i Mango Chicken Curry",
+                                        "description": "Kokos-Mango Curry mit Reis, Hähnchenbrust, Brokkoli, Karotten, Weißkohl und Kokosmilch. Wird mit Sesamkörnern zubereitet",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/35cacace7ffeff2b4a7d2ab3e21fe49f",
+                                        "price": 15.9
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 5,
+                                "name": "Suppen",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 60,
+                                        "name": "Karotte-Kokos-Ingwer-Suppe",
+                                        "description": "mit Reis",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/76f88c48a0922dc9d2b01f772766689d",
+                                        "price": 9.9
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 6,
+                                "name": "Beilagen",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 16,
+                                        "name": "Grilled Chicken (3 Stück)",
+                                        "description": "mit Soße deine Wahl und Frühlingszwiebeln",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/65c1981c70514a65006be7962449b21a",
+                                        "price": 7.9
+                                    },
+                                    {
+                                        "id": 24,
+                                        "name": "Tempura Shrimps (6 Stück)",
+                                        "description": "mit Soße deine Wahl und Frühlingszwiebeln",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/bf8b75f8bbe3806400b269e776ac3854",
+                                        "price": 7.9
+                                    },
+                                    {
+                                        "id": 28,
+                                        "name": "Kimchi extra (scharf)",
+                                        "description": "fermentierter Chinakohl",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/cf946491d86a0c8784c8a5d7f69a22fc",
+                                        "price": 4.9
+                                    },
+                                    {
+                                        "id": 29,
+                                        "name": "Meeresalgensalat extra",
+                                        "description": "garniert mit Sesam",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/8a7f53ed3a6fa9c310e74cd38fef0241",
+                                        "price": 4.9
+                                    },
+                                    {
+                                        "id": 57,
+                                        "name": "Reis extra",
+                                        "description": "sushi-Reis",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/0725400b631b62e38747c20920de5833",
+                                        "price": 3.9
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 7,
+                                "name": "Extra Flavor",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 26,
+                                        "name": "Truffle'Loa (50ml)",
+                                        "description": "mit Caesar Truffle, Miso",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/240010976da1ee077c0e7d9819045448",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 31,
+                                        "name": "Peanut Butter Dream (50ml)",
+                                        "description": "mit Erdnusssauce",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/38de00610c9e5b78a9e25f1d0cd61329",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 37,
+                                        "name": "Crazy Lime (50ml)",
+                                        "description": "mit Sojasauce, Limette",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/e93fad01e64896f22295f768af17f6f3",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 39,
+                                        "name": "Green Cream (50ml, pikant)",
+                                        "description": "mit Mayo, Wasabi",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/4954f6ad1543c5af13c125835d2116f9",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 40,
+                                        "name": "Ma'loa (50ml)",
+                                        "description": "mit Sojasoße, Sesam",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/1246addfedbeaed2dccce1852143bb74",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 50,
+                                        "name": "Korean Love (50ml, scharf)",
+                                        "description": "mit süß/scharfe koreanische Sauce",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/37b5361ca027db4b7dfd3ff95b8056e8",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 52,
+                                        "name": "Vul'Cano (50ml, pikant)",
+                                        "description": "mit Mayo, Sriracha",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/bea05408156e40750e7ae34743911c62",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 55,
+                                        "name": "Sesam Me (50ml)",
+                                        "description": "mit Sesamsauce",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/e6f9735aa4d12fbf5861003c15392cab",
+                                        "price": 2.5
+                                    },
+                                    {
+                                        "id": 65,
+                                        "name": "Sweet Shoyu (50ml)",
+                                        "description": "mit Miso",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/5c6ee3fce376d85e94d4a5e350bb4955",
+                                        "price": 2.5
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 8,
+                                "name": "Sweet Bowls",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 12,
+                                        "name": "Coconut-Cashew-Bowl",
+                                        "description": "Die exotische und leckere Sweet Bowl aus Kokos, Cashewkernen, Banane und Apfelsaft und mit saisonal wechselnden Toppings",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/a27c037ae9d0350846aa61ca7d562b50",
+                                        "price": 10.9
+                                    },
+                                    {
+                                        "id": 64,
+                                        "name": "Acai Bowl",
+                                        "description": "Die gesunde Sweet Bowl aus Acai, Banane, Blaubeeren, Apfelsaft und saisonal wechselnden Toppings",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/457e0272face1cf5dcc2ab6bc6d5396f",
+                                        "price": 10.9
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 9,
+                                "name": "Smoothies",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 8,
+                                        "name": "Pink Neyla",
+                                        "description": "Leckerer Smoothie aus Rote Drachenfrucht, Banane, Mango, Kokosnussmilch, Datteln",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/fea90304cbebfbbbcaa2ae16e8249c9c",
+                                        "price": 5.9
+                                    },
+                                    {
+                                        "id": 19,
+                                        "name": "Tropical Kino",
+                                        "description": "Leckerer Smoothie aus Mango, Ananas, Kokosnussmilch, Datteln, Maracuja, Acerola",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/9c84ded70a47f7b6f65fd237ff8453e5",
+                                        "price": 5.9
+                                    },
+                                    {
+                                        "id": 41,
+                                        "name": "Berry Moana",
+                                        "description": "Leckerer Smoothie aus Erdbeere, Banane, Heidelbeere, Schwarze Johannisbeere, Datteln, Açaípüree, Hanfprotein, Baobab-Frucht",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/143a18c8e14d64a8442514fca86fb87d",
+                                        "price": 5.9
+                                    },
+                                    {
+                                        "id": 58,
+                                        "name": "Green Nalani",
+                                        "description": "Leckerer Smoothie aus Apfel, Spinat, Datteln, Brokkoli, Banane, Limette, Erbsenprotein, Petersilie, Minze",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/454e644dfc55720f8c048e213aab5719",
+                                        "price": 5.9
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 10,
+                                "name": "Alkoholfreie Getränke",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 3,
+                                        "name": "Fritz Limo Zitrone 0,33l (MEHRWEG)",
+                                        "description": "Zitronenlimonade mit 7 % Fruchtgehalt.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/8f4bb1ac90af1379b9a24f8398292d55",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 5,
+                                        "name": "Elephant Bay Exotic 0,33l (MEHRWEG)",
+                                        "description": "Mehrfruchtlimonade mit dem Geschmack nach exotischen Früchten.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/090ed68fb92bfe46377a804cebb994d1",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 7,
+                                        "name": "Fritz Limo Melone 0,33l (MEHRWEG)",
+                                        "description": "Honigmelonenlimonade mit 5 % Fruchtgehalt.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/de0fcc80778907ab9af37000c7461171",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 13,
+                                        "name": "Elephant Bay Mango Pineapple 0,33l (MEHRWEG)",
+                                        "description": "Erfrischungsgetränk mit Mango-Ananasgeschmack und Tee-Extrakt.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/003992848242896b43514a04df086078",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 14,
+                                        "name": "ROY Ginger Kombucha 0,33l (MEHRWEG)",
+                                        "description": "ROY's Ginger Kombucha ist aromatisch, leicht süß, wärmend und ein wenig scharf.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/c74310d5197756ff8b9b36284587dc25",
+                                        "price": 3.65
+                                    },
+                                    {
+                                        "id": 15,
+                                        "name": "Fritz Kola Zuckerfrei 0,33l (MEHRWEG)",
+                                        "description": "Zuckerfreie, koffeinhaltige Limonade mit Süßungsmitteln. Erhöhter Koffeingehalt. Für Kinder und schwangere oder stillende Frauen nicht empfohlen (25 mg / 100 ml).",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/59964f1644c370675866ca1ef2aa6b89",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 17,
+                                        "name": "ROY Raspberry Kombucha 0,33l (vegan) (MEHRWEG)",
+                                        "description": "ROY's Raspberry Kombucha ist fruchtig und frisch",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/04e8981a61ee642f6d542b63914391db",
+                                        "price": 3.65
+                                    },
+                                    {
+                                        "id": 18,
+                                        "name": "Homemade Ice Tea 0,25l",
+                                        "description": "Hausgemachter Eistee aus Schwarztee und Hagebutten, mit Zucker, Pfirsich, Zitrone und Minze.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/2bb701747333bb2dd167b5cb0e30511b",
+                                        "price": 3.9
+                                    },
+                                    {
+                                        "id": 25,
+                                        "name": "Club Mate 0,33l (MEHRWEG)",
+                                        "description": "Koffeinhaltiges Erfrischungsgetränk auf Mate-Tee-Basis. Erhöhter Koffeingehalt. Für Kinder und schwangere oder stillende Frauen nicht empfohlen (20 mg / 100 ml).",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/a595a26a8b33fde06d276cce9526c74b",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 30,
+                                        "name": "ROY Strawberry & Basil Kombucha",
+                                        "description": "Bio-Kombucha-Getränk mit Erdbeer- und Basilikumgeschmack, natürlich fermentiert, mit Zucker und Kohlensäure.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/26b94aef3cf83e30910c21135b804571",
+                                        "price": 3.65
+                                    },
+                                    {
+                                        "id": 32,
+                                        "name": "Elephant Bay Ice Tea Peach 0,33l (MEHRWEG)",
+                                        "description": "Erfrischungsgetränk mit Pfirsich-geschmack und Tee-Extrakt.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/08a47715599a54c81ae1fb021d66b75f",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 33,
+                                        "name": "Viva con Agua still 0,33l (MEHRWEG)",
+                                        "description": "Natürliches Mineralwasser ohne Kohlensäure",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/fb27f93fdaa6031a893d2fb54f0974cd",
+                                        "price": 2.82
+                                    },
+                                    {
+                                        "id": 36,
+                                        "name": "Kokoswasser 0,5l (EINWEG)",
+                                        "description": "Kokoswasser, naturbelassen, ohne Zuckerzusatz, ohne Kohlensäure.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/a296f1b4734c6952a4e24284841b262e",
+                                        "price": 4.65
+                                    },
+                                    {
+                                        "id": 38,
+                                        "name": "ROY x MA'LOA Pineapple Kombucha 0,33l (MEHRWEG)",
+                                        "description": "ROY x MA'LOA Pineapple Kombucha ist ein super erfrischender Kombucha-Aufguss aus Bio-Ananas, der Dir die Inselatmosphäre von Hawaii in einer Dose bringt.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/0d31a012616e9e06cbdc9e1c35374856",
+                                        "price": 3.65
+                                    },
+                                    {
+                                        "id": 42,
+                                        "name": "Viva con Agua sprudel 0,33l (MEHRWEG)",
+                                        "description": "Natürliches Mineralwasser mit Kohlensäure",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/1dca7c94d845301199c6480d7e6da2d6",
+                                        "price": 2.82
+                                    },
+                                    {
+                                        "id": 46,
+                                        "name": "Elephant Bay Mandarin 0,33l (MEHRWEG)",
+                                        "description": "Orangenlimonade mit Mandarinengeschmack.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/f61e934062d8cba45c816f56344907e4",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 47,
+                                        "name": "Elephant Bay Watermelon 0,33l (MEHRWEG)",
+                                        "description": "Erfrischungsgetränk mit Wassermelonengeschmack und Tee-Extrakt.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/30355ca7bccc5fa7b2da029c405f049d",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 48,
+                                        "name": "Elephant Bay Pink Grapefruit 0,33l (MEHRWEG)",
+                                        "description": "Citruslimonade mit Grapefruitgeschmack.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/b5c9bcc926e9a6f706795d7165883577",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 49,
+                                        "name": "Fritz Kola 0,33l (MEHRWEG)",
+                                        "description": "Koffeinhaltige Limonade. Erhöhter Koffeingehalt. Für Kinder und schwangere oder stillende Frauen nicht empfohlen (25 mg / 100 ml).",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/d32822c6264acbb8ba0d4b731d848b5d",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 51,
+                                        "name": "Fritz Anjola Bio-Limonade Ananas-Limette 0,33l (vegan) (MEHRWEG)",
+                                        "description": "Die echte Ananas-Limonade. 1952 in Hamburg erfunden. Von fritz-kola fortgeführt - mit vielviel Liebe und Bio-Ananas aus Costa Rica.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/a5b3f007531d3e4fb8b3073107e6bafd",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 53,
+                                        "name": "Elephant Bay Pomegranate 0,33l (MEHRWEG)",
+                                        "description": "Erfrischungsgetränk mit Granatapfel-geschmack und Tee-Extrakt.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/faaa4c0b381125adb33c995304a7fc13",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 54,
+                                        "name": "Fritz Limo Rhabarber 0,33l (MEHRWEG)",
+                                        "description": "Bio-Rhabarberschorle aus 40 % Direktsaft.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/48e8d89385790b1823cfdfd6c13f54e6",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 56,
+                                        "name": "Elephant Bay Lime Mint 0,33l (MEHRWEG)",
+                                        "description": "Citruslimonade mit Minzgeschmack.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/71e0b15efe7573020dd91db985891641",
+                                        "price": 3.82
+                                    },
+                                    {
+                                        "id": 61,
+                                        "name": "Fritz-Spritz Bio-Apfelschorle 0,33l",
+                                        "description": "Bio-Apfelschorle aus 66 % Direktsaft.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/540f9697f24a6b873f1f9df063f6cd82",
+                                        "price": 3.42
+                                    },
+                                    {
+                                        "id": 63,
+                                        "name": "ROY Cucumber & Mint Kombucha 0,33l (MEHRWEG)",
+                                        "description": "Bio-Kombucha-Getränk mit Gurken- und Minzgeschmack, natürlich fermentiert, Zucker, Kohlensäure.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/661e46708425aab4e0b3c4a580e25b95",
+                                        "price": 3.65
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 11,
+                                "name": "Alkoholische Getränke",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 6,
+                                        "name": "Kona Big Wave Golden Ale Bier 0,3l (MEHRWEG)",
+                                        "description": "Big Wave ist ein leichter-goldenes Ale mit tropischem Hopfenaroma und -geschmack – weich, leicht zu trinken und erfrischend.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/dfafd1a98970867ea9f66da5e86cdb0f",
+                                        "price": 4.42
+                                    },
+                                    {
+                                        "id": 9,
+                                        "name": "Kona Longboard Bier 0,3l (MEHRWEG)",
+                                        "description": "Longboard Island Lager ist ein knackiges, blass-goldenes Lagerbier, hergestellt aus erlesenen Malzen und aromatischem Hopfen, gebraut im traditionellen Lagerbierstil.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/3c274a21536aebb4d0771c03c9d59af0",
+                                        "price": 4.42
+                                    },
+                                    {
+                                        "id": 45,
+                                        "name": "Kona Hanalei Island Bier 0,3l (MEHRWEG)",
+                                        "description": "Hanalei Island IPA ist ein leicht zu trinkendes, köstliches Bier, das das Hopfenaroma eines IPA mit einer tropischen hawaiianischen Note.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/1d04853e418434a5a940b8c2b11b16c6",
+                                        "price": 4.42
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 12,
+                                "name": "Sustainable Bowl",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 10,
+                                        "name": "Ma'loa Sustainable Bowl",
+                                        "description": "The Sustainable Bowl is your personal, reusable to-go packaging for the MA'LOA® Bowl of your choice. Get 5% off if you bring your own MA'LOA® Sustainable bowl if you come to all of our stores.",
+                                        "image_url": "https://just-eat-prod-eu-res.cloudinary.com/image/upload/ar_1:1,h_1200,w_1200/v1/de/dishes/8555350/1ab065914634c0160fd51022c52b0d48",
+                                        "price": 9.9
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "services": [
+                    "pickup",
+                    "delivery"
+                ],
+                "delivery_zones": [
+                    {
+                        "id": 1,
+                        "name": "Mitte",
+                        "geometry_type": "circle",
+                        "zip_codes": [],
+                        "min_order": 0,
+                        "fee": 0.03
+                    }
+                ]
+            }
+        ]
+    }
+}
