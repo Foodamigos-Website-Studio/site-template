@@ -3,7 +3,7 @@
 // translates through <PageTranslation /> and /menu follows the choice.
 "use client"
 
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 import { SITE_LANGUAGE } from "@/lib/config"
 import { chosenLanguage, LANGUAGE_CHANGE_EVENT, LANGUAGE_STORAGE_KEY, languageCookie, switchLanguages } from "@/lib/translation"
@@ -34,12 +34,34 @@ export function LanguageSwitch({ siteLanguage = SITE_LANGUAGE }: { siteLanguage?
     window.dispatchEvent(new CustomEvent(LANGUAGE_CHANGE_EVENT, { detail: next }))
   }
 
+  // SV.QF0.7 (SV.1): unlike the rest of the template the switch comes with a neutral look, in the header's own text
+  // colour: DE / EN apart with a separator, the chosen one at full strength and semibold, the other dimmed. Unstyled it
+  // read "DEEN" with no visible choice on built sites, because Max doesn't always restyle it.
   return (
-    <div data-slot="language-switch" role="group" aria-label="Language" translate="no">
-      {switchLanguages(siteLanguage).map((code) => (
-        <button key={code} type="button" lang={code} aria-pressed={language === code} onClick={() => choose(code)}>
-          {code.toUpperCase()}
-        </button>
+    <div
+      data-slot="language-switch"
+      role="group"
+      aria-label="Language"
+      translate="no"
+      className="inline-flex items-center gap-1 text-sm leading-none"
+    >
+      {switchLanguages(siteLanguage).map((code, index) => (
+        <Fragment key={code}>
+          {index > 0 ? (
+            <span aria-hidden="true" className="opacity-40">
+              /
+            </span>
+          ) : null}
+          <button
+            type="button"
+            lang={code}
+            aria-pressed={language === code}
+            onClick={() => choose(code)}
+            className="cursor-pointer border-0 bg-transparent px-1 py-2 text-inherit opacity-60 transition-opacity hover:opacity-100 aria-pressed:opacity-100 aria-pressed:font-semibold"
+          >
+            {code.toUpperCase()}
+          </button>
+        </Fragment>
       ))}
     </div>
   )
