@@ -12,7 +12,7 @@ import faqFixture from "./fixtures/site-api/faq.json"
 
 import { SiteFaq } from "@/components/seo/site-faq"
 import { faqPage } from "@/lib/faq"
-import { type ExtraFaqItem, mergeFaq } from "@/lib/site-faq"
+import { type ExtraFaqItem, mergeFaq, sitePath } from "@/lib/site-faq"
 import { getFaq, type SiteFaqItem } from "@/lib/studio-api"
 import Home from "@/app/page"
 
@@ -216,5 +216,20 @@ describe("home FAQ JSON-LD", () => {
     expect(script).not.toContain("<")
     expect(html.match(/<script/g)).toHaveLength(1)
     expect(jsonLd(html).mainEntity[0].acceptedAnswer.text).toBe("</script><script>alert(1)</script> <script>x</script>")
+  })
+})
+
+// Sterling's review of TP.3: a backslash after the first slash ("/\evil.test") is read by browsers like
+// "//evil.test", another host. Only the site's own slug paths become links.
+describe("known-for links stay on the site", () => {
+  it.each(["/\\evil.test", "//evil.test", "/tags/x?y=1", "javascript:alert(1)", "https://evil.test/tags/x", "/tags/ä"])(
+    "refuses %s",
+    (path) => {
+      expect(sitePath({ label: "Pizza", path })).toBe(false)
+    },
+  )
+
+  it.each(["/tags/pizza-margherita", "/tags/lasagne_al_forno", "/"])("keeps %s", (path) => {
+    expect(sitePath({ label: "Pizza", path })).toBe(true)
   })
 })

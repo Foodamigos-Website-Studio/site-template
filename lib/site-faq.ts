@@ -13,9 +13,14 @@ function sameQuestion(a: string, b: string): boolean {
   return normalize(a) !== "" && normalize(a) === normalize(b)
 }
 
-/** Only the site's own paths (/tags/...): never another host or a javascript: link. */
-function sitePath(link: FaqLink): boolean {
-  return link.path.startsWith("/") && !link.path.startsWith("//") && link.label.trim() !== ""
+/**
+ * Only the site's own paths (/tags/...): never another host or a javascript: link. A strict allow-list, because browsers
+ * read "/\evil.test" like "//evil.test" (another host); the backend builds these paths from slugs.
+ */
+const SITE_PATH = /^\/[A-Za-z0-9\-_/]*$/
+
+export function sitePath(link: FaqLink): boolean {
+  return SITE_PATH.test(link.path) && !link.path.startsWith("//") && link.label.trim() !== ""
 }
 
 function appendLinks(existing: readonly FaqLink[] | undefined, added: readonly FaqLink[]): FaqLink[] {
