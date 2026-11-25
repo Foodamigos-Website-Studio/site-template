@@ -1,0 +1,35 @@
+{
+    "data": {
+        "items": [
+            {
+                "key": "known_for",
+                "question": "Wofür seid ihr bekannt?",
+                "answer": "Für frische Poke Bowls, Hawaiian Currys und Acai Bowls in Berlin Mitte.",
+                "links": [
+                    {
+                        "label": "Poke Bowl",
+                        "path": "/tags/poke-bowl"
+                    }
+                ]
+            },
+            {
+                "key": "meals",
+                "question": "Welche Gerichte gibt es bei euch?",
+                "answer": "Poke Bowls, Currys, Suppen, Sweet Bowls und Smoothies, viele davon vegan.",
+                "links": []
+            },
+            {
+                "key": "service",
+                "question": "Liefert ihr oder kann ich abholen?",
+                "answer": "Beides: Du kannst online bestellen und abholen oder dir das Essen liefern lassen.",
+                "links": []
+            },
+            {
+                "key": "areas",
+                "question": "In welche Gegenden liefert ihr?",
+                "answer": "Wir liefern in unserem Liefergebiet Mitte rund um das Restaurant.",
+                "links": []
+            }
+        ]
+    }
+}
