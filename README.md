@@ -12,6 +12,7 @@ so the template has no influence on how v0 designs the site.
 | Cookie banner and consent (analytics, embedded media and restaurant scripts only after Accept) | `components/consent`, `lib/consent.ts` |
 | Umami analytics after consent | `components/consent/analytics.tsx` |
 | The coupons page for search engines (`/angebote` · `/coupons`): h1, FAQ, FAQ JSON-LD; in the sitemap, not in the navigation | `app/angebote`, `app/coupons`, `components/seo`, `lib/seo-pages.ts` |
+| Dish pages (`/tags/{slug}`, the same path in every language): h1, copy, the dish's menu items with photos (through `/_next/image`), CTAs for the modules that are on, FAQ with FAQPage JSON-LD (`FaqBlock`); in the sitemap, 404 for unknown slugs and drafts | `app/tags/[slug]`, `components/seo/tag-page.tsx`, `components/seo/faq-block.tsx`, `lib/tag-pages.ts`, `lib/faq.ts` |
 | Menu page with prices and Menu JSON-LD (`/speisekarte` · `/our-menu`; `/menu` is the shop's) | `app/our-menu`, `lib/format.ts` |
 | Locations and opening hours with today's status, route link and map after consent (`/standort-und-oeffnungszeiten` · `/location-and-hours`) | `app/location-and-hours`, `lib/hours.ts`, `components/locations/location-map.tsx` |
 | Table reservations: the reservation service's widget (`/reservierungen` · `/reservations`), when the module is on | `app/reservations`, `components/reservations` |
@@ -33,7 +34,8 @@ unstyled default markup: replace any page's markup freely, keep its data, hooks 
 - **Name every new page's path in the site's language** (SEO): on a German site `app/kontakt`, `app/ueber-uns`,
   never `app/contact`. Max registers it in Website Studio (`page_meta_update`), which puts it in the sitemap and the
   SEO tab; never hard-code meta tags or sitemap entries.
-- The legal pages stay `noindex` and out of the sitemap; the coupons page stays out of the navigation.
+- The legal pages stay `noindex` and out of the sitemap; the coupons page and the dish pages stay out of the navigation.
+- Every FAQ goes through `FaqBlock` (FAQPage JSON-LD via `faqPageJsonLd()`, which escapes `<`).
 - **SEO optimization** happens in Website Studio, not in code: page tags (`page_meta_update`), the site's tags
   (`site_meta_update`) and the coupons page's texts (`seo_page_update`). Wrap videos, iframes and third-party widgets in
   `<ConsentGate category="embedded_media">`.
@@ -51,7 +53,7 @@ Env vars (set by Studio on the Vercel project) win over `lib/site-defaults.ts` (
 
 ```bash
 pnpm install
-pnpm test        # unit tests (consent, inline markup, paths, /menu, hours, gift cards)
+pnpm test        # unit tests (consent, inline markup, paths, /menu, hours, gift cards, dish pages against tests/fixtures/site-api)
 pnpm typecheck
 NEXT_PUBLIC_STUDIO_API_URL=http://localhost:8095 NEXT_PUBLIC_PROJECT_UUID=<project uuid> pnpm dev
 ```

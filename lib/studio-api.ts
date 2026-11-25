@@ -118,11 +118,23 @@ export type MenuGroup = {
   categories: MenuCategory[]
 }
 
+export type DeliveryZone = {
+  id: number
+  name: string
+  geometry_type: string
+  zip_codes: string[] | null
+  min_order: number | null
+  fee: number | null
+}
+
 export type MenuCompany = {
   company_uuid: string
   name: string
   currency: string
   menus: MenuGroup[]
+  /** How the location serves (additive since F-TP): pickup, delivery, on_site. */
+  services?: ("pickup" | "delivery" | "on_site")[]
+  delivery_zones?: DeliveryZone[]
 }
 
 export type Menu = {
@@ -224,4 +236,30 @@ export type PageMetaEntry = {
 
 export function getPageMeta(language = SITE_LANGUAGE) {
   return request<PageMetaEntry[]>(`/page-meta?lang=${encodeURIComponent(language)}`)
+}
+
+/** A live dish page (F-TP): GET /tag-pages lists them; the site shows each at /tags/{slug}. */
+export type TagPageSummary = { slug: string; keyword: string; updatedAt: string | null }
+
+/** One live dish page: the H1, 2–3 paragraphs, 3–4 FAQ, meta tags and the menu products (ids of GET /menu) to show. */
+export type TagPage = {
+  slug: string
+  keyword: string
+  title: string
+  paragraphs: string[]
+  faq: { question: string; answer: string }[]
+  metaTitle: string
+  metaDescription: string
+  productIds: number[]
+  updatedAt: string | null
+}
+
+/** The live dish pages in the site's language; [] when there are none, null when the site API failed. */
+export function getTagPages(language = SITE_LANGUAGE) {
+  return request<TagPageSummary[]>(`/tag-pages?lang=${encodeURIComponent(language)}`)
+}
+
+/** One live dish page; null for an unknown slug, a draft or a removed dish (404), or when the site API failed. */
+export function getTagPage(slug: string, language = SITE_LANGUAGE) {
+  return request<TagPage>(`/tag-pages/${encodeURIComponent(slug)}?lang=${encodeURIComponent(language)}`)
 }

@@ -1,9 +1,10 @@
 // The sitemap: the template's pages the site shows, plus every page Website Studio knows (GET /page-meta, one entry per
-// page, written by Max when a page is added and removed when it is deleted). /menu is the online shop's, never a page
+// page, written by Max when a page is added and removed when it is deleted) and the live dish pages (/tags/{slug}). /menu is the online shop's, never a page
 // of the site; legal pages are noindex and never in the sitemap.
 import { localizedPath } from "./localized-routes"
-import type { PageMetaEntry } from "./studio-api"
+import type { PageMetaEntry, TagPageSummary } from "./studio-api"
 import { seoPaths } from "./seo-pages"
+import { tagPaths } from "./tag-pages"
 
 export const SITE_PAGES: readonly string[] = ["/"]
 
@@ -26,10 +27,10 @@ export function indexedPaths(language: string, modules: ModulePages = { menu: fa
 }
 
 /**
- * Every path for the sitemap: indexedPaths plus the pages registered in Website Studio without noindex (pages v0 added),
- * never a module page whose module is off.
+ * Every path for the sitemap: indexedPaths, the live dish pages (/tags/{slug}, GET /tag-pages: never a draft) and the
+ * pages registered in Website Studio without noindex (pages v0 added), never a module page whose module is off.
  */
-export function sitemapPaths(language: string, modules: ModulePages, entries: readonly PageMetaEntry[] | null): string[] {
+export function sitemapPaths(language: string, modules: ModulePages, entries: readonly PageMetaEntry[] | null, tagPages: readonly TagPageSummary[] | null = null): string[] {
   const off = [
     ...(modules.menu ? [] : [localizedPath("our-menu", language)]),
     ...(modules.locations ? [] : [localizedPath("location-and-hours", language)]),
@@ -37,5 +38,5 @@ export function sitemapPaths(language: string, modules: ModulePages, entries: re
     ...(modules.giftCards ? [] : [localizedPath("gift-cards", language)]),
   ]
   const registered = (entries ?? []).filter((entry) => !entry.noindex && !off.includes(entry.path)).map((entry) => entry.path)
-  return [...new Set([...indexedPaths(language, modules), ...registered])]
+  return [...new Set([...indexedPaths(language, modules), ...tagPaths(tagPages), ...registered])]
 }
