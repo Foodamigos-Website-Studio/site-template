@@ -13,6 +13,7 @@ so the template has no influence on how v0 designs the site.
 | Umami analytics after consent | `components/consent/analytics.tsx` |
 | The coupons page for search engines (`/angebote` · `/coupons`): h1, FAQ, FAQ JSON-LD; in the sitemap, not in the navigation | `app/angebote`, `app/coupons`, `components/seo`, `lib/seo-pages.ts` |
 | Dish pages (`/tags/{slug}`, the same path in every language): h1, copy, the dish's menu items with photos (through `/_next/image`), CTAs for the modules that are on, FAQ with FAQPage JSON-LD (`FaqBlock`); in the sitemap, 404 for unknown slugs and drafts | `app/tags/[slug]`, `components/seo/tag-page.tsx`, `components/seo/faq-block.tsx`, `lib/tag-pages.ts`, `lib/faq.ts` |
+| Home FAQ (`<SiteFaq />` on the home page): the four questions Max writes (`GET /faq`, in the site's language), "What are you known for?" linking every live dish page; the home's own questions go in as `extraItems` (standard questions only added when absent, known-for links appended); left out when `/faq` fails or is empty | `components/seo/site-faq.tsx`, `lib/site-faq.ts` |
 | Menu page with prices and Menu JSON-LD (`/speisekarte` · `/our-menu`; `/menu` is the shop's) | `app/our-menu`, `lib/format.ts` |
 | Locations and opening hours with today's status, route link and map after consent (`/standort-und-oeffnungszeiten` · `/location-and-hours`) | `app/location-and-hours`, `lib/hours.ts`, `components/locations/location-map.tsx` |
 | Table reservations: the reservation service's widget (`/reservierungen` · `/reservations`), when the module is on | `app/reservations`, `components/reservations` |
@@ -35,7 +36,8 @@ unstyled default markup: replace any page's markup freely, keep its data, hooks 
   never `app/contact`. Max registers it in Website Studio (`page_meta_update`), which puts it in the sitemap and the
   SEO tab; never hard-code meta tags or sitemap entries.
 - The legal pages stay `noindex` and out of the sitemap; the coupons page and the dish pages stay out of the navigation.
-- Every FAQ goes through `FaqBlock` (FAQPage JSON-LD via `faqPageJsonLd()`, which escapes `<`).
+- Every FAQ goes through `FaqBlock` (FAQPage JSON-LD via `faqPageJsonLd()`, which escapes `<`). Keep `<SiteFaq />` on
+  the home page; a home FAQ of your own goes into it as `extraItems`, never as a second FAQ block.
 - **SEO optimization** happens in Website Studio, not in code: page tags (`page_meta_update`), the site's tags
   (`site_meta_update`) and the coupons page's texts (`seo_page_update`). Wrap videos, iframes and third-party widgets in
   `<ConsentGate category="embedded_media">`.

@@ -263,3 +263,14 @@ export function getTagPages(language = SITE_LANGUAGE) {
 export function getTagPage(slug: string, language = SITE_LANGUAGE) {
   return request<TagPage>(`/tag-pages/${encodeURIComponent(slug)}?lang=${encodeURIComponent(language)}`)
 }
+
+/** One question of the home FAQ (F-TP): Max writes the four (faq_save) in the site's language. */
+export type SiteFaqKey = "known_for" | "meals" | "service" | "areas"
+
+/** "What are you known for?" links every live dish page (path /tags/{slug}); the other answers have none. */
+export type SiteFaqItem = { key: SiteFaqKey; question: string; answer: string; links: { label: string; path: string }[] }
+
+/** The home FAQ in the site's language: {items: []} until Max wrote it, null when the site API failed. */
+export function getFaq(language = SITE_LANGUAGE) {
+  return request<{ items: SiteFaqItem[] }>(`/faq?lang=${encodeURIComponent(language)}`)
+}
