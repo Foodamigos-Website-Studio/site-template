@@ -4,7 +4,8 @@
 import { localizedPath } from "./localized-routes"
 import type { PageMetaEntry, TagPageSummary } from "./studio-api"
 import { seoPaths } from "./seo-pages"
-import { tagPaths } from "./tag-pages"
+import { PREVIEW_TAG_SLUG } from "./tag-page-preview"
+import { tagPath, tagPaths } from "./tag-pages"
 
 export const SITE_PAGES: readonly string[] = ["/"]
 
@@ -28,7 +29,8 @@ export function indexedPaths(language: string, modules: ModulePages = { menu: fa
 
 /**
  * Every path for the sitemap: indexedPaths, the live dish pages (/tags/{slug}, GET /tag-pages: never a draft) and the
- * pages registered in Website Studio without noindex (pages v0 added), never a module page whose module is off.
+ * pages registered in Website Studio without noindex (pages v0 added), never a module page whose module is off, and
+ * never /tags/preview (the draft-only dish page fixture, lib/tag-page-preview.ts).
  */
 export function sitemapPaths(language: string, modules: ModulePages, entries: readonly PageMetaEntry[] | null, tagPages: readonly TagPageSummary[] | null = null): string[] {
   const off = [
@@ -38,5 +40,6 @@ export function sitemapPaths(language: string, modules: ModulePages, entries: re
     ...(modules.giftCards ? [] : [localizedPath("gift-cards", language)]),
   ]
   const registered = (entries ?? []).filter((entry) => !entry.noindex && !off.includes(entry.path)).map((entry) => entry.path)
-  return [...new Set([...indexedPaths(language, modules), ...tagPaths(tagPages), ...registered])]
+  const preview = tagPath(PREVIEW_TAG_SLUG)
+  return [...new Set([...indexedPaths(language, modules), ...tagPaths(tagPages), ...registered])].filter((path) => path !== preview)
 }
