@@ -7,10 +7,11 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { FaqBlock } from "@/components/seo/faq-block"
-import { SITE_LANGUAGE } from "@/lib/config"
+import { PRODUCTION_DEPLOYMENT, SITE_LANGUAGE } from "@/lib/config"
 import { formatPrice } from "@/lib/format"
 import { pageMetadata } from "@/lib/seo"
 import { getMenu, getProject, getTagPage, getTagPages, type TagPage } from "@/lib/studio-api"
+import { PREVIEW_TAG_SLUG, previewTagPage } from "@/lib/tag-page-preview"
 import { menuImageAllowed, type TagCta, type TagPageLabels, tagPageCtas, tagPageLabels, tagPageListed, tagPath, type TagProduct, tagProducts } from "@/lib/tag-pages"
 
 type TagPageProps = { params: Promise<{ slug: string }> }
@@ -55,8 +56,19 @@ export function TagPageView({ page, products, ctas, labels, language }: { page: 
   )
 }
 
+/** /tags/preview outside production: the fixture v0 styles the dish page on (lib/tag-page-preview.ts). */
+function servesPreview(slug: string): boolean {
+  return !PRODUCTION_DEPLOYMENT && slug === PREVIEW_TAG_SLUG
+}
+
 export async function generateTagPageMetadata({ params }: TagPageProps): Promise<Metadata> {
   const { slug } = await params
+  if (servesPreview(slug)) {
+    const [project, menu] = await Promise.all([getProject(), getMenu()])
+    const page = previewTagPage(project, menu, SITE_LANGUAGE)
+    const metadata = await pageMetadata({ title: page.metaTitle, description: page.metaDescription, path: tagPath(page.slug) })
+    return { ...metadata, robots: { index: false, follow: false, googleBot: { index: false, follow: false } } }
+  }
   const [page, pages] = await Promise.all([getTagPage(slug), getTagPages()])
   if (!page || !tagPageListed(pages, slug)) return {}
   return pageMetadata({ title: page.metaTitle, description: page.metaDescription, path: tagPath(page.slug) })
@@ -64,10 +76,25 @@ export async function generateTagPageMetadata({ params }: TagPageProps): Promise
 
 /**
  * An unknown slug, a draft or a removed dish is the site's 404 page: the site API answers 404 for all three, and the
- * live list (GET /tag-pages) no longer has them. With the site API down, the cached page stays.
+ * live list (GET /tag-pages) no longer has them. With the site API down, the cached page stays. Outside production,
+ * /tags/preview is the fixture (it wins over a site API page with that slug); in production "preview" is an ordinary
+ * slug.
  */
 export async function TagPageRoute({ params }: TagPageProps) {
   const { slug } = await params
+  if (servesPreview(slug)) {
+    const [project, menu] = await Promise.all([getProject(), getMenu()])
+    const page = previewTagPage(project, menu, SITE_LANGUAGE)
+    return (
+      <TagPageView
+        page={page}
+        products={tagProducts(menu, page.productIds)}
+        ctas={tagPageCtas(project, menu, SITE_LANGUAGE)}
+        labels={tagPageLabels(SITE_LANGUAGE)}
+        language={SITE_LANGUAGE}
+      />
+    )
+  }
   const [page, pages, project, menu] = await Promise.all([getTagPage(slug), getTagPages(), getProject(), getMenu()])
   if (!page || !tagPageListed(pages, slug)) notFound()
   return (

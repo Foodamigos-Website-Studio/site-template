@@ -13,6 +13,7 @@ so the template has no influence on how v0 designs the site.
 | Umami analytics after consent | `components/consent/analytics.tsx` |
 | The coupons page for search engines (`/angebote` · `/coupons`): h1, FAQ, FAQ JSON-LD; in the sitemap, not in the navigation | `app/angebote`, `app/coupons`, `components/seo`, `lib/seo-pages.ts` |
 | Dish pages (`/tags/{slug}`, the same path in every language): h1, copy, the dish's menu items with photos (through `/_next/image`), CTAs for the modules that are on, FAQ with FAQPage JSON-LD (`FaqBlock`); in the sitemap, 404 for unknown slugs and drafts | `app/tags/[slug]`, `components/seo/tag-page.tsx`, `components/seo/faq-block.tsx`, `lib/tag-pages.ts`, `lib/faq.ts` |
+| The dish page fixture `/tags/preview` (draft deployments only: `VERCEL_ENV` isn't `production`, i.e. v0's sandbox, `pnpm dev` and preview deployments): a sample dish page through the same `TagPageView`, with the menu's first 3 products and placeholder copy in the site's language; noindex, never in the sitemap; in production `preview` is an ordinary slug (404 unless a live page has it) | `lib/tag-page-preview.ts`, `components/seo/tag-page.tsx`, `PRODUCTION_DEPLOYMENT` in `lib/config.ts` |
 | Home FAQ (`<SiteFaq />` on the home page): the four questions Max writes (`GET /faq`, in the site's language), "What are you known for?" linking every live dish page; the home's own questions go in as `extraItems` (standard questions only added when absent, known-for links appended); left out when `/faq` fails or is empty | `components/seo/site-faq.tsx`, `lib/site-faq.ts` |
 | Menu page with prices and Menu JSON-LD (`/speisekarte` · `/our-menu`; `/menu` is the shop's) | `app/our-menu`, `lib/format.ts` |
 | Locations and opening hours with today's status, route link and map after consent (`/standort-und-oeffnungszeiten` · `/location-and-hours`) | `app/location-and-hours`, `lib/hours.ts`, `components/locations/location-map.tsx` |
@@ -20,6 +21,7 @@ so the template has no influence on how v0 designs the site.
 | Gift cards: purchase into the shop's checkout and balance check, as Server Actions (`/gutscheine` · `/gift-cards`), when the module is on | `app/gift-cards`, `hooks/use-gift-card-*`, `lib/gift-cards.ts` |
 | The online shop under `/menu` (when the module is on) | `proxy.ts`, `lib/menu-route.ts` |
 | Paths in the site's language: the pages above live in English folders and show under the language's path | `lib/localized-routes.ts`, `proxy.ts` |
+| The template version: `package.json`'s `"version"` (x.y.z), exported as `SITE_TEMPLATE_VERSION`; a build reads it from `package.json` at the template commit it builds from and Website Studio records it. **Rule:** an MR that adds something a backend capability needs bumps the minor version, and `SEO_PAGES_MIN_TEMPLATE_VERSION` (Website Studio backend) names the first version that has it. 0.2.0 is the first with the dish pages and the home FAQ | `package.json`, `lib/template-version.ts` |
 | The site API client | `lib/studio-api.ts`, `lib/config.ts` |
 | SEO base: metadata (each page's tags from `GET /page-meta`; the site's title template, verification codes, X card, category and image preview from the project's `meta`; the one share image `og_image_url`; the favicon, also as Apple touch icon; the iOS app banner), sitemap (the template's pages plus every page registered in `/page-meta`), robots, Restaurant JSON-LD, 404 | `lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `components/site/restaurant-json-ld.tsx`, `app/not-found.tsx` |
 
@@ -36,6 +38,7 @@ unstyled default markup: replace any page's markup freely, keep its data, hooks 
   never `app/contact`. Max registers it in Website Studio (`page_meta_update`), which puts it in the sitemap and the
   SEO tab; never hard-code meta tags or sitemap entries.
 - The legal pages stay `noindex` and out of the sitemap; the coupons page and the dish pages stay out of the navigation.
+- Style `/tags/[slug]` on `/tags/preview` (draft deployments only: it answers 404 in production); never link it.
 - Every FAQ goes through `FaqBlock` (FAQPage JSON-LD via `faqPageJsonLd()`, which escapes `<`). Keep `<SiteFaq />` on
   the home page; a home FAQ of your own goes into it as `extraItems`, never as a second FAQ block.
 - **SEO optimization** happens in Website Studio, not in code: page tags (`page_meta_update`), the site's tags

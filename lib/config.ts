@@ -26,6 +26,13 @@ export const UMAMI_SCRIPT_URL = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL ?? "htt
 /** The site's language (ISO 639-1): texts, <html lang>, the legal pages' language and slugs. */
 export const SITE_LANGUAGE = process.env.NEXT_PUBLIC_SITE_LANGUAGE ?? SITE_DEFAULTS.language
 
+/**
+ * Whether this is the site's production deployment: Vercel's system variable VERCEL_ENV is "production" there,
+ * "preview" on preview (draft) deployments, and unset in v0's sandbox and in pnpm dev. Draft-only pages (the
+ * /tags/preview fixture) are served only when this is false.
+ */
+export const PRODUCTION_DEPLOYMENT = process.env.VERCEL_ENV === "production"
+
 export const REVALIDATE_SECONDS = 300
 
 export function hasModule(module: string): boolean {
