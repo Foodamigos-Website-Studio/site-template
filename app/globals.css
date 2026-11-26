@@ -1,4 +1,340 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* No design here on purpose: v0 sets the site's colours, fonts and spacing from the inspiration. */
+@theme {
+  --color-link: #a58a5e;
+  --color-accent: #a58a5e;
+  --color-primary: #a58a5e;
+  --color-secondary: #212225;
+  --color-background: #f7f6f5;
+  --color-text-primary: #77726c;
+  --color-paper: #ffffff;
+
+  --radius: 4px;
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+}
+
+@theme inline {
+  --font-serif: var(--font-bodoni), "Libre Bodoni", Georgia, serif;
+  --font-sans: var(--font-roboto), "Roboto", system-ui, sans-serif;
+}
+
+:root {
+  --site-accent: var(--color-accent);
+  --header-height: 3.5rem;
+  --order-bar-height: 4.25rem;
+}
+
+html {
+  background-color: var(--color-background);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-paper);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+.btn-outline:hover {
+  background: var(--color-secondary);
+  color: var(--color-paper);
+}
+.btn-light {
+  background: transparent;
+  color: var(--color-paper);
+  border-color: var(--color-paper);
+}
+.btn-light:hover {
+  background: var(--color-paper);
+  border-color: var(--color-paper);
+  color: var(--color-secondary);
+}
+.btn-sm {
+  min-height: 2.25rem;
+  padding: 0 1rem;
+  font-size: 0.6875rem;
+}
+
+.eyebrow {
+  font-family: var(--font-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+}
+
+/* ---------- Template components: legal links ---------- */
+[data-slot="legal-links"] ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+[data-slot="legal-links"] a,
+[data-slot="legal-links"] button {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  letter-spacing: 0.12em;
+  color: var(--color-paper);
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease;
+}
+[data-slot="legal-links"] a:hover,
+[data-slot="legal-links"] button:hover {
+  border-bottom-color: var(--color-paper);
+}
+
+/* ---------- Template components: cookie banner ---------- */
+[data-slot="consent-banner"] {
+  position: fixed;
+  z-index: 70;
+  left: 1rem;
+  right: 1rem;
+  bottom: calc(var(--order-bar-height) + 0.75rem);
+  max-width: 26rem;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  background: var(--color-secondary);
+  color: var(--color-paper);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+}
+@media (min-width: 768px) {
+  [data-slot="consent-banner"] {
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: auto;
+  }
+}
+[data-slot="consent-banner"] p {
+  margin: 0 0 1rem;
+}
+[data-slot="consent-banner"] a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+[data-slot="consent-banner"] > div > div {
+  display: flex;
+  gap: 0.75rem;
+}
+[data-slot="consent-banner"] button {
+  flex: 1;
+  min-height: 2.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+[data-slot="consent-banner"] button:hover {
+  background: var(--color-paper);
+  border-color: var(--color-paper);
+}
+
+/* ---------- Template components: FAQ ---------- */
+[data-slot="site-faq"],
+[data-slot="faq"] {
+  max-width: 52rem;
+  margin: 0 auto;
+}
+[data-slot="faq"] h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  text-align: center;
+  color: var(--color-secondary);
+  margin: 0 0 2.5rem;
+  text-wrap: balance;
+}
+[data-slot="faq"] details {
+  border-top: 1px solid color-mix(in srgb, var(--color-text-primary) 30%, transparent);
+}
+[data-slot="faq"] details:last-of-type {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text-primary) 30%, transparent);
+}
+[data-slot="faq"] summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  letter-spacing: 0.04em;
+  color: var(--color-secondary);
+  transition: color 200ms ease;
+}
+[data-slot="faq"] summary::-webkit-details-marker {
+  display: none;
+}
+[data-slot="faq"] summary::after {
+  content: "+";
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-primary);
+  transition: transform 200ms ease;
+}
+[data-slot="faq"] details[open] summary::after {
+  transform: rotate(45deg);
+}
+[data-slot="faq"] summary:hover {
+  color: var(--color-primary);
+}
+[data-slot="faq"] details > p {
+  margin: 0 0 1.25rem;
+  max-width: 44rem;
+}
+[data-slot="faq-links"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+[data-slot="faq-links"] a {
+  color: var(--color-secondary);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary);
+  text-underline-offset: 4px;
+}
+[data-slot="faq-links"] a:hover {
+  color: var(--color-primary);
+}
+
+/* ---------- Template components: map ---------- */
+[data-slot="map"] {
+  display: block;
+  width: 100%;
+  height: 22rem;
+  border: 0;
+  border-radius: var(--radius);
+}
+[data-slot="map-placeholder"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-text-primary) 12%, var(--color-background));
+}
+[data-slot="map-placeholder"] button {
+  min-height: 2.75rem;
+  padding: 0 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-secondary);
+  background: transparent;
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+[data-slot="map-placeholder"] button:hover {
+  background: var(--color-secondary);
+  color: var(--color-paper);
+}
+
+/* ---------- Template components: legal text pages ---------- */
+.legal-content h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--color-secondary);
+}
+.legal-content h2,
+.legal-content h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-secondary);
+  letter-spacing: 0.05em;
+  margin-top: 2.5rem;
+}
+.legal-content p,
+.legal-content li {
+  max-width: 46rem;
+}
+.legal-content a {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary);
+  text-underline-offset: 3px;
+}
+.legal-content ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}

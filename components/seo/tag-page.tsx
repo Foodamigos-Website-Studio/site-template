@@ -19,39 +19,57 @@ type TagPageProps = { params: Promise<{ slug: string }> }
 export function TagPageView({ page, products, ctas, labels, language }: { page: TagPage; products: readonly TagProduct[]; ctas: readonly TagCta[]; labels: TagPageLabels; language: string }) {
   return (
     <article data-slot="tag-page" data-slug={page.slug}>
-      <h1 className="break-words">{page.title}</h1>
-      {page.paragraphs.map((paragraph, index) => (
-        <p key={index}>{paragraph}</p>
-      ))}
-      {ctas.length > 0 ? (
-        <ul data-slot="tag-page-ctas">
-          {ctas.map((cta) => (
-            <li key={cta.key}>
-              <Link href={cta.href} data-cta={cta.key}>
-                {cta.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {products.length > 0 ? (
-        <section data-slot="tag-page-items">
-          <h2>{labels.menuItems}</h2>
-          <ul>
-            {products.map((product, index) => (
-              <li key={product.id} data-slot="menu-item">
-                {menuImageAllowed(product.image_url) ? (
-                  <Image src={product.image_url} alt={product.name} width={400} height={400} sizes="(max-width: 640px) 100vw, 400px" loading={index === 0 ? "eager" : "lazy"} />
-                ) : null}
-                <span>{product.name}</span>
-                {product.price !== null ? <span>{formatPrice(product.price, product.currency, language)}</span> : null}
-                {product.description ? <p>{product.description}</p> : null}
+      <section className="bg-secondary px-6 py-20 text-center md:py-28">
+        <h1 className="eyebrow mx-auto max-w-4xl text-balance break-words text-2xl text-paper md:text-4xl">{page.title}</h1>
+      </section>
+      <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+        {page.paragraphs.map((paragraph, index) => (
+          <p key={index} className="mb-6 text-pretty text-lg leading-relaxed">
+            {paragraph}
+          </p>
+        ))}
+        {ctas.length > 0 ? (
+          <ul data-slot="tag-page-ctas" className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+            {ctas.map((cta, index) => (
+              <li key={cta.key}>
+                <Link href={cta.href} data-cta={cta.key} className={index === 0 ? "btn" : "btn btn-outline"}>
+                  {cta.label}
+                </Link>
               </li>
             ))}
           </ul>
-        </section>
-      ) : null}
-      <FaqBlock items={page.faq} heading={labels.faq} />
+        ) : null}
+        {products.length > 0 ? (
+          <section data-slot="tag-page-items" className="mt-20">
+            <h2 className="eyebrow border-b border-text-primary/30 pb-4 text-center text-lg text-secondary">{labels.menuItems}</h2>
+            <ul className="mt-8 grid gap-8 sm:grid-cols-2">
+              {products.map((product, index) => (
+                <li key={product.id} data-slot="menu-item" className="flex flex-col gap-2">
+                  {menuImageAllowed(product.image_url) ? (
+                    <Image
+                      src={product.image_url}
+                      alt={product.name}
+                      width={400}
+                      height={400}
+                      sizes="(max-width: 640px) 100vw, 400px"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      className="mb-2 aspect-square w-full object-cover"
+                    />
+                  ) : null}
+                  <div className="flex items-baseline justify-between gap-4">
+                    <span className="font-serif text-lg text-secondary">{product.name}</span>
+                    {product.price !== null ? <span className="shrink-0 text-secondary">{formatPrice(product.price, product.currency, language)}</span> : null}
+                  </div>
+                  {product.description ? <p className="text-sm">{product.description}</p> : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+        <div className="mt-20">
+          <FaqBlock items={page.faq} heading={labels.faq} />
+        </div>
+      </div>
     </article>
   )
 }

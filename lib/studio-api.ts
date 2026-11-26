@@ -169,6 +169,22 @@ export function getMenu() {
   return request<Menu>("/menu")
 }
 
+export type MarketingSettings = {
+  discount_type: string
+  tag: string | null
+  quantity: number | null
+  expiration_minutes: number | null
+  components: { discount: number; usage_threshold: number | null; max_discount: number | null }[]
+}
+
+/** The newsletter signup's settings: `{ settings: null }` = no signup discount, null = the request failed. */
+export function getMarketingSettings() {
+  return request<{ settings: MarketingSettings | null }>("/shop/marketing-settings")
+}
+
+/** The base URL of the site API for browser calls (the newsletter signup posts to it). */
+export const SITE_API_BASE_URL = BASE_URL
+
 export type LegalPageKey = "impressum" | "privacy-policy" | "cookie-policy"
 
 export type LegalBlock =

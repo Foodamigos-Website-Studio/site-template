@@ -80,16 +80,20 @@ function Block({ block }: { block: LegalBlock }) {
 
 export function LegalBlocks({ page }: { page: LegalPage }) {
   return (
-    <article>
-      <h1>{page.title}</h1>
-      {page.sections.map((section, index) => (
-        <section key={index}>
-          {section.heading ? <h2>{section.heading}</h2> : null}
-          {section.blocks.map((block, blockIndex) => (
-            <Block key={blockIndex} block={block} />
-          ))}
-        </section>
-      ))}
-    </article>
+    <>
+      <section className="bg-secondary px-6 py-20 text-center md:py-28">
+        <h1 className="eyebrow mx-auto max-w-4xl text-balance text-2xl text-paper md:text-4xl">{page.title}</h1>
+      </section>
+      <article className="legal-content mx-auto max-w-3xl px-6 py-16 md:py-24">
+        {page.sections.map((section, index) => (
+          <section key={index}>
+            {section.heading ? <h2>{section.heading}</h2> : null}
+            {section.blocks.map((block, blockIndex) => (
+              <Block key={blockIndex} block={block} />
+            ))}
+          </section>
+        ))}
+      </article>
+    </>
   )
 }
