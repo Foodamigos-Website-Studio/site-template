@@ -1,0 +1,172 @@
+{
+    "data": [
+        {
+            "uuid": "00000000-0000-4000-8000-000000009101",
+            "slug": "trattoria-bella-mitte",
+            "name": "Trattoria Bella Mitte",
+            "phone_number": "+49301234567",
+            "email": "mitte@trattoria-bella.example",
+            "address": "Torstraße 101",
+            "zip_code": "10119",
+            "city": "Berlin",
+            "country": "DE",
+            "lat": 52.5293,
+            "lon": 13.4012,
+            "timezone": "Europe/Berlin",
+            "currency": "EUR",
+            "opening_hours": [
+                {
+                    "open": {
+                        "day": 0,
+                        "hour": 12,
+                        "minute": 0
+                    },
+                    "close": {
+                        "day": 0,
+                        "hour": 23,
+                        "minute": 0
+                    }
+                },
+                {
+                    "open": {
+                        "day": 1,
+                        "hour": 12,
+                        "minute": 0
+                    },
+                    "close": {
+                        "day": 1,
+                        "hour": 23,
+                        "minute": 0
+                    }
+                },
+                {
+                    "open": {
+                        "day": 2,
+                        "hour": 12,
+                        "minute": 0
+                    },
+                    "close": {
+                        "day": 2,
+                        "hour": 23,
+                        "minute": 0
+                    }
+                },
+                {
+                    "open": {
+                        "day": 3,
+                        "hour": 12,
+                        "minute": 0
+                    },
+                    "close": {
+                        "day": 3,
+                        "hour": 23,
+                        "minute": 0
+                    }
+                },
+                {
+                    "open": {
+                        "day": 4,
+                        "hour": 12,
+                        "minute": 0
+                    },
+                    "close": {
+                        "day": 4,
+                        "hour": 23,
+                        "minute": 0
+                    }
+                },
+                {
+                    "open": {
+                        "day": 5,
+                        "hour": 12,
+                        "minute": 0
+                    },
+                    "close": {
+                        "day": 5,
+                        "hour": 23,
+                        "minute": 0
+                    }
+                },
+                {
+                    "open": {
+                        "day": 6,
+                        "hour": 12,
+                        "minute": 0
+                    },
+                    "close": {
+                        "day": 6,
+                        "hour": 23,
+                        "minute": 0
+                    }
+                }
+            ],
+            "is_live": true,
+            "business_profile": {
+                "legal_name": "Trattoria Bella Mitte GmbH",
+                "owner": "Giulia Rossi",
+                "business_type": "GmbH",
+                "address": "Torstraße 101",
+                "zip_code": "10119",
+                "city": "Berlin",
+                "country": "DE",
+                "phone_number": "+49301234567",
+                "email": "mitte@trattoria-bella.example",
+                "website_url": null,
+                "vat_id": null,
+                "tax_id": null,
+                "commercial_register": null,
+                "commercial_register_number": null,
+                "supervisory_authority": null,
+                "grantor": null,
+                "legal_disclosure": null
+            },
+            "google_place": {
+                "place_id": "ChIJTrattoriaBellaMitte0001",
+                "rating": 4.6,
+                "rates_count": 312,
+                "reviews": [
+                    {
+                        "author_name": "Anna Schmidt",
+                        "rating": 5,
+                        "text": "Die beste Carbonara der Stadt, super freundlicher Service.",
+                        "language": "de",
+                        "published_at": "2026-09-14T19:30:00+00:00",
+                        "profile_photo_url": null
+                    },
+                    {
+                        "author_name": "Jonas Weber",
+                        "rating": 5,
+                        "text": "Gemütlich, schnell und richtig gute Pizza.",
+                        "language": "de",
+                        "published_at": "2026-08-30T20:10:00+00:00",
+                        "profile_photo_url": null
+                    },
+                    {
+                        "author_name": "Marie Dubois",
+                        "rating": 4,
+                        "text": "Lovely food, a little busy on Fridays.",
+                        "language": "en",
+                        "published_at": "2026-08-02T13:05:00+00:00",
+                        "profile_photo_url": null
+                    },
+                    {
+                        "author_name": "Lukas Bauer",
+                        "rating": 5,
+                        "text": "Mittagsmenü zu fairem Preis, komme wieder.",
+                        "language": "de",
+                        "published_at": "2026-07-21T12:45:00+00:00",
+                        "profile_photo_url": null
+                    },
+                    {
+                        "author_name": "Sofia Romano",
+                        "rating": 4,
+                        "text": "Autentico e buonissimo, tiramisù da provare.",
+                        "language": "it",
+                        "published_at": "2026-06-18T21:15:00+00:00",
+                        "profile_photo_url": null
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,43 @@
+{
+    "data": {
+        "items": [
+            {
+                "key": "known_for",
+                "question": "Wofür seid ihr bekannt?",
+                "answer": "Wir sind eine Trattoria in Berlin und bekannt für unsere Pizza: Pizza Margherita, Pizza Salami und Pizza Funghi. Wer italienisch essen möchte, ist bei uns genau richtig.",
+                "links": [
+                    {
+                        "label": "Pizza Margherita",
+                        "path": "/tags/pizza-margherita"
+                    },
+                    {
+                        "label": "Pizza Salami",
+                        "path": "/tags/pizza-salami"
+                    },
+                    {
+                        "label": "Pizza Funghi",
+                        "path": "/tags/pizza-funghi"
+                    }
+                ]
+            },
+            {
+                "key": "meals",
+                "question": "Welche Gerichte gibt es bei euch?",
+                "answer": "Unsere Speisekarte hat die Kategorie Pizza. Dort findest du Pizza Margherita, Pizza Salami und Pizza Funghi.",
+                "links": []
+            },
+            {
+                "key": "service",
+                "question": "Liefert ihr oder kann ich abholen?",
+                "answer": "Bei uns kannst du dein Essen abholen. Eine Lieferung bieten wir nicht an.",
+                "links": []
+            },
+            {
+                "key": "areas",
+                "question": "Wo findet ihr uns?",
+                "answer": "Du findest uns in der Torstraße 101, 10119 Berlin. Dort holst du deine Bestellung ab, denn wir liefern nicht.",
+                "links": []
+            }
+        ]
+    }
+}

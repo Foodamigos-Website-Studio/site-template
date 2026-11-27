@@ -58,7 +58,7 @@ Env vars (set by Studio on the Vercel project) win over `lib/site-defaults.ts` (
 
 ```bash
 pnpm install
-pnpm test        # unit tests (consent, inline markup, paths, /menu, hours, gift cards, dish pages against tests/fixtures/site-api)
+pnpm test        # unit tests (consent, inline markup, paths, /menu, hours, gift cards, dish pages against tests/fixtures/site-api, the click-through home → dish pages → sitemap against the site API recorded after real ticks)
 pnpm typecheck
 NEXT_PUBLIC_STUDIO_API_URL=http://localhost:8095 NEXT_PUBLIC_PROJECT_UUID=<project uuid> pnpm dev
 ```

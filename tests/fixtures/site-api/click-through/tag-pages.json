@@ -1,0 +1,19 @@
+{
+    "data": [
+        {
+            "slug": "pizza-margherita",
+            "keyword": "Pizza Margherita",
+            "updatedAt": "2026-11-27T11:13:10+00:00"
+        },
+        {
+            "slug": "pizza-salami",
+            "keyword": "Pizza Salami",
+            "updatedAt": "2026-11-27T11:13:13+00:00"
+        },
+        {
+            "slug": "pizza-funghi",
+            "keyword": "Pizza Funghi",
+            "updatedAt": "2026-11-27T11:13:19+00:00"
+        }
+    ]
+}
