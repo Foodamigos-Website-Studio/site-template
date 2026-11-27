@@ -1,0 +1,54 @@
+{
+    "data": {
+        "currency": "EUR",
+        "companies": [
+            {
+                "company_uuid": "00000000-0000-4000-8000-000000009101",
+                "name": "Trattoria Bella Mitte",
+                "currency": "EUR",
+                "menus": [
+                    {
+                        "id": 2,
+                        "name": "Speisekarte",
+                        "schedule": null,
+                        "categories": [
+                            {
+                                "id": 13,
+                                "name": "Pizza",
+                                "description": null,
+                                "image_url": null,
+                                "products": [
+                                    {
+                                        "id": 68,
+                                        "name": "Pizza Margherita",
+                                        "description": "Tomate, Mozzarella, Basilikum",
+                                        "image_url": null,
+                                        "price": 9.5
+                                    },
+                                    {
+                                        "id": 72,
+                                        "name": "Pizza Salami",
+                                        "description": "Mit Salami und Mozzarella",
+                                        "image_url": null,
+                                        "price": 10.5
+                                    },
+                                    {
+                                        "id": 73,
+                                        "name": "Pizza Funghi",
+                                        "description": "Mit frischen Champignons",
+                                        "image_url": null,
+                                        "price": 9.9
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "services": [
+                    "pickup"
+                ],
+                "delivery_zones": []
+            }
+        ]
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "data": {
+        "slug": "pizza-margherita",
+        "keyword": "Pizza Margherita",
+        "title": "Pizza Margherita bei Trattoria Bella",
+        "paragraphs": [
+            "Die Pizza Margherita ist ein Klassiker auf der Speisekarte von Trattoria Bella und steht in der Kategorie Pizza. Sie kommt mit Tomate, Mozzarella und Basilikum, mehr braucht es für diesen Klassiker nicht. Wenn du in Berlin nach einer Pizza Margherita suchst, findest du sie bei uns in der Torstraße 101.",
+            "Du möchtest deine Pizza Margherita lieber mitnehmen? Bei Trattoria Bella kannst du sie zur Abholung bestellen und in der Torstraße 101 in 10119 Berlin abholen. Einen Lieferservice gibt es bei uns nicht.",
+            "Hast du Lust auf etwas anderes, findest du auf unserer Karte außerdem die Pizza Salami und die Pizza Funghi. So kann jeder in der Runde seine Lieblingspizza aussuchen, egal ob du allein oder mit Freunden bestellst."
+        ],
+        "faq": [
+            {
+                "question": "Was ist auf der Pizza Margherita?",
+                "answer": "Unsere Pizza Margherita ist mit Tomate, Mozzarella und Basilikum belegt."
+            },
+            {
+                "question": "Kann ich die Pizza Margherita abholen?",
+                "answer": "Ja, du kannst die Pizza Margherita bei uns abholen. Du findest uns in der Torstraße 101, 10119 Berlin."
+            },
+            {
+                "question": "Liefert ihr die Pizza Margherita auch?",
+                "answer": "Nein, bei Trattoria Bella gibt es keine Lieferung, sondern Abholung an unserer Adresse in der Torstraße 101."
+            },
+            {
+                "question": "Welche anderen Pizzen gibt es bei euch?",
+                "answer": "Neben der Pizza Margherita gibt es bei uns auch die Pizza Salami und die Pizza Funghi."
+            }
+        ],
+        "metaTitle": "Pizza Margherita in Berlin | Trattoria Bella",
+        "metaDescription": "Pizza Margherita mit Tomate, Mozzarella und Basilikum bei Trattoria Bella in Berlin – zum Abholen in der Torstraße 101.",
+        "productIds": [
+            68
+        ],
+        "updatedAt": "2026-11-27T11:13:10+00:00"
+    }
+}

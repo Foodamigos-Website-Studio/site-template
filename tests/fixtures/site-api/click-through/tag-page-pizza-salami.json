@@ -1,0 +1,36 @@
+{
+    "data": {
+        "slug": "pizza-salami",
+        "keyword": "Pizza Salami",
+        "title": "Pizza Salami bei Trattoria Bella",
+        "paragraphs": [
+            "Die Pizza Salami bei Trattoria Bella in Berlin steht in der Kategorie Pizza auf unserer Speisekarte. Sie ist belegt mit Salami und Mozzarella, mehr braucht es für diese Pizza nicht. Du findest uns an der Torstraße 101 in 10119 Berlin.",
+            "Wenn du Lust auf Pizza Salami hast, ist die Beschreibung auf unserer Karte kurz und klar: mit Salami und Mozzarella. Du suchst etwas anderes? Dann schau dir auf der Speisekarte auch die Pizza Margherita und die Pizza Funghi an. So kannst du in Ruhe die Pizza wählen, die zu deinem Hunger passt.",
+            "Die Pizza Salami gibt es bei uns zum Abholen. Komm einfach in der Torstraße 101 in Berlin vorbei und nimm deine Pizza mit. Eine Lieferung bieten wir nicht an, deshalb holst du deine Pizza Salami direkt bei uns in 10119 Berlin ab."
+        ],
+        "faq": [
+            {
+                "question": "Was ist auf der Pizza Salami?",
+                "answer": "Unsere Pizza Salami gibt es mit Salami und Mozzarella."
+            },
+            {
+                "question": "Kann ich die Pizza Salami abholen?",
+                "answer": "Ja, du kannst die Pizza Salami bei uns abholen, und zwar in der Torstraße 101 in 10119 Berlin."
+            },
+            {
+                "question": "Liefert ihr die Pizza Salami auch nach Hause?",
+                "answer": "Nein, wir bieten aktuell keine Lieferung an. Du holst deine Pizza bei uns in Berlin ab."
+            },
+            {
+                "question": "Welche anderen Pizzen gibt es bei euch?",
+                "answer": "Neben der Pizza Salami findest du auf unserer Speisekarte auch die Pizza Margherita und die Pizza Funghi."
+            }
+        ],
+        "metaTitle": "Pizza Salami in Berlin 10119 | Trattoria Bella",
+        "metaDescription": "Pizza Salami mit Salami und Mozzarella zum Abholen bei Trattoria Bella in Berlin, Torstraße 101. Jetzt vorbeikommen!",
+        "productIds": [
+            72
+        ],
+        "updatedAt": "2026-11-27T11:13:13+00:00"
+    }
+}

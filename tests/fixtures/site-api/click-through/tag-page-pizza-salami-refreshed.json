@@ -1,0 +1,36 @@
+{
+    "data": {
+        "slug": "pizza-salami",
+        "keyword": "Pizza Salami",
+        "title": "Pizza Salami bei Trattoria Bella",
+        "paragraphs": [
+            "Bei Trattoria Bella in Berlin gehört die Pizza Salami zu den Pizzen auf unserer Karte. Der Belag ist schnell erklärt: Salami und Mozzarella. Sie kostet 10,50 €. Wer in Berlin eine Pizza Salami sucht, findet bei uns genau diese Variante.",
+            "Du hast Hunger auf Pizza und weißt noch nicht genau, welche es sein soll? Neben der Pizza Salami stehen auch die Pizza Margherita und die Pizza Funghi auf unserer Karte. Wirf einen Blick auf alle drei und such dir die aus, die du dir heute schmecken lassen willst.",
+            "Die Pizza Salami bekommst du bei uns zum Mitnehmen. Unser Restaurant findest du in der Torstraße 101, 10119 Berlin. Geliefert wird bei uns nicht, du holst die Pizza also direkt vor Ort ab."
+        ],
+        "faq": [
+            {
+                "question": "Was kostet die Pizza Salami bei Trattoria Bella?",
+                "answer": "Die Pizza Salami kostet bei uns 10,50 €."
+            },
+            {
+                "question": "Wo kann ich die Pizza Salami in Berlin abholen?",
+                "answer": "Du holst sie bei uns in der Torstraße 101, 10119 Berlin ab."
+            },
+            {
+                "question": "Wie bekomme ich die Pizza Salami?",
+                "answer": "Du nimmst die Pizza Salami zum Abholen direkt bei uns im Restaurant mit. Einen Lieferservice haben wir nicht."
+            },
+            {
+                "question": "Welche Pizzen stehen neben der Pizza Salami auf der Karte?",
+                "answer": "In der Kategorie Pizza findest du außerdem die Pizza Margherita und die Pizza Funghi."
+            }
+        ],
+        "metaTitle": "Pizza Salami abholen in Berlin | Trattoria Bella",
+        "metaDescription": "Pizza Salami mit Salami und Mozzarella für 10,50 € bei Trattoria Bella, Torstraße 101 in Berlin. Zum Abholen.",
+        "productIds": [
+            72
+        ],
+        "updatedAt": "2026-11-27T11:17:23+00:00"
+    }
+}

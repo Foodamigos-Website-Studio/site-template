@@ -1,0 +1,40 @@
+{
+    "data": {
+        "uuid": "5f0c2a9e-3b1d-4e8a-9c7f-1a2b3c4d5e6f",
+        "name": "Trattoria Bella",
+        "slug": "trattoria-bella",
+        "default_language": "de",
+        "tagline": "Hausgemachte Pasta mitten in Berlin",
+        "about": "Familiengeführte Trattoria mit frischer Pasta, Holzofenpizza und italienischen Weinen.",
+        "dietary_attributes": [],
+        "socials": {
+            "instagram": "https://instagram.com/trattoriabella.berlin"
+        },
+        "delivery_links": {},
+        "has_reservations": true,
+        "has_online_shop": true,
+        "online_shop_url": "https://trattoria-bella.order.example",
+        "has_gift_cards": false,
+        "gift_cards_redemption_mode": null,
+        "logo_url": null,
+        "favicon_url": null,
+        "og_image_url": null,
+        "reservation_url": "https://trattoria-bella.foodamigos-reservation-testseite.com",
+        "mobile_app": {
+            "name": null,
+            "app_icon": null,
+            "app_bundle_identifier": null,
+            "asc_app_id": null,
+            "released": false
+        },
+        "google_maps_api_key": null,
+        "meta": {
+            "title_template": null,
+            "google_site_verification": null,
+            "bing_site_verification": null,
+            "twitter_card": "summary_large_image",
+            "category": null,
+            "max_image_preview": "large"
+        }
+    }
+}
