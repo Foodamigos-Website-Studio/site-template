@@ -34,7 +34,7 @@ function asksSame(own: string, standard: string): boolean {
 }
 
 /** Word beginnings in English and German (the site languages). A word matches when it starts with one of them. */
-const DELIVERS = ["deliver", "liefer", "zustell"]
+const DELIVERS = ["deliver", "liefer", "beliefer", "zustell"]
 const PICKUP = ["takeout", "takeaway", "pickup", "carryout", "collect", "abhol", "mitnehm"]
 const PICKUP_PHRASES = [["pick", "up"], ["take", "out"], ["take", "away"], ["to", "go"]]
 /**
@@ -44,8 +44,30 @@ const PICKUP_PHRASES = [["pick", "up"], ["take", "out"], ["take", "away"], ["to"
  */
 const NOT_DELIVERY = ["lieferant", "collection", "collector", "point", "punkt", "loyal", "reward", "stamp", "stempel", "bonus", "treue", "prämie"]
 const AREA = ["area", "zone", "postcode", "zip", "district", "neighbo", "gegend", "gebiet", "stadtteil", "bezirk", "umkreis", "postleitzahl", "plz"]
+/** German compounds that end in an area word: "Liefergebiet", "Lieferzone", "Lieferradius" (TP.QF0.4). */
+const AREA_ENDS = ["gebiet", "zone", "radius", "umkreis", "gegend"]
+/** Verbs that make an area word the areas question without a delivery word: "Which areas do you serve / cover?". */
+const AREA_VERBS = ["serve", "serving", "cover", "reach", "bedien", "versorg", "abdeck"]
 /** Whole words: "wo" as a word beginning would also match "Woche". */
 const WHERE = new Set(["where", "wo", "wohin"])
+
+/**
+ * The known-for question (TP.QF0.4): "famous", "specialty" or "Spezialität" on their own, "known" or "bekannt" only with
+ * "for"/"für"/"wofür" ("What is your restaurant known for?"), so "Is the allergen list known?" stays its own question.
+ * "Daily specials" isn't a specialty: the beginnings need "specialt"/"speciali".
+ */
+const FAMOUS = ["famous", "specialt", "speciali", "signature", "berühmt", "spezialit"]
+const KNOWN = ["known", "bekannt"]
+const FOR = new Set(["for", "für", "wofür"])
+/** The meals question (TP.QF0.4): a food word asked with what or which ("What's on the menu?", "Was gibt es zu essen?"). */
+const FOOD = ["food", "meal", "dish", "menu", "cuisine", "essen", "gericht", "speise", "küche", "mahlzeit"]
+const WHAT = new Set(["what", "which", "was", "welche", "welches", "welcher"])
+/** A narrower food question (a diet, an allergen, a price, a time) stays its own question. */
+const FOOD_DETAIL = [
+  "vegan", "vegetar", "gluten", "allerg", "halal", "kosher", "koscher", "lactose", "laktose", "dairy", "nut", "nuss",
+  "spicy", "scharf", "kid", "child", "kinder", "price", "cost", "preis", "kost", "time", "when", "wann", "uhr", "popular",
+  "bestsell", "beliebt", "recommend", "empfehl",
+]
 /** A delivery detail (cost, time, minimum order) is another question than whether the restaurant delivers. */
 const DETAIL = ["how", "what", "when", "which", "why", "fee", "cost", "price", "charge", "minimum", "long", "wie", "was", "wann", "welche", "warum", "wieviel", "kost", "gebühr", "preis", "mindest", "dauer", "lange"]
 
@@ -57,8 +79,20 @@ function hasPickup(all: readonly string[]): boolean {
   return has(PICKUP, all) || PICKUP_PHRASES.some(([a, b]) => all.some((word, i) => word === a && all[i + 1] === b))
 }
 
+function hasArea(all: readonly string[]): boolean {
+  return has(AREA, all) || all.some((word) => has(DELIVERS, [word]) && AREA_ENDS.some((end) => word.endsWith(end)))
+}
+
 function asksWhere(all: readonly string[]): boolean {
-  return has(AREA, all) || all.some((word) => WHERE.has(word))
+  return hasArea(all) || all.some((word) => WHERE.has(word))
+}
+
+function asksKnownFor(all: readonly string[]): boolean {
+  return has(FAMOUS, all) || (has(KNOWN, all) && all.some((word) => FOR.has(word)))
+}
+
+function asksMeals(all: readonly string[]): boolean {
+  return has(FOOD, all) && all.some((word) => WHAT.has(word)) && !has(FOOD_DETAIL, all)
 }
 
 /**
@@ -68,12 +102,18 @@ function asksWhere(all: readonly string[]): boolean {
  * cost?", "Wie lange dauert die Lieferung?") stays its own question, and so does a one-word question. So do a question
  * about suppliers or loyalty points ("Arbeitet ihr mit regionalen Lieferanten?", "Do you collect loyalty points?") and
  * one about where to pick up ("Where can I pick up my order?"): only a delivery word makes a "where" the areas question.
+ * TP.QF0.4: "Was ist euer Liefergebiet?", "Welche Gegenden beliefert ihr?" and "Which areas do you serve?" ask the areas
+ * question; "What are you famous for?" and "Was ist eure Spezialität?" the known-for one; "What's on the menu?" and
+ * "Welche Speisen bietet ihr an?" the meals one ("Which dishes are vegan?" stays its own question).
  */
 function asksTopic(own: string, key: SiteFaqKey): boolean {
   const all = words(own)
-  if (all.length < 2 || has(NOT_DELIVERY, all)) return false
+  if (all.length < 2) return false
+  if (key === "known_for") return asksKnownFor(all)
+  if (key === "meals") return asksMeals(all)
+  if (has(NOT_DELIVERY, all)) return false
   const delivers = has(DELIVERS, all)
-  if (key === "areas") return delivers && asksWhere(all)
+  if (key === "areas") return (delivers && asksWhere(all)) || (hasArea(all) && has(AREA_VERBS, all))
   return key === "service" && (delivers || hasPickup(all)) && !asksWhere(all) && !has(DETAIL, all)
 }
 

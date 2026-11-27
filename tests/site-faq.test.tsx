@@ -239,6 +239,73 @@ describe("merge with the home's own questions (extraItems)", () => {
     expect(items.map((item) => item.question)).toEqual([question, ...site.map((item) => item.question)])
   })
 
+  // TP.QF0.4 (found in TP.7): the usual EN and DE wordings of the areas, known-for and meals questions still got the
+  // standard question added as a duplicate ("beliefert", "Liefergebiet", "famous", "Spezialität", "Speisekarte", ...).
+  // Each is recognised by its topic; standard order is known_for, meals, service, areas.
+  const questions = (site: SiteFaqItem[]) => site.map((item) => item.question)
+  const isGerman = (question: string) => /[äöüß]|ihr|euch|eure|euer|der/.test(question)
+  const without = (site: SiteFaqItem[], index: number) => questions(site).filter((_, i) => i !== index)
+
+  it.each([
+    "Which areas do you serve?",
+    "What areas do you cover?",
+    "Was ist euer Liefergebiet?",
+    "Wie groß ist euer Liefergebiet?",
+    "Welche Gegenden beliefert ihr?",
+  ])("takes the home's %j as the areas question: no second areas or delivery question (AC8)", (question) => {
+    const site = isGerman(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...without(site, 3)])
+    expect(items[1].links).toEqual([{ label: "Poke Bowl", path: "/tags/poke-bowl" }])
+  })
+
+  it.each([
+    "What are you famous for?",
+    "What is your restaurant known for?",
+    "What is your specialty?",
+    "Wofür ist euer Restaurant bekannt?",
+    "Was ist eure Spezialität?",
+  ])("takes the home's %j as the known-for question and appends the dish links to its answer (AC8, E5)", (question) => {
+    const site = isGerman(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...without(site, 0)])
+    expect(items[0]).toEqual({ question, answer: "Own answer.", links: [{ label: "Poke Bowl", path: "/tags/poke-bowl" }] })
+  })
+
+  it.each([
+    "What food do you serve?",
+    "What kind of food do you serve?",
+    "What meals do you offer?",
+    "What's on the menu?",
+    "Was gibt es bei euch zu essen?",
+    "Welche Gerichte bietet ihr an?",
+    "Welche Speisen bietet ihr an?",
+    "Was steht auf der Speisekarte?",
+    "Welche Gerichte kann ich bestellen?",
+  ])("takes the home's %j as the meals question: no second meals question (AC8)", (question) => {
+    const site = isGerman(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...without(site, 1)])
+    expect(items[1].links).toEqual([{ label: "Poke Bowl", path: "/tags/poke-bowl" }])
+  })
+
+  // A narrower question about the same topic stays its own, and all four standard questions stay (AC5).
+  it.each([
+    "Which dishes are vegan?",
+    "What does the food cost?",
+    "Habt ihr glutenfreie Gerichte?",
+    "Welche Gerichte sind vegetarisch?",
+    "Was kostet das Essen?",
+    "Is the allergen list known?",
+    "Do you have daily specials?",
+    "Aus welchem Anbaugebiet kommt euer Wein?",
+    "Where do you serve breakfast?",
+  ])("keeps %j as its own question and all four standard questions (AC5)", (question) => {
+    const site = isGerman(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...questions(site)])
+  })
+
   it("keeps a different question that merely shares words with a standard one", () => {
     const items = mergeFaq(english, [
       { question: "Do you offer catering?", answer: "Yes." },
