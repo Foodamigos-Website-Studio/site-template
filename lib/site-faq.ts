@@ -33,6 +33,50 @@ function asksSame(own: string, standard: string): boolean {
   return shorter.size >= 2 && [...shorter].every((word) => longer.has(word))
 }
 
+/** Word beginnings in English and German (the site languages). A word matches when it starts with one of them. */
+const DELIVERS = ["deliver", "liefer", "zustell"]
+const PICKUP = ["takeout", "takeaway", "pickup", "carryout", "collect", "abhol", "mitnehm"]
+const PICKUP_PHRASES = [["pick", "up"], ["take", "out"], ["take", "away"], ["to", "go"]]
+/**
+ * Words that share a beginning with a delivery or pickup word but ask something else (TP.QF0.3 review): suppliers
+ * ("Lieferanten"), collecting loyalty points or stamps, a collection. A question with one of them is never the delivery
+ * or areas question.
+ */
+const NOT_DELIVERY = ["lieferant", "collection", "collector", "point", "punkt", "loyal", "reward", "stamp", "stempel", "bonus", "treue", "prämie"]
+const AREA = ["area", "zone", "postcode", "zip", "district", "neighbo", "gegend", "gebiet", "stadtteil", "bezirk", "umkreis", "postleitzahl", "plz"]
+/** Whole words: "wo" as a word beginning would also match "Woche". */
+const WHERE = new Set(["where", "wo", "wohin"])
+/** A delivery detail (cost, time, minimum order) is another question than whether the restaurant delivers. */
+const DETAIL = ["how", "what", "when", "which", "why", "fee", "cost", "price", "charge", "minimum", "long", "wie", "was", "wann", "welche", "warum", "wieviel", "kost", "gebühr", "preis", "mindest", "dauer", "lange"]
+
+function has(list: readonly string[], all: readonly string[]): boolean {
+  return all.some((word) => list.some((start) => word.startsWith(start)))
+}
+
+function hasPickup(all: readonly string[]): boolean {
+  return has(PICKUP, all) || PICKUP_PHRASES.some(([a, b]) => all.some((word, i) => word === a && all[i + 1] === b))
+}
+
+function asksWhere(all: readonly string[]): boolean {
+  return has(AREA, all) || all.some((word) => WHERE.has(word))
+}
+
+/**
+ * The site's own question asks a standard one by its topic, in the usual wordings the word check misses (TP.QF0.3):
+ * "Bietet ihr Lieferung an?", "Gibt es Lieferung?" and "Do you deliver?" ask the delivery or takeout question;
+ * "Wohin liefert ihr?" and "Where do you deliver?" ask the areas question. A delivery detail ("How much does delivery
+ * cost?", "Wie lange dauert die Lieferung?") stays its own question, and so does a one-word question. So do a question
+ * about suppliers or loyalty points ("Arbeitet ihr mit regionalen Lieferanten?", "Do you collect loyalty points?") and
+ * one about where to pick up ("Where can I pick up my order?"): only a delivery word makes a "where" the areas question.
+ */
+function asksTopic(own: string, key: SiteFaqKey): boolean {
+  const all = words(own)
+  if (all.length < 2 || has(NOT_DELIVERY, all)) return false
+  const delivers = has(DELIVERS, all)
+  if (key === "areas") return delivers && asksWhere(all)
+  return key === "service" && (delivers || hasPickup(all)) && !asksWhere(all) && !has(DETAIL, all)
+}
+
 /**
  * Only the site's own paths (/tags/...): never another host or a javascript: link. A strict allow-list, because browsers
  * read "/\evil.test" like "//evil.test" (another host); the backend builds these paths from slugs.
@@ -53,7 +97,7 @@ function appendLinks(existing: readonly FaqLink[] | undefined, added: readonly F
 
 /**
  * The home FAQ: the site's own questions first, then each standard question from /faq the site doesn't have yet (same
- * key, the same question, or the same question in fewer words: see asksSame). Each of the site's questions stands in
+ * key, the same question, the same question in fewer words (asksSame), or the same topic (asksTopic)). Each of the site's questions stands in
  * for one standard question at most, the first it matches (by key first). When the site already answers "What are you
  * known for?", the links to the live dish pages are appended to its answer instead, so no question shows twice.
  */
@@ -63,7 +107,10 @@ export function mergeFaq(standard: readonly SiteFaqItem[], extraItems: readonly 
   const answering = (item: SiteFaqItem) => {
     const free = (match: (extra: ExtraFaqItem) => boolean) => extraItems.findIndex((extra, index) => !claimed.has(index) && match(extra))
     const byKey = extraItems.findIndex((extra) => extra.key === item.key)
-    const index = byKey !== -1 ? byKey : free((extra) => extra.key === undefined && asksSame(extra.question, item.question))
+    const own = (match: (question: string) => boolean) => free((extra) => extra.key === undefined && match(extra.question))
+    let index = byKey
+    if (index === -1) index = own((question) => asksSame(question, item.question))
+    if (index === -1) index = own((question) => asksTopic(question, item.key))
     if (index !== -1) claimed.add(index)
     return index
   }
