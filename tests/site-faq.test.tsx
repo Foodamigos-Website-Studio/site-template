@@ -222,6 +222,23 @@ describe("merge with the home's own questions (extraItems)", () => {
     expect(items.map((item) => item.question)).toEqual([question, ...site.map((item) => item.question)])
   })
 
+  // TP.QF0.3 review: a supplier, loyalty-points or pickup-location question is not the delivery or areas question, so
+  // all four standard questions stay on the home (AC5).
+  it.each([
+    "Arbeitet ihr mit regionalen Lieferanten?",
+    "Wer sind eure Lieferanten?",
+    "Kann ich bei euch Treuepunkte sammeln?",
+    "Do you collect loyalty points?",
+    "Can I collect points with my order?",
+    "Do you have a loyalty card collection?",
+    "Where can I pick up my order?",
+    "Wo kann ich meine Bestellung abholen?",
+  ])("keeps %j as its own question and all four standard questions (AC5)", (question) => {
+    const site = /[äöüß]|ihr|euch|eure|ich/.test(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...site.map((item) => item.question)])
+  })
+
   it("keeps a different question that merely shares words with a standard one", () => {
     const items = mergeFaq(english, [
       { question: "Do you offer catering?", answer: "Yes." },

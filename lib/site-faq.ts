@@ -34,9 +34,18 @@ function asksSame(own: string, standard: string): boolean {
 }
 
 /** Word beginnings in English and German (the site languages). A word matches when it starts with one of them. */
-const DELIVERY = ["deliver", "takeout", "takeaway", "pickup", "carryout", "collect", "liefer", "abhol", "mitnehm", "zustell"]
-const DELIVERY_PHRASES = [["pick", "up"], ["take", "out"], ["take", "away"], ["to", "go"]]
-const AREA = ["area", "zone", "where", "postcode", "zip", "district", "neighbo", "gegend", "gebiet", "wohin", "stadtteil", "bezirk", "umkreis", "postleitzahl", "plz"]
+const DELIVERS = ["deliver", "liefer", "zustell"]
+const PICKUP = ["takeout", "takeaway", "pickup", "carryout", "collect", "abhol", "mitnehm"]
+const PICKUP_PHRASES = [["pick", "up"], ["take", "out"], ["take", "away"], ["to", "go"]]
+/**
+ * Words that share a beginning with a delivery or pickup word but ask something else (TP.QF0.3 review): suppliers
+ * ("Lieferanten"), collecting loyalty points or stamps, a collection. A question with one of them is never the delivery
+ * or areas question.
+ */
+const NOT_DELIVERY = ["lieferant", "collection", "collector", "point", "punkt", "loyal", "reward", "stamp", "stempel", "bonus", "treue", "prämie"]
+const AREA = ["area", "zone", "postcode", "zip", "district", "neighbo", "gegend", "gebiet", "stadtteil", "bezirk", "umkreis", "postleitzahl", "plz"]
+/** Whole words: "wo" as a word beginning would also match "Woche". */
+const WHERE = new Set(["where", "wo", "wohin"])
 /** A delivery detail (cost, time, minimum order) is another question than whether the restaurant delivers. */
 const DETAIL = ["how", "what", "when", "which", "why", "fee", "cost", "price", "charge", "minimum", "long", "wie", "was", "wann", "welche", "warum", "wieviel", "kost", "gebühr", "preis", "mindest", "dauer", "lange"]
 
@@ -44,21 +53,28 @@ function has(list: readonly string[], all: readonly string[]): boolean {
   return all.some((word) => list.some((start) => word.startsWith(start)))
 }
 
-function hasDelivery(all: readonly string[]): boolean {
-  return has(DELIVERY, all) || DELIVERY_PHRASES.some(([a, b]) => all.some((word, i) => word === a && all[i + 1] === b))
+function hasPickup(all: readonly string[]): boolean {
+  return has(PICKUP, all) || PICKUP_PHRASES.some(([a, b]) => all.some((word, i) => word === a && all[i + 1] === b))
+}
+
+function asksWhere(all: readonly string[]): boolean {
+  return has(AREA, all) || all.some((word) => WHERE.has(word))
 }
 
 /**
  * The site's own question asks a standard one by its topic, in the usual wordings the word check misses (TP.QF0.3):
  * "Bietet ihr Lieferung an?", "Gibt es Lieferung?" and "Do you deliver?" ask the delivery or takeout question;
  * "Wohin liefert ihr?" and "Where do you deliver?" ask the areas question. A delivery detail ("How much does delivery
- * cost?", "Wie lange dauert die Lieferung?") stays its own question, and so does a one-word question.
+ * cost?", "Wie lange dauert die Lieferung?") stays its own question, and so does a one-word question. So do a question
+ * about suppliers or loyalty points ("Arbeitet ihr mit regionalen Lieferanten?", "Do you collect loyalty points?") and
+ * one about where to pick up ("Where can I pick up my order?"): only a delivery word makes a "where" the areas question.
  */
 function asksTopic(own: string, key: SiteFaqKey): boolean {
   const all = words(own)
-  if (all.length < 2 || !hasDelivery(all)) return false
-  if (key === "areas") return has(AREA, all)
-  return key === "service" && !has(AREA, all) && !has(DETAIL, all)
+  if (all.length < 2 || has(NOT_DELIVERY, all)) return false
+  const delivers = has(DELIVERS, all)
+  if (key === "areas") return delivers && asksWhere(all)
+  return key === "service" && (delivers || hasPickup(all)) && !asksWhere(all) && !has(DETAIL, all)
 }
 
 /**
