@@ -38,7 +38,7 @@ function Block({ block }: { block: LegalBlock }) {
       return (
         <div className="mb-6">
           {block.heading ? <h3 className="mt-6 mb-2 text-lg font-semibold">{block.heading}</h3> : null}
-          <dl className="grid gap-x-6 gap-y-1 sm:grid-cols-[minmax(8rem,auto)_1fr]">
+          <dl className="grid gap-x-6 gap-y-1 sm:grid-cols-[minmax(8rem,14rem)_minmax(0,1fr)]">
             {block.items.map((item) => (
               <div key={item.term} className="contents">
                 <dt className="font-semibold">{item.term}</dt>
@@ -51,7 +51,7 @@ function Block({ block }: { block: LegalBlock }) {
     case "table":
       return (
         <div className="mb-6 overflow-x-auto">
-          <table className="w-full border-collapse text-left text-sm">
+          <table className="w-full border-collapse text-left text-sm [overflow-wrap:normal]">
             <thead>
               <tr>
                 {block.columns.map((column) => (
