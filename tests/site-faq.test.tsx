@@ -181,6 +181,47 @@ describe("merge with the home's own questions (extraItems)", () => {
     expect(takeout).toHaveLength(4)
   })
 
+  // TP.QF0.3 (found in TP.7 run 2): the usual German and English delivery wordings share no word list with the standard
+  // question, so the home got a second delivery question. Each is recognised by its topic (delivery or pickup).
+  it.each([
+    ["de", "Bietet ihr Lieferung an?"],
+    ["de", "Gibt es Lieferung?"],
+    ["de", "Habt ihr einen Lieferservice?"],
+    ["de", "Kann man bei euch abholen?"],
+    ["en", "Do you deliver?"],
+    ["en", "Is there delivery?"],
+    ["en", "Can I pick up my order?"],
+    ["en", "Do you do takeaway?"],
+  ] as const)("adds no second delivery question when the %s home asks %j (E5), known-for links appended", (language, question) => {
+    const site = language === "de" ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, site[0].question, site[1].question, site[3].question])
+    expect(items[0].answer).toBe("Own answer.")
+    expect(items[1].links).toEqual([{ label: "Poke Bowl", path: "/tags/poke-bowl" }])
+  })
+
+  it.each([
+    ["de", "Wohin liefert ihr?"],
+    ["de", "Liefert ihr in meinen Stadtteil?"],
+    ["en", "Where do you deliver?"],
+    ["en", "Which areas do you deliver to?"],
+  ] as const)("takes the %s home's %j as the areas question, not the delivery one", (language, question) => {
+    const site = language === "de" ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, site[0].question, site[1].question, site[2].question])
+  })
+
+  it.each([
+    "How much does delivery cost?",
+    "Is there a minimum order for delivery?",
+    "Wie lange dauert die Lieferung?",
+    "Was kostet die Lieferung?",
+  ])("keeps %j as its own question: it asks a delivery detail, the standard question is still added", (question) => {
+    const site = /[äöüß]|Lieferung/.test(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...site.map((item) => item.question)])
+  })
+
   it("keeps a different question that merely shares words with a standard one", () => {
     const items = mergeFaq(english, [
       { question: "Do you offer catering?", answer: "Yes." },
