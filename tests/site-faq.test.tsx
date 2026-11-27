@@ -18,6 +18,14 @@ import Home from "@/app/page"
 
 const standard = faqFixture.data.items as SiteFaqItem[]
 
+// TP.QF0.2 (found in TP.7): the English /faq's four questions (AC15), a v0 home that already asks a shorter delivery question.
+const english: SiteFaqItem[] = [
+  { ...standard[0], question: "What are you known for?" },
+  { ...standard[1], question: "What meals do you serve?" },
+  { ...standard[2], question: "Do you offer delivery or takeout?" },
+  { ...standard[3], question: "What areas do you serve?" },
+]
+
 /** The site API as recorded: /faq answered with `faq` (or a status), the project for the home page. */
 function replaySiteApi(faq: { status: number; body: unknown } | "offline") {
   const calls: string[] = []
@@ -146,6 +154,41 @@ describe("merge with the home's own questions (extraItems)", () => {
     expect(items.map((item) => item.question)).not.toContain("In welche Gegenden liefert ihr?")
   })
 
+
+  it("adds no 'Do you offer delivery or takeout?' when the home already asks 'Do you offer delivery?' (E5), known-for links appended", () => {
+    const items = mergeFaq(english, [{ question: "Do you offer delivery?", answer: "Yes, until 10 pm." }])
+    expect(items.map((item) => item.question)).toEqual([
+      "Do you offer delivery?",
+      "What are you known for?",
+      "What meals do you serve?",
+      "What areas do you serve?",
+    ])
+    expect(items[0].answer).toBe("Yes, until 10 pm.")
+    expect(items[1].links).toEqual([{ label: "Poke Bowl", path: "/tags/poke-bowl" }])
+  })
+
+  it("matches a shorter own question whose words are all in a standard one, in German too, each to one standard question", () => {
+    const items = mergeFaq(standard, [{ question: "Liefert ihr?", answer: "Ja." }])
+    // "Liefert ihr?" is in the service question and the areas question: it answers the first, the areas one is still added.
+    expect(items.map((item) => item.question)).toEqual([
+      "Liefert ihr?",
+      "Wofür seid ihr bekannt?",
+      "Welche Gerichte gibt es bei euch?",
+      "In welche Gegenden liefert ihr?",
+    ])
+    const takeout = mergeFaq(english, [{ question: "Do you offer delivery or takeout to my area?", answer: "Yes." }])
+    expect(takeout.map((item) => item.question)).not.toContain("Do you offer delivery or takeout?")
+    expect(takeout).toHaveLength(4)
+  })
+
+  it("keeps a different question that merely shares words with a standard one", () => {
+    const items = mergeFaq(english, [
+      { question: "Do you offer catering?", answer: "Yes." },
+      { question: "Delivery?", answer: "Yes." },
+    ])
+    expect(items.map((item) => item.question)).toEqual(["Do you offer catering?", "Delivery?", ...english.map((item) => item.question)])
+  })
+
   it("appends the known-for links to the home's own known-for answer, each link once", () => {
     const own: ExtraFaqItem = { key: "known_for", question: "Was macht euch aus?", answer: "Unsere Bowls.", links: [{ label: "Poke Bowl", path: "/tags/poke-bowl" }, { label: "Speisekarte", path: "/speisekarte" }] }
     const items = mergeFaq(
@@ -185,6 +228,20 @@ describe("merge with the home's own questions (extraItems)", () => {
     expect(html.match(/<details>/g)).toHaveLength(4)
     expect(html.match(/<script/g)).toHaveLength(1)
     expect(jsonLd(html).mainEntity).toHaveLength(4)
+  })
+
+  it("renders an English home that asks 'Do you offer delivery?' with four questions, one FAQPage and the known-for link (E5)", async () => {
+    replaySiteApi({ status: 200, body: { data: { items: english } } })
+    const html = await renderSiteFaq({ extraItems: [{ question: "Do you offer delivery?", answer: "Yes, until 10 pm." }] })
+    expect(html.match(/<details>/g)).toHaveLength(4)
+    expect(html).not.toContain("Do you offer delivery or takeout?")
+    expect(html).toContain('<li><a href="/tags/poke-bowl">Poke Bowl</a></li>')
+    expect(jsonLd(html).mainEntity.map((entity: { name: string }) => entity.name)).toEqual([
+      "Do you offer delivery?",
+      "What are you known for?",
+      "What meals do you serve?",
+      "What areas do you serve?",
+    ])
   })
 })
 
