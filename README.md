@@ -4,7 +4,10 @@ The base every FoodAmigos Website Studio website starts from. Max (the Website S
 v0 chat from this repository (`POST /chats/from-repo`), writes the restaurant's values into `lib/site-defaults.ts`,
 and v0 then designs the restaurant's own pages. Everything every site must have is already here, so v0 never builds
 it again. **None of it is styled**: plain semantic HTML with `data-slot` hooks, an empty theme and no UI components,
-so the template has no influence on how v0 designs the site.
+so the template has no influence on how v0 designs the site. The one exception is the legal pages
+(`components/legal/legal-blocks.tsx`): a neutral, readable layout that inherits the site's fonts and colours (a
+centred column with side padding, top spacing clear of a fixed header via `--legal-page-top`), so they never ship as
+bare markup; restyle them to the site's design.
 
 | What | Where |
 |---|---|
