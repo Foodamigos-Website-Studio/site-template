@@ -68,6 +68,11 @@ const FOOD_DETAIL = [
   "spicy", "scharf", "kid", "child", "kinder", "price", "cost", "preis", "kost", "time", "when", "wann", "uhr", "popular",
   "bestsell", "beliebt", "recommend", "empfehl",
 ]
+/**
+ * A delivery or order detail (a fee, a minimum order) asked about food is not the meals question either (TP.QF0.4
+ * review): "What is the minimum order for food?", "Wie hoch ist der Mindestbestellwert für Essen?".
+ */
+const ORDER_DETAIL = ["fee", "charge", "minimum", "mindest", "gebühr"]
 /** A delivery detail (cost, time, minimum order) is another question than whether the restaurant delivers. */
 const DETAIL = ["how", "what", "when", "which", "why", "fee", "cost", "price", "charge", "minimum", "long", "wie", "was", "wann", "welche", "warum", "wieviel", "kost", "gebühr", "preis", "mindest", "dauer", "lange"]
 
@@ -91,7 +96,13 @@ function asksKnownFor(all: readonly string[]): boolean {
   return has(FAMOUS, all) || (has(KNOWN, all) && all.some((word) => FOR.has(word)))
 }
 
+/**
+ * A delivery, pickup or areas question that happens to name food ("Which areas do you deliver food to?") is never the
+ * meals question (TP.QF0.4 review): it would take the meals slot, so the meals question went missing and the areas one
+ * was added twice.
+ */
 function asksMeals(all: readonly string[]): boolean {
+  if (has(DELIVERS, all) || hasPickup(all) || hasArea(all) || has(ORDER_DETAIL, all)) return false
   return has(FOOD, all) && all.some((word) => WHAT.has(word)) && !has(FOOD_DETAIL, all)
 }
 

@@ -306,6 +306,32 @@ describe("merge with the home's own questions (extraItems)", () => {
     expect(items.map((item) => item.question)).toEqual([question, ...questions(site)])
   })
 
+  // TP.QF0.4 review: a delivery or areas question with a food word is not the meals question. Before, it took the meals
+  // slot, so the meals question went missing (AC5) and the areas question was added a second time (AC8).
+  it.each([
+    "Which areas do you deliver food to?",
+    "What areas do you serve food in?",
+    "In welche Gegenden liefert ihr Essen?",
+    "Welche Gebiete beliefert ihr mit Speisen?",
+  ])("takes the home's %j as the areas question and still adds the meals question (AC5, AC8)", (question) => {
+    const site = isGerman(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...without(site, 3)])
+  })
+
+  it.each([
+    "What is the minimum order for food delivery?",
+    "What is the delivery fee for food?",
+    "Which food can I take away?",
+    "What is the minimum order for food?",
+    "Wie hoch ist der Mindestbestellwert für Essen?",
+    "Was kostet die Lieferung von Speisen?",
+  ])("keeps the delivery detail %j as its own question and all four standard questions (AC5)", (question) => {
+    const site = isGerman(question) ? standard : english
+    const items = mergeFaq(site, [{ question, answer: "Own answer." }])
+    expect(items.map((item) => item.question)).toEqual([question, ...questions(site)])
+  })
+
   it("keeps a different question that merely shares words with a standard one", () => {
     const items = mergeFaq(english, [
       { question: "Do you offer catering?", answer: "Yes." },
